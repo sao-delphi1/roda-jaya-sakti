@@ -1,0 +1,107 @@
+unit INRptStokMin;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxCore, dxButton, dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmINRptStokMin = class(TfmRptDlg)
+    dxDBGrid1: TdxDBGrid;
+    dxDBGridMaskColumn1: TdxDBGridMaskColumn;
+    dxDBGridMaskColumn2: TdxDBGridMaskColumn;
+    rbAll: TRadioButton;
+    rbSelect: TRadioButton;
+    bbCari: TdxButton;
+    quActWarehouseID: TStringField;
+    quActWarehouseName: TStringField;
+    quActAddress: TStringField;
+    quActCity: TStringField;
+    quActContactPerson: TStringField;
+    quActPhone: TStringField;
+    quActFax: TStringField;
+    quActUpdDate: TDateTimeField;
+    quActUpdUser: TStringField;
+    quActlogo: TBlobField;
+    quActFgOtoJkt: TStringField;
+    procedure FormShow(Sender: TObject);
+    procedure rbAllClick(Sender: TObject);
+    procedure bbPreviewClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmINRptStokMin: TfmINRptStokMin;
+
+implementation
+
+{$R *.dfm}
+uses MyUnit, UnitGeneral, QRRptINStokMinim;
+
+procedure TfmINRptStokMin.FormShow(Sender: TObject);
+begin
+  inherited;
+  quAct.Open;
+  rbAllClick(rbselect);
+end;
+
+procedure TfmINRptStokMin.rbAllClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dxDBGrid1.OptionsBehavior := dxDBGrid1.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dxDBGrid1.OptionsBehavior := dxDBGrid1.OptionsBehavior + [edgoMultiSelect];
+     if dxDBGrid1.FocusedNode <> nil then
+       dxDBGrid1.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmINRptStokMin.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  with TfmINQRRptStokMinim.Create (Application) do
+       try
+          qrlTitle.Caption  := 'Laporan Stok Minimum Per Hari';
+          qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',date);
+
+         with qu001,sql do
+         begin
+           Close;Clear;
+           add(' SELECT  B.WareHouseId,B.WareHouseId as warehouseid2,(B.WareHouseID+''-''+B.WareHouseName) as Gudang '
+              +' FROM INMsWareHouse B ');
+           if rbSelect.Checked then
+           Add(' and B.WarehouseID IN '+SelGrid(quAct,dxdbgrid1,'WarehouseID'));// WHERE'
+           Open;
+         End;
+
+         with qu002,SQL do
+         begin
+            Close; Clear;
+            Add('SELECT K.ItemID,K.ItemName,K.Tipe,K.MinimumStok,K.TransUOM,K.Stok_Akhir FROM ('
+               +'SELECT DISTINCT A.ItemID,B.ItemName,ISNULL(B.MinimumStok,0) as MinimumStok,B.UOMID as TransUOM,B.TypeUnit as Tipe,A.WarehouseID,'
+               +'ISNULL((SELECT SUM(CASE WHEN X.FgTrans < 50 THEN X.Qty ELSE X.Qty*-1 END) FROM AllItem X '
+               +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) <= CONVERT(VARCHAR(8),Getdate(),112) AND X.ItemID=A.ItemID AND X.WarehouseID=:warehouseid),0) as Stok_Akhir '
+               +'FROM AllItem A INNER JOIN INMsItem B on A.ItemID=B.ITemID '
+               +') as K WHERE K.WarehouseID=:WarehouseID2 AND K.Stok_Akhir <= K.MinimumStok AND K.MinimumStok<>0 ORDER BY K.ItemID');
+            Parameters.ParamByName('WarehouseID').DataType := ftString;
+            Parameters.ParamByName('WarehouseID2').DataType := ftString;
+            showmessage(sql.Text);
+            Open;
+         end;   
+
+         MyReport.PreviewModal;
+       finally
+         Free;
+       end;
+end;
+
+end.

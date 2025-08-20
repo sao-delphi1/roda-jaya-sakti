@@ -1,0 +1,276 @@
+inherited fmCfTrTB: TfmCfTrTB
+  Left = 670
+  Top = 312
+  Caption = ''
+  ClientHeight = 343
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    inherited laTitle: TLabel
+      Left = 11
+      Width = 115
+      Caption = 'Tutup Buku'
+    end
+  end
+  inherited paCenter: TPanel
+    Height = 302
+    object Label1: TLabel
+      Left = 16
+      Top = 240
+      Width = 361
+      Height = 15
+      Caption = 'NB: Proses Tutup Buku Tidak Dapat Dibatalkan Setelah di-Proses'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsItalic]
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 24
+      Top = 400
+      Width = 95
+      Height = 13
+      Caption = 'Laba Bulan Berjalan'
+    end
+    object Label4: TLabel
+      Left = 328
+      Top = 400
+      Width = 95
+      Height = 13
+      Caption = 'Laba Bulan Berjalan'
+    end
+    object sbClose: TSpeedButton
+      Left = 348
+      Top = 265
+      Width = 76
+      Height = 27
+      Hint = 'Close this Form'
+      Caption = 'Tutup'
+      Flat = True
+      Glyph.Data = {
+        F6000000424DF600000000000000760000002800000010000000100000000100
+        0400000000008000000000000000000000001000000010000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00777777777444
+        7777777777077777477777777007777747777777030777444447777033077774
+        447770033300000747777703330FF07777777703300FF07777777703330FF077
+        77777703330FF07777777703330FF07777777703330FF0777777770330FFF077
+        777777030FFFF07777777700FFFFF07777777700000000777777}
+      ParentShowHint = False
+      ShowHint = True
+      Transparent = False
+      OnClick = sbCloseClick
+    end
+    object Button1: TButton
+      Left = 16
+      Top = 184
+      Width = 201
+      Height = 49
+      Caption = 'PROSES TUTUP BUKU'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object GroupBox2: TGroupBox
+      Left = 12
+      Top = 12
+      Width = 253
+      Height = 77
+      Caption = '[ Periode ]'
+      Ctl3D = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 1
+      object dxDateEdit1: TdxDateEdit
+        Left = 399
+        Top = 18
+        Width = 87
+        TabOrder = 0
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+      object dxTahun: TdxSpinEdit
+        Left = 150
+        Top = 31
+        Width = 80
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
+        StyleController = SCEdit
+      end
+      object dxBulan: TdxImageEdit
+        Left = 17
+        Top = 31
+        Width = 134
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
+        Text = 'dxBulan'
+        StyleController = SCEdit
+        Descriptions.Strings = (
+          'January'
+          'Febuary'
+          'Maret'
+          'April'
+          'Mei'
+          'Juni'
+          'July'
+          'Agustus'
+          'September'
+          'Oktober'
+          'November'
+          'Desember')
+        ImageIndexes.Strings = (
+          '0'
+          '1'
+          '2'
+          '3'
+          '4'
+          '5'
+          '6'
+          '7'
+          '8'
+          '9'
+          '10'
+          '11')
+        Values.Strings = (
+          '01'
+          '02'
+          '03'
+          '04'
+          '05'
+          '06'
+          '07'
+          '08'
+          '09'
+          '10'
+          '11'
+          '12')
+      end
+    end
+    object Edit2: TEdit
+      Left = 128
+      Top = 400
+      Width = 121
+      Height = 21
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object Button3: TButton
+      Left = 256
+      Top = 400
+      Width = 75
+      Height = 25
+      Caption = 'Button3'
+      TabOrder = 3
+      OnClick = Button3Click
+    end
+    object GroupBox1: TGroupBox
+      Left = 12
+      Top = 92
+      Width = 413
+      Height = 85
+      Caption = '[ Rekening Laba Bulan Berjalan ]'
+      Ctl3D = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 4
+      object Label3: TLabel
+        Left = 203
+        Top = 38
+        Width = 4
+        Height = 19
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Edit1: TEdit
+        Left = 76
+        Top = 36
+        Width = 121
+        Height = 25
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object Button2: TButton
+        Left = 18
+        Top = 36
+        Width = 55
+        Height = 25
+        Caption = 'CARI'
+        TabOrder = 1
+        OnClick = Button2Click
+      end
+    end
+  end
+  inherited paBottom: TPanel
+    Top = 343
+    Height = 0
+    inherited bbPreview: TBitBtn
+      Left = 91
+      Top = -123
+    end
+    inherited bbPrint: TBitBtn
+      Left = 185
+      Top = -123
+    end
+    inherited bbExit: TBitBtn
+      Left = 259
+      Top = -123
+    end
+  end
+  object quSelisih: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 296
+    Top = 52
+  end
+  object quHeader: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 328
+    Top = 52
+  end
+  object quDetail: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 360
+    Top = 52
+  end
+end

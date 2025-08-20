@@ -1,0 +1,827 @@
+inherited fmINMsWareHouse: TfmINMsWareHouse
+  Left = 214
+  Top = 154
+  Caption = 'Master Gudang'
+  ClientHeight = 381
+  ClientWidth = 667
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 332
+    inherited pa3: TdxContainer
+      Height = 153
+    end
+    inherited paOperation: TdxContainer
+      Top = 8
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+    inherited pa1: TdxContainer
+      Top = 0
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 369
+    Width = 667
+  end
+  inherited pa2: TdxContainer
+    Height = 332
+  end
+  inherited pcMain: TdxPageControl
+    Width = 474
+    Height = 332
+    inherited ts01: TdxTabSheet
+      inherited dbgList: TdxDBGrid
+        Width = 787
+        Height = 330
+        KeyField = 'WarehouseID'
+        Filter.Criteria = {00000000}
+        object dbgListWarehouseID: TdxDBGridColumn
+          DisableEditor = True
+          Width = 124
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'WarehouseID'
+        end
+        object dbgListWarehouseName: TdxDBGridColumn
+          DisableEditor = True
+          Width = 285
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'WarehouseName'
+        end
+        object dbgListContactPerson: TdxDBGridColumn
+          DisableEditor = True
+          Width = 150
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'ContactPerson'
+        end
+        object dbgListPhone: TdxDBGridColumn
+          DisableEditor = True
+          Width = 138
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'Phone'
+        end
+        object dbgListFax: TdxDBGridColumn
+          DisableEditor = True
+          Width = 141
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'Fax'
+        end
+        object dbgListAddress: TdxDBGridColumn
+          DisableEditor = True
+          Width = 400
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'Address'
+        end
+        object dbgListCity: TdxDBGridColumn
+          DisableEditor = True
+          Width = 150
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'City'
+        end
+      end
+    end
+    inherited ts02: TdxTabSheet
+      object Label1: TLabel
+        Left = 10
+        Top = 16
+        Width = 100
+        Height = 17
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Kode Gudang :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object Label2: TLabel
+        Left = 10
+        Top = 40
+        Width = 100
+        Height = 17
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Nama Gudang :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object Label3: TLabel
+        Left = 10
+        Top = 64
+        Width = 100
+        Height = 17
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Alamat Gudang :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object Label4: TLabel
+        Left = 15
+        Top = 486
+        Width = 29
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Kota'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label5: TLabel
+        Left = 22
+        Top = 516
+        Width = 91
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Contact Person'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label6: TLabel
+        Left = 18
+        Top = 546
+        Width = 46
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Telepon'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label7: TLabel
+        Left = 14
+        Top = 576
+        Width = 22
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Fax'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label11: TLabel
+        Left = 119
+        Top = 486
+        Width = 7
+        Height = 17
+        Alignment = taRightJustify
+        Caption = ' :'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label12: TLabel
+        Left = 119
+        Top = 516
+        Width = 7
+        Height = 17
+        Alignment = taRightJustify
+        Caption = ' :'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label13: TLabel
+        Left = 119
+        Top = 546
+        Width = 7
+        Height = 17
+        Alignment = taRightJustify
+        Caption = ' :'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label14: TLabel
+        Left = 119
+        Top = 576
+        Width = 7
+        Height = 17
+        Alignment = taRightJustify
+        Caption = ' :'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label8: TLabel
+        Left = 552
+        Top = 444
+        Width = 110
+        Height = 17
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'Otorisasi Jakarta :'
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        Visible = False
+      end
+      object Label9: TLabel
+        Left = 10
+        Top = 152
+        Width = 100
+        Height = 17
+        Alignment = taRightJustify
+        AutoSize = False
+        Caption = 'PIC :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object DBText1: TDBText
+        Left = 227
+        Top = 129
+        Width = 54
+        Height = 17
+        AutoSize = True
+        DataField = 'Lsites'
+        DataSource = dsMain
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label10: TLabel
+        Left = 63
+        Top = 129
+        Width = 46
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Lokasi :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object dxDBEdit1: TdxDBEdit
+        Left = 115
+        Top = 12
+        Width = 141
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'WarehouseID'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object dxDBEdit2: TdxDBEdit
+        Left = 115
+        Top = 36
+        Width = 294
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'WarehouseName'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object dxDBMemo1: TdxDBMemo
+        Left = 115
+        Top = 60
+        Width = 294
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'Address'
+        DataSource = dsMain
+        StyleController = SCEdit
+        WantReturns = False
+        Height = 65
+      end
+      object dxDBEdit3: TdxDBEdit
+        Left = 141
+        Top = 480
+        Width = 600
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 3
+        Visible = False
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'City'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object dxDBEdit5: TdxDBEdit
+        Left = 115
+        Top = 148
+        Width = 294
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'ContactPerson'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object dxDBEdit7: TdxDBEdit
+        Left = 141
+        Top = 540
+        Width = 600
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        Visible = False
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'Phone'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object dxDBEdit6: TdxDBEdit
+        Left = 141
+        Top = 570
+        Width = 600
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+        Visible = False
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'Fax'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object bbSave: TdxButton
+        Tag = 3333
+        Left = 115
+        Top = 253
+        Width = 100
+        Height = 35
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Anchors = [akRight, akBottom]
+        Color = 9609897
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        Version = '1.0.2e'
+        Action = ActSave
+        Caption = 'Simpan (F3)'
+        Colors.FocusedFrom = 16750383
+        Colors.FocusedTo = 16763799
+        Colors.HighlightFrom = clWhite
+        Colors.HighlightTo = clWhite
+        HotTrack = True
+        TabOrder = 7
+      end
+      object bbCancel: TdxButton
+        Tag = 4444
+        Left = 216
+        Top = 253
+        Width = 100
+        Height = 35
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Anchors = [akRight, akBottom]
+        Color = 9609897
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        Version = '1.0.2e'
+        Action = ActCancel
+        Caption = 'Batal (Esc)'
+        Colors.FocusedFrom = 16750383
+        Colors.FocusedTo = 16763799
+        Colors.HighlightFrom = clWhite
+        Colors.HighlightTo = clWhite
+        HotTrack = True
+        TabOrder = 8
+      end
+      object GroupBox2: TGroupBox
+        Left = 116
+        Top = 173
+        Width = 221
+        Height = 50
+        Ctl3D = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 9
+        object Label21: TLabel
+          Left = 24
+          Top = 8
+          Width = 36
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'User :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText8: TDBText
+          Left = 68
+          Top = 9
+          Width = 132
+          Height = 17
+          DataField = 'UpdUser'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label22: TLabel
+          Left = 15
+          Top = 29
+          Width = 45
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Waktu :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText9: TDBText
+          Left = 68
+          Top = 30
+          Width = 132
+          Height = 17
+          DataField = 'UpdDate'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+      end
+      object DBImage1: TDBImage
+        Left = 667
+        Top = 310
+        Width = 169
+        Height = 99
+        Cursor = crHandPoint
+        DataField = 'logo'
+        DataSource = dsMain
+        Enabled = False
+        Stretch = True
+        TabOrder = 10
+        Visible = False
+      end
+      object bbLogo: TBitBtn
+        Left = 668
+        Top = 413
+        Width = 60
+        Height = 25
+        Cursor = crHandPoint
+        Hint = 'Ubah Logo Perusahaan'
+        Caption = '&Image'
+        Enabled = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 11
+        Visible = False
+        OnClick = bbLogoClick
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333303333
+          333333333337FF3333333333330003333333333333777F333333333333080333
+          3333333F33777FF33F3333B33B000B33B3333373F777773F7333333BBB0B0BBB
+          33333337737F7F77F333333BBB0F0BBB33333337337373F73F3333BBB0F7F0BB
+          B333337F3737F73F7F3333BB0FB7BF0BB3333F737F37F37F73FFBBBB0BF7FB0B
+          BBB3773F7F37337F377333BB0FBFBF0BB333337F73F333737F3333BBB0FBF0BB
+          B3333373F73FF7337333333BBB000BBB33333337FF777337F333333BBBBBBBBB
+          3333333773FF3F773F3333B33BBBBB33B33333733773773373333333333B3333
+          333333333337F33333333333333B333333333333333733333333}
+        NumGlyphs = 2
+      end
+      object bbHpsLogo: TBitBtn
+        Left = 729
+        Top = 413
+        Width = 60
+        Height = 25
+        Cursor = crHandPoint
+        Hint = 'Hapus Logo Perusahaan'
+        Caption = '&Delete'
+        Enabled = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 12
+        Visible = False
+        OnClick = bbHpsLogoClick
+        Glyph.Data = {
+          9E050000424D9E05000000000000360400002800000012000000120000000100
+          08000000000068010000120B0000120B00000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600CCFFFF0099FFFF0066FFFF0033FFFF00FFCCFF00CCCCFF0099CCFF0066CC
+          FF0033CCFF0000CCFF00FF99FF00CC99FF009999FF006699FF003399FF000099
+          FF00FF66FF00CC66FF009966FF006666FF003366FF000066FF00FF33FF00CC33
+          FF009933FF006633FF003333FF000033FF00CC00FF009900FF006600FF003300
+          FF00FFFFCC00CCFFCC0099FFCC0066FFCC0066FFCC0033FFCC0000FFCC00FFCC
+          CC00CCCCCC0099CCCC0066CCCC0033CCCC0000CCCC00FF99CC00CC99CC009999
+          CC006699CC003399CC000099CC00FF66CC00CC66CC009966CC006666CC003366
+          CC000066CC00FF33CC00CC33CC009933CC006633CC003333CC000033CC00FF00
+          CC00CC00CC009900CC006600CC003300CC000000CC00FFFF9900CCFF990099FF
+          990066FF990033FF990000FF9900FFCC9900CCCC990099CC990066CC990033CC
+          990000CC9900FF999900CC99990099999900669999003399990000999900FF66
+          9900CC66990099669900666699003366990000669900FF339900CC3399009933
+          9900663399003333990000339900FF009900CC00990099009900660099003300
+          990000009900FFFF6600CCFF660099FF660066FF660033FF660000FF6600FFCC
+          6600CCCC660099CC660066CC660033CC660000CC6600FF996600CC9966009999
+          6600669966003399660000996600FF666600CC66660099666600666666003366
+          660000666600FF336600CC33660099336600663366003333660000336600FF00
+          6600CC00660099006600660066003300660000006600FFFF3300CCFF330099FF
+          330066FF330033FF330000FF3300FFCC3300CCCC330099CC330066CC330033CC
+          330000CC3300FF993300CC99330099993300669933003399330000993300FF66
+          3300CC66330099663300666633003366330000663300FF333300CC3333009933
+          3300663333003333330000333300FF003300CC00330099003300660033003300
+          330000003300CCFF000099FF000066FF000033FF0000FFCC0000CCCC000099CC
+          000066CC000033CC000000CC0000FF990000CC99000099990000669900003399
+          000000990000FF660000CC66000099660000666600000066000033660000FF33
+          0000CC33000099330000663300003333000000330000CC000000990000006600
+          0000330000000000DD000000BB000000AA000000880000007700000055000000
+          44000000220000DD000000BB000000AA00000088000000770000005500000044
+          000000220000DDDDDD0055555500777777007777770044444400222222001111
+          110077000000550000004400000022000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00323232323232
+          32323232323232323232323200003232323232323200DEDEDE00323232323232
+          000032323232323232DEDDDD7272323232323232000032323232323200DDDBDB
+          DB720032323232320000323232323232004EF9F9DB7200323232323200003232
+          3232323232DBF9F94EDE323232323232000032323232323232000000DE003232
+          3232323200003232323232323232DBDE00323232323232320000323232323232
+          3200DBDEDE3232323232323200003232323232323200DBDBDE32323232323232
+          00003232323232323200DBDBDE00323232323232000032323232323232DBDBDB
+          DEDE323232323232000032323232323200DBDBDBDBDE00323232323200003232
+          3232323200DBDBDB1DDE0032323232320000323232323232001DDBDBDBDBDE32
+          323232320000323232323232DBDBDBDBDBDBDB32323232320000323232323232
+          32DBDBDBDB003232323232320000323232323232323200003232323232323232
+          0000}
+      end
+      object dxDBImageEdit2: TdxDBImageEdit
+        Left = 667
+        Top = 440
+        Width = 115
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 13
+        Visible = False
+        OnKeyPress = dxDBEdit1KeyPress
+        DataField = 'FgOtoJkt'
+        DataSource = dsMain
+        StyleController = SCEdit
+        Descriptions.Strings = (
+          'YA'
+          'TIDAK')
+        ImageIndexes.Strings = (
+          '0'
+          '1')
+        Values.Strings = (
+          'Y'
+          'T')
+      end
+      object dxDBButtonEdit1: TdxDBButtonEdit
+        Left = 115
+        Top = 124
+        Width = 103
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 14
+        DataField = 'City'
+        DataSource = dsMain
+        StyleController = SCEdit
+        Buttons = <
+          item
+            Default = True
+          end>
+        OnButtonClick = dxDBButtonEdit1ButtonClick
+        ExistButtons = True
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 667
+    inherited sbLast: TSpeedButton
+      Left = 630
+    end
+    inherited sbNext: TSpeedButton
+      Left = 603
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 576
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 549
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 523
+    end
+    inherited BvlPeriod: TBevel
+      Left = 277
+    end
+    inherited laPeriod: TLabel
+      Left = 281
+    end
+  end
+  inherited quMain: TADOQuery
+    OnCalcFields = quMainCalcFields
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'SELECT * FROM INMsWareHouse')
+    object quMainWarehouseID: TStringField
+      FieldName = 'WarehouseID'
+    end
+    object quMainWarehouseName: TStringField
+      FieldName = 'WarehouseName'
+      Size = 100
+    end
+    object quMainAddress: TStringField
+      FieldName = 'Address'
+      Size = 300
+    end
+    object quMainCity: TStringField
+      FieldName = 'City'
+      Size = 150
+    end
+    object quMainContactPerson: TStringField
+      FieldName = 'ContactPerson'
+      Size = 100
+    end
+    object quMainPhone: TStringField
+      FieldName = 'Phone'
+    end
+    object quMainFax: TStringField
+      FieldName = 'Fax'
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+      DisplayFormat = 'DD MMMM YYYY'
+      EditMask = 'DD MMMM YYYY'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quMainlogo: TBlobField
+      FieldName = 'logo'
+    end
+    object quMainFgOtoJkt: TStringField
+      FieldName = 'FgOtoJkt'
+      Size = 10
+    end
+    object quMainLsites: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'Lsites'
+      Size = 100
+      Calculated = True
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActCari: TAction
+      OnExecute = bbFindClick
+    end
+  end
+  object odLogo: TOpenPictureDialog
+    Filter = 'Bitmaps (*.bmp)|*.bmp'
+    Left = 196
+    Top = 70
+  end
+end

@@ -1,0 +1,476 @@
+inherited fmCFRptPOBlmInv: TfmCFRptPOBlmInv
+  Left = 593
+  Top = 156
+  Caption = 'Purchase Order Belum Ada FPP'
+  ClientWidth = 1298
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 1298
+    Height = 84
+    inherited laTitle: TLabel
+      Width = 40
+      Height = 18
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      Visible = False
+    end
+    object grbKartu: TGroupBox
+      Left = 11
+      Top = 3
+      Width = 278
+      Height = 75
+      Caption = '[ Periode ]'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object bbRefresh: TBitBtn
+        Left = 149
+        Top = 30
+        Width = 112
+        Height = 34
+        Hint = 'Refresh'
+        Caption = '&Refresh'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        OnClick = bbRefreshClick
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333FFFFFFFFFFFFF3344444444444443337777777777777F334CCCCCCCCCC
+          C43337777777777777F33444881B188444333777F3737337773333308881FF70
+          33333337F3373337F3333330888BF770333333373F33F337333333330881F703
+          3333333373F73F7333333333308B703333333333373F77333333333333080333
+          3333333333777FF333333333301F103333333333377777FF3333333301B1F103
+          333333337737777FF3333330881BFB7033333337F3737F77F333333088881F70
+          333333F7F3337777FFF334448888888444333777FFFFFFF777F334CCCCCCCCCC
+          C43337777777777777F334444444444444333777777777777733}
+        NumGlyphs = 2
+      end
+      object dtpDari: TDateTimePicker
+        Left = 16
+        Top = 30
+        Width = 125
+        Height = 32
+        CalAlignment = dtaLeft
+        Date = 38070
+        Format = 'dd/MM/yyyy'
+        Time = 38070
+        Color = 16311512
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -19
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        Kind = dtkDate
+        ParseInput = False
+        ParentFont = False
+        TabOrder = 1
+      end
+    end
+    object CheckBox3: TCheckBox
+      Left = 488
+      Top = 61
+      Width = 265
+      Height = 17
+      Caption = 'Tampilkan Tgl FPP'
+      Ctl3D = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = CheckBox3Click
+    end
+    object RadioGroup1: TRadioGroup
+      Left = 488
+      Top = 8
+      Width = 185
+      Height = 50
+      Caption = '[ Company ]'
+      ItemIndex = 0
+      Items.Strings = (
+        'Roda Jaya Sakti')
+      TabOrder = 2
+    end
+    object RadioGroup2: TRadioGroup
+      Left = 296
+      Top = 6
+      Width = 185
+      Height = 72
+      Caption = '[ Tampilkan PO ]'
+      ItemIndex = 0
+      Items.Strings = (
+        'Belum FPP'
+        'Sudah FPP'
+        'Semua')
+      TabOrder = 3
+    end
+  end
+  inherited paCenter: TPanel
+    Top = 84
+    Width = 1298
+    Height = 410
+    object dgrReport: TdxDBGrid
+      Left = 1
+      Top = 1
+      Width = 1296
+      Height = 408
+      Bands = <
+        item
+          Width = 1263
+        end>
+      DefaultLayout = False
+      HeaderPanelRowCount = 1
+      KeyField = 'POID'
+      ShowGroupPanel = True
+      ShowSummaryFooter = True
+      SummaryGroups = <
+        item
+          DefaultGroup = True
+          SummaryItems = <
+            item
+              SummaryField = 'total'
+              SummaryFormat = '#,##0.#'
+              SummaryType = cstSum
+            end>
+          Name = 'dgrReportSummaryGroup2'
+        end>
+      SummarySeparator = ', '
+      Align = alClient
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      BandColor = clMoneyGreen
+      BandFont.Charset = DEFAULT_CHARSET
+      BandFont.Color = clWindowText
+      BandFont.Height = -11
+      BandFont.Name = 'MS Sans Serif'
+      BandFont.Style = [fsBold]
+      DataSource = dsAct
+      Filter.Active = True
+      Filter.Criteria = {00000000}
+      HeaderColor = clSilver
+      HeaderFont.Charset = DEFAULT_CHARSET
+      HeaderFont.Color = clWindowText
+      HeaderFont.Height = -16
+      HeaderFont.Name = 'MS Sans Serif'
+      HeaderFont.Style = []
+      HideFocusRect = True
+      HideSelection = True
+      HighlightTextColor = clRed
+      LookAndFeel = lfUltraFlat
+      OptionsBehavior = [edgoAutoCopySelectedToClipboard, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
+      OptionsDB = [edgoCancelOnExit, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoUseBookmarks]
+      OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+      PreviewFont.Charset = DEFAULT_CHARSET
+      PreviewFont.Color = clBlue
+      PreviewFont.Height = -11
+      PreviewFont.Name = 'MS Sans Serif'
+      PreviewFont.Style = []
+      ShowBands = True
+      ShowRowFooter = True
+      object dgrReportColumn1: TdxDBGridColumn
+        Caption = 'Nomor PO'
+        Width = 150
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'POID'
+      end
+      object dgrReportColumn2: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Tanggal'
+      end
+      object dgrReportColumn3: TdxDBGridColumn
+        Caption = 'Nama Supplier'
+        Width = 200
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'SuppName'
+      end
+      object dgrReportColumn4: TdxDBGridColumn
+        Caption = 'Subtotal'
+        Width = 143
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'StPO'
+      end
+      object dgrReportColumn11: TdxDBGridColumn
+        Caption = 'Ongkir'
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'ongkir'
+      end
+      object dgrReportColumn12: TdxDBGridColumn
+        Caption = 'PBB-KB'
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'pbbkb'
+      end
+      object dgrReportColumn5: TdxDBGridColumn
+        Caption = 'Diskon'
+        Width = 150
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'DiscAmount'
+      end
+      object dgrReportColumn6: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'PPN'
+      end
+      object dgrReportColumn7: TdxDBGridColumn
+        Caption = 'Total'
+        Width = 150
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'TTLPO'
+        SummaryFooterType = cstSum
+        SummaryFooterField = 'TTLPO'
+        SummaryFooterFormat = '#,0'
+        SummaryType = cstSum
+        SummaryField = 'TTLPO'
+        SummaryFormat = '#,0'
+        SummaryGroupName = 'dgrReportSummaryGroup2'
+      end
+      object dgrReportColumn8: TdxDBGridColumn
+        Caption = 'Site'
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'SiteName'
+      end
+      object dgrReportColumn9: TdxDBGridColumn
+        Caption = 'FPP'
+        Visible = False
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'TglFPP'
+      end
+      object dgrReportColumn10: TdxDBGridColumn
+        Caption = 'Interval'
+        Visible = False
+        Width = 80
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Selisih'
+      end
+    end
+  end
+  inherited paBottom: TPanel
+    Width = 1298
+    inherited bbPreview: TBitBtn
+      Left = 10
+      Enabled = False
+      Visible = False
+    end
+    inherited bbPrint: TBitBtn
+      Left = 10
+      Enabled = False
+      Visible = False
+    end
+    inherited bbExit: TBitBtn
+      Left = 10
+      Enabled = False
+      Visible = False
+    end
+    object bbExcel: TBitBtn
+      Left = 1007
+      Top = 6
+      Width = 115
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Export Excel'
+      TabOrder = 3
+      OnClick = bbExcelClick
+      Glyph.Data = {
+        26040000424D2604000000000000360000002800000012000000120000000100
+        180000000000F003000000000000000000000000000000000000808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        8080808080808080808080808080808000008080800080000080000080000080
+        0000800000800000800000800000800000800000800000800000800000800000
+        8000008000808080000080808000800000800000800000800000800000800000
+        8000008000008000008000008000008000008000008000008000008000808080
+        0000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080000080
+        000080000080000080000080008080800000808080008000008000FFFFFF0080
+        00008000008000008000008000008000008000FFFFFF00800000800000800000
+        80000080008080800000808080008000008000FFFFFF00800000800000800000
+        8000008000008000FFFFFF008000008000008000FFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000008000008000008000008000FFFFFF
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFF008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFFFFFF
+        FFFFFFFF008000FFFFFF008000008000008000008000FFFFFFFFFFFFFFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFF008000FFFFFF00
+        8000008000008000008000008000008000FFFFFFFFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000FFFFFF008000008000008000008000
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFF008000008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFF0080
+        00008000008000FFFFFFFFFFFFFFFFFF008000008000008000008000FFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF008000008000808080
+        0000808080008000008000008000008000008000008000008000008000008000
+        0080000080000080000080000080000080000080008080800000808080008000
+        0080000080000080000080000080000080000080000080000080000080000080
+        0000800000800000800000800080808000008080808080808080808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        80808080808080800000}
+    end
+    object bbCancel: TBitBtn
+      Left = 1122
+      Top = 6
+      Width = 92
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Batal'
+      TabOrder = 4
+      OnClick = bbCancelClick
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333FFFFF3333333333999993333333333F77777FFF333333999999999
+        3333333777333777FF33339993707399933333773337F3777FF3399933000339
+        9933377333777F3377F3399333707333993337733337333337FF993333333333
+        399377F33333F333377F993333303333399377F33337FF333373993333707333
+        333377F333777F333333993333101333333377F333777F3FFFFF993333000399
+        999377FF33777F77777F3993330003399993373FF3777F37777F399933000333
+        99933773FF777F3F777F339993707399999333773F373F77777F333999999999
+        3393333777333777337333333999993333333333377777333333}
+      NumGlyphs = 2
+    end
+  end
+  inherited quAct: TADOQuery
+    SQL.Strings = (
+      
+        'select A.POID,CONVERT(VARCHAR(10),A.Transdate,103) as Tanggal,B.' +
+        'SuppName,A.TTLPO,A.StPO,A.ongkir,A.pbbkb,A.PPN,A.DiscAmount,C.Si' +
+        'teName,'
+      
+        'ISNULL((Select CONVERT(VARCHAR(10),Y.Transdate,103) FROM APTrKon' +
+        'sinyasiInvSub X '
+      
+        'INNER JOIN ApTrKonsinyasiInvHD Y on X.KonsinyasiInvId=Y.Konsinya' +
+        'siInvID WHERE X.POID=A.POID),'#39'-'#39') as TglFPP,'
+      
+        'DATEDIFF(day,A.Transdate,ISNULL((Select Y.TransDate FROM APTrKon' +
+        'sinyasiInvSub X '
+      
+        'INNER JOIN ApTrKonsinyasiInvHD Y on X.KonsinyasiInvId=Y.Konsinya' +
+        'siInvID WHERE X.POID=A.POID),GETDATE())) as Selisih'
+      
+        'from APTrPurchaseOrderHd A inner join APMsSupplier B on A.SuppID' +
+        '=B.SuppID'
+      'inner join INMsSites C on A.SiteID=C.SiteID'
+      
+        'Where A.FgOto='#39'Y'#39' AND A.warehouseID='#39'RJS'#39' AND A.POID IN (Select ' +
+        'X.POID FROM APTrKonsinyasiInvSub X)'
+      'order by A.Transdate')
+    object quActPOID: TStringField
+      FieldName = 'POID'
+    end
+    object quActTanggal: TStringField
+      FieldName = 'Tanggal'
+      ReadOnly = True
+      Size = 10
+    end
+    object quActSuppName: TStringField
+      FieldName = 'SuppName'
+      Size = 50
+    end
+    object quActTTLPO: TBCDField
+      FieldName = 'TTLPO'
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quActStPO: TBCDField
+      FieldName = 'StPO'
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quActPPN: TBCDField
+      FieldName = 'PPN'
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quActDiscAmount: TBCDField
+      FieldName = 'DiscAmount'
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quActSiteName: TStringField
+      FieldName = 'SiteName'
+      Size = 100
+    end
+    object quActTglFPP: TStringField
+      FieldName = 'TglFPP'
+      ReadOnly = True
+      Size = 10
+    end
+    object quActSelisih: TIntegerField
+      FieldName = 'Selisih'
+      ReadOnly = True
+    end
+    object quActongkir: TBCDField
+      FieldName = 'ongkir'
+      DisplayFormat = '#,0'
+      Precision = 18
+      Size = 0
+    end
+    object quActpbbkb: TBCDField
+      FieldName = 'pbbkb'
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+  end
+  inherited dsAct: TDataSource
+    OnStateChange = dsActStateChange
+  end
+  object saveDlg: TSaveDialog
+    DefaultExt = '*.xls'
+    Filter = 'Microsoft Excel File|*.xls'
+    Left = 856
+    Top = 64
+  end
+  object dxReport: TdxComponentPrinter
+    Version = 0
+    Left = 892
+    Top = 64
+  end
+end

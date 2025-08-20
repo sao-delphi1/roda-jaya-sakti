@@ -1,0 +1,188 @@
+unit INRptKanibal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, dxExEdtr, dxTL, dxDBCtrl, dxDBGrid, dxCntner, ComCtrls,
+  StdCtrls, DB, ADODB, Buttons, ExtCtrls, dxPSGlbl, dxPSUtl, dxPSEngn,
+  dxPrnPg, dxBkgnd, dxWrap, dxPrnDev, dxPSCore;
+
+type
+  TfmINRptKanibal = class(TfmRptDlg)
+    grbKartu: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    bbRefresh: TBitBtn;
+    dtpSmp: TDateTimePicker;
+    dtpDari: TDateTimePicker;
+    dgrReport: TdxDBGrid;
+    quReport: TADOQuery;
+    dsReport: TDataSource;
+    dgrReportColumn1: TdxDBGridColumn;
+    dgrReportColumn2: TdxDBGridColumn;
+    dgrReportColumn3: TdxDBGridColumn;
+    dgrReportColumn4: TdxDBGridColumn;
+    dgrReportColumn5: TdxDBGridColumn;
+    dgrReportColumn6: TdxDBGridColumn;
+    dgrReportColumn7: TdxDBGridColumn;
+    dgrReportColumn8: TdxDBGridColumn;
+    dgrReportColumn9: TdxDBGridColumn;
+    dgrReportColumn10: TdxDBGridColumn;
+    dgrReportColumn11: TdxDBGridColumn;
+    dgrReportColumn12: TdxDBGridColumn;
+    dgrReportColumn13: TdxDBGridColumn;
+    dgrReportColumn14: TdxDBGridColumn;
+    dgrReportColumn15: TdxDBGridColumn;
+    dgrReportColumn16: TdxDBGridColumn;
+    saveDlg: TSaveDialog;
+    dxReport: TdxComponentPrinter;
+    bbExcel: TBitBtn;
+    bbCancel: TBitBtn;
+    quReportTransID: TStringField;
+    quReportItemID: TStringField;
+    quReportKerusakan: TStringField;
+    quReportKeterangan: TStringField;
+    quReportQty: TBCDField;
+    quReportActionPlan: TStringField;
+    quReportObjection: TStringField;
+    quReportUpdDate: TDateTimeField;
+    quReportUpdUser: TStringField;
+    quReportItemName: TStringField;
+    quReportUOMID: TStringField;
+    quReportCompany: TStringField;
+    quReportTransDate: TDateTimeField;
+    quReportSiteID: TStringField;
+    quReportNoUnit: TStringField;
+    quReportTypeUnit: TStringField;
+    quReportCompanySrc: TStringField;
+    quReportNoUnitSrc: TStringField;
+    quReportTypeUnitSrc: TStringField;
+    quReportKM: TStringField;
+    quReportKMSrc: TStringField;
+    quReportNote: TStringField;
+    quReportSiteSrc: TStringField;
+    quReportSiteName: TStringField;
+    quReportSiteNama: TStringField;
+    quReportDescription: TStringField;
+    quReportTypeUn: TStringField;
+    RadioGroup1: TRadioGroup;
+    quReportOtorisasi: TStringField;
+    dgrReportColumn17: TdxDBGridColumn;
+    procedure bbRefreshClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure bbExcelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    sQuery : string;
+  end;
+
+var
+  fmINRptKanibal: TfmINRptKanibal;
+
+implementation
+
+uses UnitDate;
+{$R *.dfm}
+
+procedure TfmINRptKanibal.bbRefreshClick(Sender: TObject);
+var oto : string;
+begin
+  inherited;
+  if RadioGroup1.ItemIndex = 0 then oto := '''T'',''X'',''Y''';
+  if RadioGroup1.ItemIndex = 1 then oto := '''X''';
+  if RadioGroup1.ItemIndex = 2 then oto := '''T''';
+  if radiogroup1.ItemIndex = 3 then oto := '''Y''';
+  sQuery :=' '
+          +'  select A.TransID,'
+          +'  X.ItemID,X.Kerusakan,X.Note as Keterangan,X.Qty,'
+          +'  CASE WHEN X.ActionPlan=''OC'' THEN ''ORDER COMPONENT'' '
+          +'       WHEN X.ActionPlan=''RON'' THEN ''REPAIR ON SITE'' '
+          +'       ELSE ''REPAIR OFF SITE'' END AS ActionPlan,'
+          +'  CASE WHEN X.Objection=''NW'' THEN ''NORMAL WEAR'' '
+          +'       WHEN X.Objection=''PM'' THEN ''POOR MAINTENANCE'' '
+          +'       WHEN X.Objection=''PO'' THEN ''POOR OPERATION'' '
+          +'       WHEN X.Objection=''PF'' THEN ''PREMATURE FEATURE'' '
+          +'       WHEN X.Objection=''AC'' THEN ''ACCIDENT'' '
+          +'       ELSE ''OTHERS'' END AS Objection, '
+          +'  X.UpdDate,X.UpdUser,Y.ItemName,Y.UOMID, '
+          +'  CASE WHEN A.Company=''RJS'' THEN ''RODA JAYA SAKTI'' '
+          +'       WHEN A.Company=''EBTL'' THEN ''ERA BARU TIMUR LESTARI'' '
+          +'       WHEN A.Company=''DIL'' THEN ''DIMAS INDOMINERAL LAMPUNG'' '
+          +'       WHEN A.Company=''OJP'' THEN ''OPTIMA JAYA PERKASA'' '
+          +'       WHEN A.Company=''GP'' THEN ''GITA PERKASA'' '
+          +'       WHEN A.Company=''IUP'' THEN ''INTI UTAMA PERKASA'' '
+          +'       WHEN A.Company=''IGS'' THEN ''INDO GEMILANG SEJAHTERA'' '
+          +'       WHEN A.Company=''OJS'' THEN ''OPTIMA JAYA SAKTI'' '
+          +'       WHEN A.Company=''AGT'' THEN ''ARAGATA MANDIRI SEJATI'' '
+          +'       WHEN A.Company=''TPM'' THEN ''TIMUR PERKASA MINERALINDO'' '
+          +'       WHEN A.Company=''AT'' THEN ''ANDALAS TEKNIK'' '
+          +'  ELSE ''KAISAR'' END AS Company, '
+          +'  A.TransDate,A.SiteID,A.NoUnit,A.TypeUnit, '
+          +'  CASE WHEN A.CompanySrc=''RJS'' THEN ''RODA JAYA SAKTI'' '
+          +'       WHEN A.CompanySrc=''EBTL'' THEN ''ERA BARU TIMUR LESTARI'' '
+          +'       WHEN A.CompanySrc=''DIL'' THEN ''DIMAS INDOMINERAL LAMPUNG'' '
+          +'       WHEN A.CompanySrc=''OJP'' THEN ''OPTIMA JAYA PERKASA'' '
+          +'       WHEN A.CompanySrc=''GP'' THEN ''GITA PERKASA'' '
+          +'       WHEN A.CompanySrc=''IUP'' THEN ''INTI UTAMA PERKASA'' '
+          +'       WHEN A.CompanySrc=''IGS'' THEN ''INDO GEMILANG SEJAHTERA'' '
+          +'       WHEN A.Company=''OJS'' THEN ''OPTIMA JAYA SAKTI'' '
+          +'       WHEN A.CompanySrc=''AGT'' THEN ''ARAGATA MANDIRI SEJATI'' '
+          +'       WHEN A.CompanySrc=''TPM'' THEN ''TIMUR PERKASA MINERALINDO'' '
+          +'       WHEN A.CompanySrc=''AT'' THEN ''ANDALAS TEKNIK'' '
+          +'       ELSE ''KAISAR'' END AS CompanySrc,'
+          +'  A.NoUnitSrc,A.TypeUnitSrc,A.KM,A.KMSrc,A.Note,A.SiteSrc,C.SiteName,B.SiteName as SiteNama, '
+          +'  D.Description,E.Description as TypeUn, '
+          +' CASE WHEN A.FgOto=''Y'' THEN ''APPROVED'' '
+          +'      WHEN A.FgOto=''T'' THEN ''PENDING'' '
+          +'      ELSE ''REJECTED'' END as Otorisasi '
+          +'  from INTrKanibalDt X '
+          +'  inner join INTrKanibalHd A on A.TransID=X.TransID '
+          +'  inner join INMsSites B on A.SiteID=B.SiteID '
+          +'  inner join INMsSites C on A.SiteSrc=C.SiteID '
+          +'  inner join INMsNoUnit D on A.NoUnit=D.NoUnit '
+          +'  inner join INMsNoUnit E on A.NoUnitSrc=E.NoUnit '
+          +'  inner join INMsItem Y on X.ItemID=Y.ItemID '
+          +'  WHERE CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dtpDari.Date)+''' '
+          +'  AND '''+FormatDateTime('yyyyMMdd',dtpSmp.Date)+''' And A.FgOto IN ('+Oto+') ';
+
+  with quReport do
+  begin
+    if active then close;
+    SQL.Text := sQuery;
+    Open;
+  end;
+end;
+
+procedure TfmINRptKanibal.FormShow(Sender: TObject);
+begin
+  inherited;
+  dtpDari.Date := EncodeDate(GetYear(Date),GetMonth(Date),1);
+  dtpSmp.Date := Date;
+  quREport.Open;
+
+  bbRefreshClick(bbRefresh);
+end;
+
+procedure TfmINRptKanibal.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+procedure TfmINRptKanibal.bbExcelClick(Sender: TObject);
+begin
+  inherited;
+  if saveDlg.Execute then
+    begin
+      if Pos('.XLS', uppercase(saveDlg.FileName)) > 0 then
+        dgrReport.SaveToXLS(saveDlg.FileName, true)
+      else
+        dgrReport.SaveToXLS(saveDlg.FileName + '.xls', true);
+    end;
+end;
+
+end.

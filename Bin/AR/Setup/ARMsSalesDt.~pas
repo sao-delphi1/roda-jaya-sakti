@@ -1,0 +1,81 @@
+unit ARMsSalesDt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv2, dxExEdtr, dxButton, dxDBCtrl, dxDBGrid, dxDBTLCl,
+  dxGrClms, dxTL, dxCntner, ActnList, DB, ADODB, StdCtrls, ExtCtrls,
+  dxCore, dxContainer, Buttons;
+
+type
+  TfmARMsSalesDt = class(TfmStdLv2)
+    dbgMenu: TdxDBGrid;
+    dbgMenuSalesID: TdxDBGridColumn;
+    dbgMenuNo: TdxDBGridColumn;
+    dbgMenuNama: TdxDBGridColumn;
+    dbgMenuJenis: TdxDBGridButtonColumn;
+    dbgMenuBirthDate: TdxDBGridDateColumn;
+    dbgMenuJenKel: TdxDBGridImageColumn;
+    dbgMenuNIK: TdxDBGridColumn;
+    dbgMenuAgama: TdxDBGridButtonColumn;
+    dbgMenuSuku: TdxDBGridButtonColumn;
+    dbgMenuAlamat: TdxDBGridColumn;
+    dbgMenuPhone: TdxDBGridColumn;
+    dbgMenuNPWP: TdxDBGridColumn;
+    dbgMenuBPJSKet: TdxDBGridColumn;
+    dbgMenuBPJSKes: TdxDBGridColumn;
+    dbgMenuRekening: TdxDBGridColumn;
+    dbgMenuBank: TdxDBGridColumn;
+    dbgMenuUpdDate: TdxDBGridDateColumn;
+    dbgMenuUpdUser: TdxDBGridMaskColumn;
+    TmbBrg: TdxButton;
+    KrgBrg: TdxButton;
+    bbSimpanDetil: TdxButton;
+    BtlBrg: TdxButton;
+    quMainSalesID: TStringField;
+    quMainItemID: TStringField;
+    quMainItemName: TStringField;
+    quMainAddress: TStringField;
+    quMainPhone: TStringField;
+    quMainBirthDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainUpdDate: TDateTimeField;
+    quMainAgama: TStringField;
+    quMainJenKel: TStringField;
+    quMainNIK: TStringField;
+    quMainNPWP: TStringField;
+    quMainBPJSKes: TStringField;
+    quMainBPJSKet: TStringField;
+    quMainRekening: TStringField;
+    quMainBank: TStringField;
+    quMainSuku: TStringField;
+    quMainJenis: TStringField;
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    SalesID : string;
+  end;
+
+var
+  fmARMsSalesDt: TfmARMsSalesDt;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmARMsSalesDt.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+  with quMain,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT * FROM ARMsSalesDt WHERE SalesID='''+SalesID+''' ');
+    Open;
+  end;
+end;
+
+end.

@@ -1,0 +1,182 @@
+inherited fmARRptPenjPerTglDlg: TfmARRptPenjPerTglDlg
+  Left = 338
+  Top = 138
+  Caption = ''
+  ClientHeight = 193
+  ClientWidth = 551
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 551
+    inherited laTitle: TLabel
+      Width = 313
+      Caption = 'Laporan Penjualan Per - Tanggal'
+    end
+  end
+  inherited paCenter: TPanel
+    Width = 551
+    Height = 111
+    object GroupBox1: TGroupBox
+      Left = 22
+      Top = 7
+      Width = 319
+      Height = 70
+      Caption = 'Periode'
+      Ctl3D = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 0
+      object Label2: TLabel
+        Left = 133
+        Top = 30
+        Width = 47
+        Height = 19
+        Caption = 'sampai'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object dt1: TdxDateEdit
+        Left = 10
+        Top = 24
+        Width = 120
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Comic Sans MS'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        OnKeyPress = dt1KeyPress
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+      object dt2: TdxDateEdit
+        Left = 190
+        Top = 24
+        Width = 120
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Comic Sans MS'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 1
+        OnKeyPress = dt1KeyPress
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+    end
+    object rcNota: TdxCheckEdit
+      Left = 21
+      Top = 79
+      Width = 133
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+      Caption = 'Detail Per Nota'
+      OnChange = rcNotaChange
+    end
+    object rbJenis: TRadioGroup
+      Left = 351
+      Top = 5
+      Width = 167
+      Height = 70
+      Caption = '[ Valuta ]'
+      Columns = 2
+      Ctl3D = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Comic Sans MS'
+      Font.Style = [fsBold]
+      ItemIndex = 0
+      Items.Strings = (
+        'IDR'
+        'USD')
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 2
+    end
+    object dxJenisBrg: TdxImageEdit
+      Left = 24
+      Top = 225
+      Width = 109
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      Text = 'SEMUA'
+      StyleController = SCEdit
+      Descriptions.Strings = (
+        'SEMUA'
+        'SPARE PART'
+        'MESIN')
+      ImageIndexes.Strings = (
+        '0'
+        '1'
+        '2')
+      Values.Strings = (
+        'A'
+        'S'
+        'M')
+    end
+    object rcHPP: TdxCheckEdit
+      Left = 22
+      Top = 262
+      Width = 133
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      Caption = 'Tampilkan HPP'
+    end
+  end
+  inherited paBottom: TPanel
+    Top = 152
+    Width = 551
+    inherited bbPreview: TBitBtn
+      Left = 305
+      OnClick = bbPreviewClick
+    end
+    inherited bbPrint: TBitBtn
+      Left = 399
+      OnClick = bbPreviewClick
+    end
+    inherited bbExit: TBitBtn
+      Left = 473
+    end
+  end
+  object ActionList: TActionList
+    Left = 228
+    Top = 8
+    object ActPrint: TAction
+      Category = 'Data'
+      Caption = 'Cetak (F9)'
+      ShortCut = 120
+      OnExecute = bbPreviewClick
+    end
+  end
+end

@@ -1,0 +1,903 @@
+inherited fmINMsAssets: TfmINMsAssets
+  Left = 479
+  Top = 184
+  Caption = 'Master Assets'
+  ClientHeight = 513
+  ClientWidth = 741
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 464
+    inherited pa3: TdxContainer
+      Height = 285
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 501
+    Width = 741
+  end
+  inherited pa2: TdxContainer
+    Height = 464
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 548
+    Height = 464
+    inherited pcParent: TdxPageControl
+      Width = 548
+      Height = 464
+      inherited ts01: TdxTabSheet
+        Caption = 'Depresiasi'
+        object pcMain: TdxPageControl [0]
+          Left = 0
+          Top = 0
+          Width = 548
+          Height = 464
+          ActivePage = ts02
+          Align = alClient
+          HideButtons = False
+          HotTrack = False
+          MultiLine = False
+          OwnerDraw = False
+          RaggedRight = False
+          ScrollOpposite = False
+          TabHeight = 0
+          TabOrder = 2
+          TabPosition = dxtpTop
+          TabStop = False
+          TabWidth = 0
+          object dxTabSheet1: TdxTabSheet
+            Caption = '&Grid'
+            object dbgList: TdxDBGrid
+              Left = 0
+              Top = 0
+              Width = 1054
+              Height = 458
+              Bands = <
+                item
+                end>
+              DefaultLayout = True
+              HeaderPanelRowCount = 1
+              KeyField = 'SuppID'
+              SummaryGroups = <>
+              SummarySeparator = ', '
+              Align = alClient
+              TabOrder = 0
+              DataSource = dsMain
+              Filter.Criteria = {00000000}
+              HideFocusRect = True
+              HideSelection = True
+              LookAndFeel = lfFlat
+              OptionsBehavior = [edgoAutoSearch, edgoAutoSort, edgoDragScroll, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+              OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowAutoHeight, edgoUseBitmap]
+              object dbgListColumn1: TdxDBGridColumn
+                ReadOnly = True
+                Width = 83
+                BandIndex = 0
+                RowIndex = 0
+                FieldName = 'AssetsID'
+              end
+              object dbgListColumn2: TdxDBGridColumn
+                ReadOnly = True
+                Width = 178
+                BandIndex = 0
+                RowIndex = 0
+                FieldName = 'AssetsName'
+              end
+              object dbgListColumn5: TdxDBGridColumn
+                ReadOnly = True
+                Width = 72
+                BandIndex = 0
+                RowIndex = 0
+                FieldName = 'AssetsType'
+              end
+              object dbgListColumn3: TdxDBGridColumn
+                ReadOnly = True
+                Width = 124
+                BandIndex = 0
+                RowIndex = 0
+                FieldName = 'RekeningD'
+              end
+              object dbgListColumn4: TdxDBGridColumn
+                ReadOnly = True
+                Width = 124
+                BandIndex = 0
+                RowIndex = 0
+                FieldName = 'RekeningK'
+              end
+            end
+          end
+          object ts02: TdxTabSheet
+            Caption = 'Data'
+            object Label1: TLabel
+              Left = 15
+              Top = 68
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Tgl Beli :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label2: TLabel
+              Left = 15
+              Top = 92
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Status Aktif :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label7: TLabel
+              Left = 15
+              Top = 164
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Penyusutan :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label8: TLabel
+              Left = 15
+              Top = 140
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Nilai Buku :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label13: TLabel
+              Left = 15
+              Top = 44
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Nama Aset :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label14: TLabel
+              Left = 15
+              Top = 116
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Type Aset :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label9: TLabel
+              Left = 31
+              Top = 606
+              Width = 63
+              Height = 19
+              Alignment = taRightJustify
+              Caption = 'FgAssets :'
+              Enabled = False
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -16
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+              Visible = False
+            end
+            object Label23: TLabel
+              Left = 128
+              Top = 473
+              Width = 7
+              Height = 19
+              Alignment = taRightJustify
+              Caption = ' :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -16
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label31: TLabel
+              Left = 15
+              Top = 20
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Kode Aset :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label35: TLabel
+              Left = 15
+              Top = 212
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Rekening Debet :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label3: TLabel
+              Left = 15
+              Top = 188
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Lama Penyusutan :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label5: TLabel
+              Left = 15
+              Top = 236
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Rekening Kredit :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label6: TLabel
+              Left = 15
+              Top = 260
+              Width = 125
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Keterangan :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label4: TLabel
+              Left = 151
+              Top = 140
+              Width = 21
+              Height = 17
+              Alignment = taRightJustify
+              Caption = 'Rp.'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object Label10: TLabel
+              Left = 216
+              Top = 188
+              Width = 36
+              Height = 17
+              Caption = 'Tahun'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object DBText5: TDBText
+              Left = 310
+              Top = 212
+              Width = 54
+              Height = 17
+              AutoSize = True
+              DataField = 'LDebit'
+              DataSource = dsMain
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+            end
+            object DBText1: TDBText
+              Left = 310
+              Top = 236
+              Width = 54
+              Height = 17
+              AutoSize = True
+              DataField = 'LKredit'
+              DataSource = dsMain
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label11: TLabel
+              Left = 279
+              Top = 68
+              Width = 75
+              Height = 20
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Tgl Jual :'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Transparent = True
+            end
+            object dxDBImageEdit2: TdxDBImageEdit
+              Left = 150
+              Top = 87
+              Width = 125
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 0
+              OnKeyPress = dxDBEdit1KeyPress
+              DataField = 'FgActive'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Descriptions.Strings = (
+                'YES'
+                'DISPOSAL'
+                'SOLD')
+              ImageIndexes.Strings = (
+                '0'
+                '1'
+                '2')
+              Values.Strings = (
+                'Y'
+                'T'
+                'S')
+            end
+            object GroupBox2: TGroupBox
+              Left = 8
+              Top = 371
+              Width = 249
+              Height = 65
+              Ctl3D = False
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentCtl3D = False
+              ParentFont = False
+              TabOrder = 1
+              object Label21: TLabel
+                Left = 23
+                Top = 14
+                Width = 36
+                Height = 17
+                Alignment = taRightJustify
+                Caption = 'User :'
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clBlack
+                Font.Height = -15
+                Font.Name = 'Times New Roman'
+                Font.Style = []
+                ParentFont = False
+              end
+              object DBText8: TDBText
+                Left = 68
+                Top = 15
+                Width = 130
+                Height = 17
+                DataField = 'UpdUser'
+                DataSource = dsMain
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clBlack
+                Font.Height = -15
+                Font.Name = 'Times New Roman'
+                Font.Style = []
+                ParentFont = False
+              end
+              object Label22: TLabel
+                Left = 15
+                Top = 35
+                Width = 45
+                Height = 17
+                Alignment = taRightJustify
+                Caption = 'Waktu :'
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clBlack
+                Font.Height = -15
+                Font.Name = 'Times New Roman'
+                Font.Style = []
+                ParentFont = False
+              end
+              object DBText9: TDBText
+                Left = 68
+                Top = 36
+                Width = 130
+                Height = 17
+                DataField = 'UpdDate'
+                DataSource = dsMain
+                Font.Charset = ANSI_CHARSET
+                Font.Color = clBlack
+                Font.Height = -15
+                Font.Name = 'Times New Roman'
+                Font.Style = []
+                ParentFont = False
+              end
+            end
+            object dxDBEdit1: TdxDBEdit
+              Left = 150
+              Top = 15
+              Width = 150
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 2
+              OnKeyPress = dxDBEdit1KeyPress
+              CharCase = ecUpperCase
+              DataField = 'AssetsID'
+              DataSource = dsMain
+              StyleController = SCEdit
+            end
+            object dxDBEdit9: TdxDBEdit
+              Left = 150
+              Top = 255
+              Width = 350
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+              OnKeyPress = dxDBEdit1KeyPress
+              AutoSize = False
+              CharCase = ecUpperCase
+              DataField = 'Note'
+              DataSource = dsMain
+              MaxLength = 200
+              StyleController = SCEdit
+              Height = 110
+              StoredValues = 2
+            end
+            object dxDBEdit7: TdxDBEdit
+              Left = 180
+              Top = 135
+              Width = 150
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 4
+              OnKeyPress = dxDBEdit1KeyPress
+              Alignment = taRightJustify
+              CharCase = ecUpperCase
+              DataField = 'AssetsValue'
+              DataSource = dsMain
+              StyleController = SCEdit
+              StoredValues = 1
+            end
+            object dxDBEdit10: TdxDBEdit
+              Left = 150
+              Top = 39
+              Width = 350
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 5
+              OnKeyPress = dxDBEdit1KeyPress
+              CharCase = ecUpperCase
+              DataField = 'AssetsName'
+              DataSource = dsMain
+              StyleController = SCEdit
+            end
+            object dxDBDateEdit1: TdxDBDateEdit
+              Left = 150
+              Top = 63
+              Width = 125
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 6
+              OnKeyPress = dxDBEdit1KeyPress
+              DataField = 'tglbeli'
+              DataSource = dsMain
+              StyleController = SCEdit
+            end
+            object dxDBDateEdit2: TdxDBDateEdit
+              Left = 360
+              Top = 63
+              Width = 125
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 7
+              OnKeyPress = dxDBEdit1KeyPress
+              DataField = 'tgljual'
+              DataSource = dsMain
+              StyleController = SCEdit
+            end
+            object dxDBImageEdit3: TdxDBImageEdit
+              Left = 150
+              Top = 111
+              Width = 180
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 8
+              OnKeyPress = dxDBEdit1KeyPress
+              DataField = 'AssetsType'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Descriptions.Strings = (
+                '1 - KENDARAAN'
+                '2 - TANAH'
+                '3 - MESIN/PERALATAN'
+                '4 - GEDUNG/BANGUNAN'
+                '5 - FURNITURE')
+              ImageIndexes.Strings = (
+                '0'
+                '1'
+                '2'
+                '3'
+                '4')
+              Values.Strings = (
+                '1'
+                '2'
+                '3'
+                '4'
+                '5')
+            end
+            object dxDBImageEdit4: TdxDBImageEdit
+              Left = 150
+              Top = 159
+              Width = 60
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 9
+              OnKeyPress = dxDBEdit1KeyPress
+              DataField = 'FgSusut'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Descriptions.Strings = (
+                'YES'
+                'NO')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dxDBImageEdit5: TdxDBImageEdit
+              Left = 109
+              Top = 598
+              Width = 52
+              Enabled = False
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -16
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 10
+              Visible = False
+              DataField = 'FgAssets'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Descriptions.Strings = (
+                'YES'
+                'NO')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dxDBButtonEdit1: TdxDBButtonEdit
+              Left = 150
+              Top = 231
+              Width = 150
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 11
+              OnKeyPress = dxDBEdit1KeyPress
+              CharCase = ecUpperCase
+              DataField = 'RekeningK'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Buttons = <
+                item
+                  Default = True
+                end>
+              OnButtonClick = dxDBButtonEdit1ButtonClick
+              ExistButtons = True
+            end
+            object dxDBButtonEdit2: TdxDBButtonEdit
+              Left = 150
+              Top = 183
+              Width = 60
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 12
+              OnKeyPress = dxDBEdit1KeyPress
+              CharCase = ecUpperCase
+              DataField = 'Term'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Buttons = <
+                item
+                  Default = True
+                end>
+              OnButtonClick = dxDBButtonEdit2ButtonClick
+              ExistButtons = True
+            end
+            object dxDBButtonEdit3: TdxDBButtonEdit
+              Left = 150
+              Top = 207
+              Width = 150
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 13
+              OnKeyPress = dxDBEdit1KeyPress
+              CharCase = ecUpperCase
+              DataField = 'RekeningD'
+              DataSource = dsMain
+              StyleController = SCEdit
+              Buttons = <
+                item
+                  Default = True
+                end>
+              OnButtonClick = dxDBButtonEdit3ButtonClick
+              ExistButtons = True
+            end
+          end
+        end
+        inherited bbSave: TdxButton
+          Left = 309
+          Top = 407
+          Width = 95
+          Height = 35
+          Font.Charset = ANSI_CHARSET
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Caption = 'Simpan (F3)'
+        end
+        inherited bbCancel: TdxButton
+          Left = 405
+          Top = 407
+          Width = 95
+          Height = 35
+          Font.Charset = ANSI_CHARSET
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Caption = 'Batal (Esc)'
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 741
+    inherited sbLast: TSpeedButton
+      Left = 704
+    end
+    inherited sbNext: TSpeedButton
+      Left = 677
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 650
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 623
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 597
+    end
+    inherited BvlPeriod: TBevel
+      Left = 351
+    end
+    inherited laPeriod: TLabel
+      Left = 355
+    end
+  end
+  inherited quMain: TADOQuery
+    BeforeDelete = quMainBeforeDelete
+    OnCalcFields = quMainCalcFields
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'select * from inmsassets')
+    object quMainAssetsID: TStringField
+      FieldName = 'AssetsID'
+    end
+    object quMainAssetsName: TStringField
+      FieldName = 'AssetsName'
+      Size = 50
+    end
+    object quMaintglbeli: TDateTimeField
+      FieldName = 'tglbeli'
+      DisplayFormat = 'dd/MM/yyyy'
+      EditMask = 'dd/MM/yyyy'
+    end
+    object quMaintgljual: TDateTimeField
+      FieldName = 'tgljual'
+      DisplayFormat = 'dd/MM/yyyy'
+      EditMask = 'dd/MM/yyyy'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+      Size = 50
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+      DisplayFormat = 'dd/MM/yyyy'
+      EditMask = 'dd/MM/yyyy'
+    end
+    object quMainAssetsType: TStringField
+      FieldName = 'AssetsType'
+      FixedChar = True
+      Size = 1
+    end
+    object quMainFgSusut: TStringField
+      FieldName = 'FgSusut'
+      FixedChar = True
+      Size = 1
+    end
+    object quMainAssetsValue: TBCDField
+      FieldName = 'AssetsValue'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quMainFgAssets: TStringField
+      FieldName = 'FgAssets'
+      FixedChar = True
+      Size = 1
+    end
+    object quMainNote: TStringField
+      FieldName = 'Note'
+      Size = 200
+    end
+    object quMainRekeningD: TStringField
+      FieldName = 'RekeningD'
+    end
+    object quMainRekeningK: TStringField
+      FieldName = 'RekeningK'
+    end
+    object quMainFgActive: TStringField
+      FieldName = 'FgActive'
+      FixedChar = True
+      Size = 1
+    end
+    object quMainTerm: TIntegerField
+      FieldName = 'Term'
+    end
+    object quMainLType: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LType'
+      Size = 50
+      Calculated = True
+    end
+    object quMainLDebit: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LDebit'
+      Size = 50
+      Calculated = True
+    end
+    object quMainLKredit: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LKredit'
+      Size = 50
+      Calculated = True
+    end
+  end
+  inherited ActionList: TActionList
+    Left = 392
+    Top = 4
+  end
+end

@@ -1,0 +1,307 @@
+inherited fmCFRptFPS: TfmCFRptFPS
+  Left = 251
+  Top = 197
+  Caption = 'Rekap Faktur Pajak'
+  ClientHeight = 474
+  ClientWidth = 1318
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 425
+    inherited pa3: TdxContainer
+      Top = 65
+      Height = 360
+      object RadioGroup1: TRadioGroup
+        Left = 8
+        Top = 8
+        Width = 168
+        Height = 92
+        Caption = '[ Tampilkan ]'
+        ItemIndex = 0
+        Items.Strings = (
+          'Belum Ada Faktur Pajak'
+          'Sudah Ada Faktur Pajak'
+          'Semua')
+        TabOrder = 0
+      end
+      object Button1: TButton
+        Left = 56
+        Top = 176
+        Width = 75
+        Height = 25
+        Caption = 'REFRESH'
+        TabOrder = 1
+        OnClick = Button1Click
+      end
+      object RadioGroup2: TRadioGroup
+        Left = 8
+        Top = 104
+        Width = 168
+        Height = 60
+        Caption = '[ Urutkan ]'
+        ItemIndex = 0
+        Items.Strings = (
+          'Old'
+          'New')
+        TabOrder = 2
+      end
+    end
+    inherited paOperation: TdxContainer
+      Height = 57
+      inherited ceContinuousAdd: TdxCheckEdit [0]
+        Left = 36
+        Top = 19
+        Enabled = False
+      end
+      inherited bbNew: TdxButton [1]
+        Enabled = False
+      end
+      inherited bbDelete: TdxButton [2]
+        Top = 4
+        Enabled = False
+      end
+      inherited bbFind: TdxButton [3]
+        Top = 4
+        OnClick = bbFindClick
+      end
+    end
+    inherited pa1: TdxContainer
+      Top = 57
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 462
+    Width = 1318
+  end
+  inherited pa2: TdxContainer
+    Height = 425
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 1125
+    Height = 425
+    inherited pcParent: TdxPageControl
+      Width = 1125
+      Height = 425
+      inherited ts01: TdxTabSheet
+        inherited bbSave: TdxButton
+          Left = 954
+          Top = 403
+        end
+        inherited bbCancel: TdxButton
+          Left = 1034
+          Top = 403
+        end
+        object dxDBGrid1: TdxDBGrid
+          Left = 0
+          Top = 0
+          Width = 1124
+          Height = 424
+          Bands = <
+            item
+            end>
+          DefaultLayout = True
+          HeaderPanelRowCount = 1
+          KeyField = 'KonsinyasiInvID'
+          SummaryGroups = <>
+          SummarySeparator = ', '
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          OnDblClick = dxDBGrid1DblClick
+          BandFont.Charset = ANSI_CHARSET
+          BandFont.Color = clWindowText
+          BandFont.Height = -12
+          BandFont.Name = 'Times New Roman'
+          BandFont.Style = []
+          DataSource = dsMain
+          Filter.Criteria = {00000000}
+          HeaderFont.Charset = ANSI_CHARSET
+          HeaderFont.Color = clWindowText
+          HeaderFont.Height = -12
+          HeaderFont.Name = 'Times New Roman'
+          HeaderFont.Style = []
+          HideFocusRect = True
+          HideSelection = True
+          LookAndFeel = lfFlat
+          OptionsBehavior = [edgoAutoSearch, edgoAutoSort, edgoDragScroll, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+          OptionsDB = [edgoCancelOnExit, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+          OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowAutoHeight, edgoUseBitmap]
+          PreviewFont.Charset = DEFAULT_CHARSET
+          PreviewFont.Color = clBlue
+          PreviewFont.Height = -12
+          PreviewFont.Name = 'Comic Sans MS'
+          PreviewFont.Style = []
+          object dxDBGrid1Column1: TdxDBGridColumn
+            Caption = 'Tanggal'
+            Width = 80
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Transdate'
+          end
+          object dxDBGrid1Column2: TdxDBGridColumn
+            Caption = 'FPP'
+            Width = 120
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'KonsinyasiInvID'
+          end
+          object dxDBGrid1Column9: TdxDBGridColumn
+            Caption = 'Nomor PO'
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'POID'
+          end
+          object dxDBGrid1Column3: TdxDBGridColumn
+            Caption = 'Supplier'
+            Width = 150
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'SuppName'
+          end
+          object dxDBGrid1Column4: TdxDBGridColumn
+            Caption = 'Subtotal'
+            Width = 95
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'SubTotal'
+          end
+          object dxDBGrid1Column5: TdxDBGridColumn
+            Width = 95
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Disc'
+          end
+          object dxDBGrid1Column6: TdxDBGridColumn
+            Width = 95
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'PPN'
+          end
+          object dxDBGrid1Column7: TdxDBGridColumn
+            Caption = 'Total'
+            Width = 95
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'TTLKS'
+          end
+          object dxDBGrid1Column8: TdxDBGridColumn
+            Caption = 'No Faktur'
+            Width = 150
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'FPS'
+          end
+          object dxDBGrid1Column10: TdxDBGridColumn
+            Caption = 'Tgl Faktur'
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'tglFPS'
+          end
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1318
+    inherited sbLast: TSpeedButton
+      Left = 1281
+    end
+    inherited sbNext: TSpeedButton
+      Left = 1254
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 1227
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 1200
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 1174
+    end
+    inherited BvlPeriod: TBevel
+      Left = 928
+    end
+    inherited laPeriod: TLabel
+      Left = 932
+    end
+  end
+  inherited quMain: TADOQuery
+    SQL.Strings = (
+      'select * from ('
+      
+        'select A.Transdate,A.KonsinyasiInvID,C.POID,B.SuppName,C.Subtota' +
+        'lM+C.SubtotalU as  SubTotal,C.DiscAmount as Disc,C.PPN,C.TTLKJ a' +
+        's TTLKS,A.FPS,A.transdate as tglFPS from APTrKonsinyasiInvSub C'
+      
+        'inner join APTrKonsinyasiInvHd A on A.KonsinyasiInvID=C.Konsinya' +
+        'siInvID'
+      ''
+      'inner join APMsSupplier B on A.SuppID=B.SuppID'
+      'WHere A.PPN<>0'
+      'UNION ALL'
+      
+        'select A.TransDate,A.PurchaseID,'#39#39',B.SuppName,A.StPb,A.DiscAmoun' +
+        't,A.PPN,A.TTLPb,A.POID,A.tglFPS from APTrPurchaseHd A inner join' +
+        ' APMsSupplier B on A.SuppID=B.SuppID'
+      'where A.PPN<>0 AND A.FgPajak='#39'Y'#39
+      ') as K')
+    object quMainTransdate: TDateTimeField
+      FieldName = 'Transdate'
+      ReadOnly = True
+      DisplayFormat = 'dd/MM/yyyy'
+    end
+    object quMainKonsinyasiInvID: TStringField
+      FieldName = 'KonsinyasiInvID'
+      ReadOnly = True
+      Size = 50
+    end
+    object quMainSuppName: TStringField
+      FieldName = 'SuppName'
+      ReadOnly = True
+      Size = 50
+    end
+    object quMainSubTotal: TBCDField
+      FieldName = 'SubTotal'
+      ReadOnly = True
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quMainDisc: TBCDField
+      FieldName = 'Disc'
+      ReadOnly = True
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quMainPPN: TBCDField
+      FieldName = 'PPN'
+      ReadOnly = True
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quMainTTLKS: TBCDField
+      FieldName = 'TTLKS'
+      ReadOnly = True
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quMainFPS: TStringField
+      FieldName = 'FPS'
+      ReadOnly = True
+      Size = 50
+    end
+    object quMainPOID: TStringField
+      FieldName = 'POID'
+      ReadOnly = True
+      Size = 75
+    end
+    object quMaintglFPS: TDateTimeField
+      FieldName = 'tglFPS'
+      ReadOnly = True
+    end
+  end
+end

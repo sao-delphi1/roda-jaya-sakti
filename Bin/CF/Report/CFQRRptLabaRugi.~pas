@@ -1,0 +1,162 @@
+unit CFQRRptLabaRugi;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv1, DB, ADODB, StdCtrls, QRCtrls, QuickRpt, ExtCtrls;
+
+type
+  TfmCFQrRptLabaRugi = class(TfmRptLv1)
+    QRDBText1: TQRDBText;
+    QRBand1: TQRBand;
+    quCalc: TADOQuery;
+    quStock: TADOQuery;
+    bnd001: TQRSubDetail;
+    QRBand2: TQRBand;
+    qu002: TADOQuery;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    procedure QRDBText2Print(sender: TObject; var Value: String);
+    procedure MyReportBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure BndDetailBeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure bnd001AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRLabel17Print(sender: TObject; var Value: String);
+    procedure QRLabel11Print(sender: TObject; var Value: String);
+    procedure QRLabel2Print(sender: TObject; var Value: String);
+    procedure QRBand2BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel3Print(sender: TObject; var Value: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    dari,sampai : string;
+    Total, GrandTotal : Currency;
+  end;
+
+var
+  fmCFQrRptLabaRugi: TfmCFQrRptLabaRugi;
+
+implementation
+
+uses MyUnit;
+
+{$R *.dfm}
+
+procedure TfmCFQrRptLabaRugi.QRDBText2Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value)
+end;
+
+procedure TfmCFQrRptLabaRugi.MyReportBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  inherited;
+  GrandTotal := 0;
+end;
+
+procedure TfmCFQrRptLabaRugi.BndDetailBeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  Total := 0;
+end;
+
+procedure TfmCFQrRptLabaRugi.bnd001AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  inherited;
+  if (TRIM(qu002.FieldByName('Kode').AsString) = '1') or (TRIM(qu002.FieldByName('Kode').AsString) = '4') then
+  begin
+    Total := Total + qu002.FieldByName('Jumlah').AsCurrency;
+    GrandTotal := GrandTotal + qu002.FieldByName('Jumlah').AsCurrency;
+  end else
+  begin
+    Total := Total - qu002.FieldByName('Jumlah').AsCurrency;
+    GrandTotal := GrandTotal - qu002.FieldByName('Jumlah').AsCurrency;
+  end;
+end;
+
+procedure TfmCFQrRptLabaRugi.QRLabel17Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+{  if Total < 0 then
+    Value := FormatRptkurung(CurrToStr(Total*-1))
+  else}
+//  if (qu002.FieldByName('Kode').AsInteger = 1) or (qu002.FieldByName('Kode').AsInteger = 5) then
+    Value := FormatRptkurung(CurrToStr(Total))
+//  else
+//    Value := FormatRptkurung(CurrToStr(Total*-1));
+end;
+
+procedure TfmCFQrRptLabaRugi.QRLabel11Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := 'Total '+qu001.FieldByName('Komponen').AsString+' : Rp';
+end;
+
+procedure TfmCFQrRptLabaRugi.QRLabel2Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := 'Net Profit : Rp ' + FormatRptkurung(CurrToStr(GrandTotal));
+end;
+
+procedure TfmCFQrRptLabaRugi.QRBand2BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  if qu001.FieldByName('Kode').AsInteger = 3 then
+  begin
+    QRLabel1.Enabled := True;
+    QRLabel3.Enabled := True;
+  end else
+  begin
+    QRLabel1.Enabled := False;
+    QRLabel3.Enabled := False;
+  end;
+{  if (qu001.FieldByName('Kode').AsString = '2') or (qu001.FieldByName('Kode').AsString = '3') or
+     (qu001.FieldByName('Kode').AsString = '5') or (qu001.FieldByName('Kode').AsString = '6') then
+  begin
+    if qu001.FieldByName('Kode').AsString = '2' then
+      QRLabel1.Caption := 'Gross Profit : Rp'
+    else
+    if qu001.FieldByName('Kode').AsString = '3' then
+      QRLabel1.Caption := 'Net Profit before Other Income and Other Expenses : Rp'
+    else
+    if qu001.FieldByName('Kode').AsString = '5' then
+      QRLabel1.Caption := 'Net Profit before Tax : Rp';
+    QRBand2.Height := 42;
+    QRLabel1.Enabled := True;
+  end else
+  begin
+    QRBand2.Height := 21;
+    QRLabel1.Enabled := False;
+  end;  }
+end;
+
+procedure TfmCFQrRptLabaRugi.QRLabel3Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+{  if GrandTotal < 0 then
+    Value := FormatRptkurung(CurrToStr(GrandTotal*-1))
+  else}
+    Value := FormatRptkurung(CurrToStr(GrandTotal));
+end;
+
+end.

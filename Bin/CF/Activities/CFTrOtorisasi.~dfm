@@ -1,0 +1,276 @@
+inherited fmCFTrOtorisasi: TfmCFTrOtorisasi
+  Left = 406
+  Top = 383
+  Caption = 'Otorisasi Pengeluaran Uang'
+  ClientHeight = 415
+  ClientWidth = 1184
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 366
+    inherited pa3: TdxContainer
+      Top = 8
+      Height = 358
+      object CheckBox1: TCheckBox
+        Left = 24
+        Top = 8
+        Width = 97
+        Height = 17
+        Caption = 'Lihat Approval'
+        TabOrder = 0
+        OnClick = CheckBox1Click
+      end
+      object Button1: TButton
+        Left = 24
+        Top = 40
+        Width = 75
+        Height = 25
+        Caption = 'CARI'
+        TabOrder = 1
+        OnClick = Button1Click
+      end
+    end
+    inherited paOperation: TdxContainer
+      Top = 8
+      Height = 0
+      inherited bbNew: TdxButton
+        Enabled = False
+      end
+      inherited bbDelete: TdxButton
+        Top = 52
+        Enabled = False
+      end
+      inherited bbFind: TdxButton
+        Top = 100
+        Enabled = False
+      end
+      inherited ceContinuousAdd: TdxCheckEdit
+        Left = 28
+        Enabled = False
+      end
+    end
+    inherited pa1: TdxContainer
+      Top = 0
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 403
+    Width = 1184
+  end
+  inherited pa2: TdxContainer
+    Height = 366
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 991
+    Height = 366
+    inherited pcParent: TdxPageControl
+      Width = 991
+      Height = 366
+      inherited ts01: TdxTabSheet
+        inherited bbSave: TdxButton
+          Left = 820
+          Top = 344
+        end
+        inherited bbCancel: TdxButton
+          Left = 900
+          Top = 344
+        end
+        object dxDBGrid1: TdxDBGrid
+          Left = 0
+          Top = 0
+          Width = 991
+          Height = 366
+          Bands = <
+            item
+            end>
+          DefaultLayout = True
+          HeaderPanelRowCount = 1
+          SummaryGroups = <>
+          SummarySeparator = ', '
+          Align = alClient
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          OnDblClick = dxDBGrid1DblClick
+          BandFont.Charset = ANSI_CHARSET
+          BandFont.Color = clWindowText
+          BandFont.Height = -12
+          BandFont.Name = 'Comic Sans MS'
+          BandFont.Style = []
+          DataSource = dsMain
+          Filter.Criteria = {00000000}
+          HeaderFont.Charset = ANSI_CHARSET
+          HeaderFont.Color = clWindowText
+          HeaderFont.Height = -12
+          HeaderFont.Name = 'Arial'
+          HeaderFont.Style = []
+          HideFocusRect = True
+          HideSelection = True
+          LookAndFeel = lfFlat
+          OptionsBehavior = [edgoAutoSearch, edgoAutoSort, edgoDragScroll, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+          OptionsDB = [edgoCancelOnExit, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+          OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowAutoHeight, edgoUseBitmap]
+          PreviewFont.Charset = DEFAULT_CHARSET
+          PreviewFont.Color = clBlue
+          PreviewFont.Height = -12
+          PreviewFont.Name = 'Comic Sans MS'
+          PreviewFont.Style = []
+          object dxDBGrid1VoucherID: TdxDBGridColumn
+            Caption = 'Voucher ID'
+            Width = 136
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'VoucherID'
+          end
+          object dxDBGrid1Column8: TdxDBGridColumn
+            Caption = 'Tgl Transaksi'
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'TransDate1'
+          end
+          object dxDBGrid1Transdate: TdxDBGridColumn
+            Caption = 'Tgl Efektif'
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Transdate'
+          end
+          object dxDBGrid1Actor: TdxDBGridColumn
+            Width = 214
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Actor'
+          end
+          object dxDBGrid1CurrID: TdxDBGridColumn
+            Caption = 'Valuta'
+            Visible = False
+            Width = 49
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'CurrID'
+          end
+          object dxDBGrid1JumlahD: TdxDBGridColumn
+            Caption = 'Jumlah'
+            Width = 113
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'JumlahD'
+          end
+          object dxDBGrid1Column7: TdxDBGridButtonColumn
+            Width = 70
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'BankID'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dxDBGrid1Column7ButtonClick
+          end
+          object dxDBGrid1Column6: TdxDBGridColumn
+            Width = 47
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Flag'
+          end
+          object dxDBGrid1Column9: TdxDBGridColumn
+            Visible = False
+            Width = 136
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'KodeApproval'
+          end
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1184
+    inherited sbLast: TSpeedButton
+      Left = 1147
+    end
+    inherited sbNext: TSpeedButton
+      Left = 1120
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 1093
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 1066
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 1040
+    end
+    inherited BvlPeriod: TBevel
+      Left = 794
+    end
+    inherited laPeriod: TLabel
+      Left = 798
+    end
+  end
+  inherited quMain: TADOQuery
+    SQL.Strings = (
+      
+        'SELECT VoucherID,Transdate,TransDate1,JumlahD,CurrID,BankID,Kode' +
+        'Approval,'
+      
+        'isnull((SELECT K.SuppName FROM (SELECT SuppID,SuppName From APMs' +
+        'Supplier) as K WHERE K.SuppID=Actor),Actor) as Actor,'
+      
+        'CASE WHEN FlagKKBB IN ('#39'APK'#39','#39'APB'#39','#39'APC'#39') THEN '#39'Payable'#39' ELSE '#39'P' +
+        'engeluaran/Biaya'#39' END as Flag FROM CFTrKKBBHd'
+      
+        'WHERE FlagKKBB IN ('#39'APK'#39','#39'APB'#39','#39'APC'#39','#39'KK'#39','#39'BK'#39') AND FgPayment='#39'F' +
+        #39
+      'ORDER BY VoucherID')
+    object quMainVoucherID: TStringField
+      FieldName = 'VoucherID'
+      Size = 50
+    end
+    object quMainTransdate: TDateTimeField
+      FieldName = 'Transdate'
+      DisplayFormat = 'dd/MM/yyyy'
+    end
+    object quMainJumlahD: TBCDField
+      FieldName = 'JumlahD'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quMainCurrID: TStringField
+      FieldName = 'CurrID'
+      Size = 30
+    end
+    object quMainActor: TStringField
+      FieldName = 'Actor'
+      ReadOnly = True
+      Size = 200
+    end
+    object quMainFlag: TStringField
+      FieldName = 'Flag'
+      ReadOnly = True
+      Size = 11
+    end
+    object quMainTransDate1: TDateTimeField
+      FieldName = 'TransDate1'
+      DisplayFormat = 'dd/MM/yyyy'
+    end
+    object quMainBankID: TStringField
+      FieldName = 'BankID'
+      Size = 30
+    end
+    object quMainKodeApproval: TStringField
+      FieldName = 'KodeApproval'
+      Size = 50
+    end
+  end
+  inherited ActionList: TActionList
+    Left = 384
+    Top = 4
+  end
+end

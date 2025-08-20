@@ -1,0 +1,417 @@
+inherited fmSAMsPT: TfmSAMsPT
+  Left = 360
+  Top = 234
+  Caption = 'Master PT'
+  ClientHeight = 408
+  PixelsPerInch = 96
+  TextHeight = 14
+  inherited paLeft: TdxContainer
+    Height = 355
+    inherited pa3: TdxContainer
+      Height = 162
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 395
+  end
+  inherited pa2: TdxContainer
+    Height = 355
+  end
+  inherited dxContainer7: TdxContainer
+    Height = 355
+    inherited pcParent: TdxPageControl
+      Height = 355
+      inherited ts01: TdxTabSheet
+        object Label10: TLabel [0]
+          Left = 120
+          Top = 284
+          Width = 225
+          Height = 18
+          AutoSize = False
+          Caption = 'Note : Bitmap File, rec. size = 230px x 150px'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = [fsItalic]
+          ParentFont = False
+          Transparent = True
+        end
+        object Label1: TLabel [1]
+          Left = 9
+          Top = 30
+          Width = 100
+          Height = 18
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Kode PT :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label25: TLabel [2]
+          Left = 9
+          Top = 54
+          Width = 100
+          Height = 18
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Nama PT :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label3: TLabel [3]
+          Left = 9
+          Top = 78
+          Width = 100
+          Height = 18
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Alamat PT :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label2: TLabel [4]
+          Left = 9
+          Top = 134
+          Width = 100
+          Height = 18
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Logo PT :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        inherited bbSave: TdxButton
+          Left = 427
+          Top = 324
+        end
+        inherited bbCancel: TdxButton
+          Left = 513
+          Top = 324
+        end
+        object DBImage1: TDBImage
+          Left = 118
+          Top = 131
+          Width = 230
+          Height = 150
+          Cursor = crHandPoint
+          DataField = 'LogoPT'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          Stretch = True
+          TabOrder = 2
+        end
+        object BitBtn1: TBitBtn
+          Left = 119
+          Top = 302
+          Width = 85
+          Height = 27
+          Cursor = crHandPoint
+          Hint = 'Ubah TTD'
+          Caption = '&Image'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
+          OnClick = BitBtn1Click
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333303333
+            333333333337FF3333333333330003333333333333777F333333333333080333
+            3333333F33777FF33F3333B33B000B33B3333373F777773F7333333BBB0B0BBB
+            33333337737F7F77F333333BBB0F0BBB33333337337373F73F3333BBB0F7F0BB
+            B333337F3737F73F7F3333BB0FB7BF0BB3333F737F37F37F73FFBBBB0BF7FB0B
+            BBB3773F7F37337F377333BB0FBFBF0BB333337F73F333737F3333BBB0FBF0BB
+            B3333373F73FF7337333333BBB000BBB33333337FF777337F333333BBBBBBBBB
+            3333333773FF3F773F3333B33BBBBB33B33333733773773373333333333B3333
+            333333333337F33333333333333B333333333333333733333333}
+          NumGlyphs = 2
+        end
+        object BitBtn2: TBitBtn
+          Left = 206
+          Top = 302
+          Width = 85
+          Height = 27
+          Cursor = crHandPoint
+          Hint = 'Hapus TTD'
+          Caption = '&Delete'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 4
+          OnClick = BitBtn2Click
+          Glyph.Data = {
+            9E050000424D9E05000000000000360400002800000012000000120000000100
+            08000000000068010000120B0000120B00000001000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+            A600CCFFFF0099FFFF0066FFFF0033FFFF00FFCCFF00CCCCFF0099CCFF0066CC
+            FF0033CCFF0000CCFF00FF99FF00CC99FF009999FF006699FF003399FF000099
+            FF00FF66FF00CC66FF009966FF006666FF003366FF000066FF00FF33FF00CC33
+            FF009933FF006633FF003333FF000033FF00CC00FF009900FF006600FF003300
+            FF00FFFFCC00CCFFCC0099FFCC0066FFCC0066FFCC0033FFCC0000FFCC00FFCC
+            CC00CCCCCC0099CCCC0066CCCC0033CCCC0000CCCC00FF99CC00CC99CC009999
+            CC006699CC003399CC000099CC00FF66CC00CC66CC009966CC006666CC003366
+            CC000066CC00FF33CC00CC33CC009933CC006633CC003333CC000033CC00FF00
+            CC00CC00CC009900CC006600CC003300CC000000CC00FFFF9900CCFF990099FF
+            990066FF990033FF990000FF9900FFCC9900CCCC990099CC990066CC990033CC
+            990000CC9900FF999900CC99990099999900669999003399990000999900FF66
+            9900CC66990099669900666699003366990000669900FF339900CC3399009933
+            9900663399003333990000339900FF009900CC00990099009900660099003300
+            990000009900FFFF6600CCFF660099FF660066FF660033FF660000FF6600FFCC
+            6600CCCC660099CC660066CC660033CC660000CC6600FF996600CC9966009999
+            6600669966003399660000996600FF666600CC66660099666600666666003366
+            660000666600FF336600CC33660099336600663366003333660000336600FF00
+            6600CC00660099006600660066003300660000006600FFFF3300CCFF330099FF
+            330066FF330033FF330000FF3300FFCC3300CCCC330099CC330066CC330033CC
+            330000CC3300FF993300CC99330099993300669933003399330000993300FF66
+            3300CC66330099663300666633003366330000663300FF333300CC3333009933
+            3300663333003333330000333300FF003300CC00330099003300660033003300
+            330000003300CCFF000099FF000066FF000033FF0000FFCC0000CCCC000099CC
+            000066CC000033CC000000CC0000FF990000CC99000099990000669900003399
+            000000990000FF660000CC66000099660000666600000066000033660000FF33
+            0000CC33000099330000663300003333000000330000CC000000990000006600
+            0000330000000000DD000000BB000000AA000000880000007700000055000000
+            44000000220000DD000000BB000000AA00000088000000770000005500000044
+            000000220000DDDDDD0055555500777777007777770044444400222222001111
+            110077000000550000004400000022000000F0FBFF00A4A0A000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00323232323232
+            32323232323232323232323200003232323232323200DEDEDE00323232323232
+            000032323232323232DEDDDD7272323232323232000032323232323200DDDBDB
+            DB720032323232320000323232323232004EF9F9DB7200323232323200003232
+            3232323232DBF9F94EDE323232323232000032323232323232000000DE003232
+            3232323200003232323232323232DBDE00323232323232320000323232323232
+            3200DBDEDE3232323232323200003232323232323200DBDBDE32323232323232
+            00003232323232323200DBDBDE00323232323232000032323232323232DBDBDB
+            DEDE323232323232000032323232323200DBDBDBDBDE00323232323200003232
+            3232323200DBDBDB1DDE0032323232320000323232323232001DDBDBDBDBDE32
+            323232320000323232323232DBDBDBDBDBDBDB32323232320000323232323232
+            32DBDBDBDB003232323232320000323232323232323200003232323232323232
+            0000}
+        end
+        object dxDBEdit1: TdxDBEdit
+          Left = 118
+          Top = 27
+          Width = 109
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          DataField = 'KodePT'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit16: TdxDBEdit
+          Left = 118
+          Top = 51
+          Width = 215
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 6
+          DataField = 'NamaPT'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBMemo1: TdxDBMemo
+          Left = 118
+          Top = 75
+          Width = 377
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
+          DataField = 'AlamatPT'
+          DataSource = dsMain
+          StyleController = SCEdit
+          WantReturns = False
+          Height = 56
+        end
+        object DBRadioGroup3: TDBRadioGroup
+          Left = 360
+          Top = 133
+          Width = 131
+          Height = 70
+          Caption = '[ Status Aktif ]'
+          Ctl3D = False
+          DataField = 'FgActive'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Items.Strings = (
+            'Ya'
+            'Tidak')
+          ParentCtl3D = False
+          ParentFont = False
+          TabOrder = 8
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object GroupBox1: TGroupBox
+          Left = 359
+          Top = 206
+          Width = 268
+          Height = 62
+          Ctl3D = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentCtl3D = False
+          ParentFont = False
+          TabOrder = 9
+          object Label4: TLabel
+            Left = 26
+            Top = 12
+            Width = 36
+            Height = 19
+            Alignment = taRightJustify
+            Caption = 'User :'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBText3: TDBText
+            Left = 71
+            Top = 13
+            Width = 142
+            Height = 18
+            DataField = 'UpdUser'
+            DataSource = dsMain
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label11: TLabel
+            Left = 15
+            Top = 34
+            Width = 47
+            Height = 19
+            Alignment = taRightJustify
+            Caption = 'Waktu :'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBText4: TDBText
+            Left = 71
+            Top = 34
+            Width = 187
+            Height = 19
+            DataField = 'UpdDate'
+            DataSource = dsMain
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+        end
+      end
+    end
+  end
+  inherited quMain: TADOQuery
+    SQL.Strings = (
+      'select * from samspt')
+    object quMainid: TAutoIncField
+      FieldName = 'id'
+      ReadOnly = True
+    end
+    object quMainKodePT: TStringField
+      FieldName = 'KodePT'
+      Size = 10
+    end
+    object quMainNamaPT: TStringField
+      FieldName = 'NamaPT'
+      Size = 50
+    end
+    object quMainAlamatPT: TStringField
+      FieldName = 'AlamatPT'
+      Size = 500
+    end
+    object quMainLogoPT: TBlobField
+      FieldName = 'LogoPT'
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+      Size = 50
+    end
+    object quMainFgActive: TStringField
+      FieldName = 'FgActive'
+      Size = 10
+    end
+  end
+  object odLogo: TOpenPictureDialog
+    Filter = 'Bitmaps (*.bmp)|*.bmp'
+    Left = 564
+    Top = 60
+  end
+end

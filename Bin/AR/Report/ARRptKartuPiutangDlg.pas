@@ -1,0 +1,365 @@
+unit ARRptKartuPiutangDlg;
+                                                       
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxTL, dxDBCtrl, dxDBGrid, dxEditor, dxEdLib, dxCore, dxButton,
+  dxDBELib, ActnList;
+
+type
+  TfmARRptKartuPiutangDlg = class(TfmRptDlg)
+    cbxOuts: TCheckBox;
+    GroupBox1: TGroupBox;
+    dt1: TdxDateEdit;
+    bbCancel: TdxButton;
+    rbAll: TRadioButton;
+    rbSelect: TRadioButton;
+    dbgList: TdxDBGrid;
+    dbgListCust: TdxDBGridMaskColumn;
+    dbgListCustName: TdxDBGridMaskColumn;
+    RcNota: TCheckBox;
+    rbJenis: TRadioGroup;
+    ActionList: TActionList;
+    ActPrint: TAction;
+    KodeDari: TdxButtonEdit;
+    procedure rbAllClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure bbPreviewClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure RcNotaClick(Sender: TObject);
+    procedure KodeDariButtonClick(Sender: TObject; AbsoluteIndex: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    StLap : string;
+  end;
+
+var
+  fmARRptKartuPiutangDlg: TfmARRptKartuPiutangDlg;
+
+implementation
+
+uses StdLv0, QRRptAPKartuHutang, UnitGeneral, ARQRRptKartuPiutang, Search,
+  RptLv4, RptLv0, MyUnit;
+
+{$R *.dfm}
+
+procedure TfmARRptKartuPiutangDlg.rbAllClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmARRptKartuPiutangDlg.FormShow(Sender: TObject);
+begin
+  inherited;
+  quAct.Open;
+  dt1.Date:=date;
+  if StLap = 'Jual' then
+  begin
+    laTitle.Caption := 'Laporan Rekap Piutang Penjualan';
+    dbgListCust.Caption := 'Kode Pelanggan';
+    dbgListCustName.Caption := 'Nama Pelanggan';
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT CustID,CustName FROM ARMsCustomer ORDER BY CustID');
+      Open;
+    end;
+  end else
+  begin
+    laTitle.Caption := 'Laporan Rekap Hutang Pembelian';
+    dbgListCust.Caption := 'Kode Supplier';
+    dbgListCustName.Caption := 'Nama Supplier';
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT SuppID as CustID,SuppName as CustName FROM APMsSupplier ORDER BY SuppID');
+      Open;
+    end;
+  end;
+end;
+
+procedure TfmARRptKartuPiutangDlg.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  with TfmARQRRptKartuPiutang.Create(Self) do
+  try
+    qrlTitle.Caption := laTitle.Caption;
+    qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt1.date);
+
+     if rbJenis.ItemIndex = 0 then
+       qrlValuta.Caption := 'VALUTA : RUPIAH'
+     else
+       qrlValuta.Caption := 'VALUTA : US DOLLAR';
+
+    if cbxOuts.Checked then
+      bCheckced := True
+    else
+      bCheckced := False;
+
+    if StLap = 'Jual' then
+    begin
+      QRLabel2.Caption := 'Grand Total Rekap Piutang Penjualan : ';
+      With qu001,SQL do
+      Begin
+         Close;Clear;
+         Add('SELECT DISTINCT K.CustID,L.CustName,K.CustID+'' - ''+L.CustName as Cust,ISNULL(SUM(K.Total),0) as Total,ISNULL(SUM(K.Retur),0) as Retur,'
+            +'ISNULL(SUM(K.Bayar-K.Potongan),0) as Bayar,ISNULL(SUM(K.Potongan),0) as Potongan,ISNULL(SUM(K.Total-Retur-Bayar),0) as Sisa FROM (SELECT A.CustID,A.Transdate,ISNULL(A.TTLKj,0) as Total,'
+            +'ISNULL((SELECT ISNULL(SUM(X.Qty*Z.Price),0) as Retur FROM ARTrKonReturDt X INNER JOIN ARTrKonReturHd Y ON X.KonReturID=Y.KonReturID '
+            +'INNER JOIN ARTrKonInvPelDt Z ON X.ItemID=Z.ItemID AND X.KonTransBrgID=Z.KonTransBrgID '
+            +'WHERE Z.KonInvPelID=A.KonInvPelID AND X.KonTransBrgID=A.SOID AND Y.CustID=A.CustID),0) as Retur,A.CurrID,'
+            +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''K'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherId=Q.VoucherId '
+            +'WHERE L.Note = A.KonInvPelID  AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND L.RekeningID='''+sDRPj+''') as Bayar,'
+            +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''D'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherId=Q.VoucherId '
+            +'WHERE L.Note = A.KonInvPelID  AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND L.RekeningID='''+sDGRBi+''') as Potongan '
+            +'FROM ARTrKonInvPelHd A) as K INNER JOIN ARMsCustomer L ON K.CustID=L.CustID '
+            +'WHERE CONVERT(VARCHAR(8),K.Transdate,112)<='''+FormatDateTime('yyyyMMdd',dt1.Date)+''' ');
+         if bCheckced then
+            Add(' AND ISNULL(K.Total-K.Retur-K.Bayar,0)<>0');
+         if rbSelect.Checked then
+            Add(' AND K.CustID IN '+SelGrid(quAct,dbgList,'CustID'));
+         if rbJenis.ItemIndex = 0 then
+            Add(' AND K.CurrID=''IDR'' ')
+         else
+            Add(' AND K.CurrID=''USD'' ');
+         Add('GROUP BY K.CustID,L.CustName ORDER BY K.CustID');
+         Open;
+         if IsEmpty then
+         begin
+            MsgInfo('No Data !');
+            Abort;
+         end;
+      End;
+
+      With qu002,SQL do
+      Begin
+         Close;Clear;
+         Add('SELECT DISTINCT K.CustID,K.CurrID,L.CurrName,K.CurrID+''-''+L.CurrName as Valuta FROM (SELECT A.CustID,A.Transdate,ISNULL(A.TTLKj,0) as Total,'
+            +'ISNULL((SELECT ISNULL(SUM(X.Qty*Z.Price),0) as Retur FROM ARTrKonReturDt X INNER JOIN ARTrKonReturHd Y ON X.KonReturID=Y.KonReturID '
+            +'INNER JOIN ARTrKonInvPelDt Z ON X.ItemID=Z.ItemID AND X.KonTransBrgID=Z.KonTransBrgID '
+            +'WHERE Z.KonInvPelID=A.KonInvPelID AND X.KonTransBrgID=A.SOID AND Y.CustID=A.CustID),0) as Retur,A.CurrID,'
+            +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''K'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherId=Q.VoucherId '
+            +'WHERE L.Note = A.KonInvPelID AND L.RekeningID='''+sDRPj+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Bayar, '
+            +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''D'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherId=Q.VoucherId '
+            +'WHERE L.Note = A.KonInvPelID AND L.RekeningID='''+sDGRBi+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Potongan '
+            +'FROM ARTrKonInvPelHd A) as K INNER JOIN SAMsValuta L ON K.CurrID=L.CurrID '
+            +'WHERE CONVERT(VARCHAR(8),K.Transdate,112)<='''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND K.CustID=:CustID ');
+         if bCheckced then
+            Add(' AND ISNULL(K.Total-K.Retur-K.Bayar,0)<>0');
+         if rbJenis.ItemIndex = 0 then
+            Add(' AND K.CurrID=''IDR'' ')
+         else
+            Add(' AND K.CurrID=''USD'' ');
+         Add('GROUP BY K.CustID,K.CurrID,L.CurrName ORDER BY K.CurrID');
+         Parameters.ParamByName('CustId').DataType := ftString;
+         Open;
+      End;
+
+      With qu003,SQL do
+      Begin
+         Close;Clear;
+         Add('SELECT DISTINCT K.CustID,CONVERT(VARCHAR(10),K.Transdate,103) as Tanggal,CONVERT(VARCHAR(8),K.Transdate,112),'
+            +'K.KonInvPelID as IP,ISNULL(K.TTLKj,0) as Kredit,K.Retur,K.Potongan,'
+            +'ISNULL(K.Debit-K.Potongan,0) as Debit FROM(SELECT A.CustID,A.CurrID,A.Transdate,A.KonInvPelID,ISNULL(A.TTLKj,0) as TTLKj,'
+            +'ISNULL((SELECT ISNULL(SUM(X.Qty*Y.Price),0) FROM ARTrKonReturDt X INNER JOIN ARTrKonInvPelDt Y ON X.KonTransBrgID=Y.KonTransBrgID AND X.ItemID=Y.ItemID WHERE Y.KonInvPelID=A.KonInvPelID),0) as Retur,'
+            +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''K'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherID=Q.VoucherID '
+            +'WHERE L.Note = A.KonInvPelID AND L.RekeningID='''+sDRPj+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Debit,'
+            +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''D'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherID=Q.VoucherID '
+            +'WHERE L.Note = A.KonInvPelID AND L.RekeningID='''+sDGRBi+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Potongan '
+            +'FROM ARTrKonInvPelHd A) as K WHERE K.CustID=:CustID '
+            +'AND K.CurrID=:CurrID ');//AND ISNULL(K.TTLKj-K.Retur,0)<>0 ');
+         if bCheckced then
+            Add(' AND ISNULL(K.TTLKj-K.Retur-K.Debit,0)<>0 ');
+         Add(' AND CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' '
+            +'ORDER BY CONVERT(VARCHAR(8),K.Transdate,112)');
+         Parameters.ParamByName('CustId').DataType := ftString;
+         Parameters.ParamByName('CurrID').DataType := ftString;
+         Open;
+      End;
+    end else
+    begin
+//      QRLabel1.Caption := 'SUPPLIER :';
+      QRLabel7.Caption := 'Saldo Hutang';
+      QRLabel2.Caption := 'Grand Total Rekap Hutang Pembelian : ';
+      With qu001,SQL do
+      Begin
+         Close;Clear;
+         Add('SELECT DISTINCT K.CustID,L.SuppName CustName,L.SuppName as Cust,City,ISNULL(SUM(K.Total),0) as Total,0 as Retur,ISNULL(SUM(K.Bayar),0) as Bayar,ISNULL(SUM(K.Total-Bayar),0) as Sisa FROM ('
+            +'SELECT A.SuppID as CustID,A.Transdate,ISNULL(A.TTLKs,0) as Total,A.CurrID,(SELECT ISNULL(SUM(L.Amount),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherID=Q.VoucherID '
+            +'WHERE L.Note = A.KonsinyasiInvID AND L.RekeningID='''+sDRPb+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Bayar FROM APTrKonsinyasiInvHd A) as K '
+            +'INNER JOIN APMsSupplier L ON K.CustID=L.SuppID WHERE CONVERT(VARCHAR(8),K.Transdate,112)<='''+FormatDateTime('yyyyMMdd',dt1.Date)+''' ');
+         if bCheckced then
+            Add(' AND ISNULL(K.Total-K.Bayar,0)<>0');
+         if rbSelect.Checked then
+            Add(' AND K.CustID IN '+SelGrid(quAct,dbgList,'CustID'));
+         if rbJenis.ItemIndex = 0 then
+            Add(' AND K.CurrID=''IDR'' ')
+         else
+            Add(' AND K.CurrID=''USD'' ');
+         Add('GROUP BY K.CustID,L.SuppName,L.City ORDER BY K.CustID');
+         Open;
+         if IsEmpty then
+         begin
+            MsgInfo('No Data !');
+            Abort;
+         end;
+      End;
+
+      With qu002,SQL do
+      Begin
+         Close;Clear;
+         Add('SELECT DISTINCT K.CustID,K.CurrID,L.CurrName,K.CurrID+''-''+L.CurrName as Valuta FROM (SELECT A.SuppID as CustID,A.Transdate,ISNULL(A.TTLKs,0) as Total,'
+            +'A.CurrID,(SELECT ISNULL(SUM(L.Amount),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherID=Q.VoucherID '
+            +'WHERE L.Note = A.KonsinyasiInvID AND L.RekeningID='''+sDRPb+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Bayar '
+            +'FROM APTrKonsinyasiInvHd A) as K INNER JOIN SAMsValuta L ON K.CurrID=L.CurrID '
+            +'WHERE CONVERT(VARCHAR(8),K.Transdate,112)<='''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND K.CustID=:CustID ');
+         if bCheckced then
+            Add(' AND ISNULL(K.Total-K.Bayar,0)<>0');
+         if rbJenis.ItemIndex = 0 then
+            Add(' AND K.CurrID=''IDR'' ')
+         else
+            Add(' AND K.CurrID=''USD'' ');
+         Add('ORDER BY K.CurrID');
+         Parameters.ParamByName('CustId').DataType := ftString;
+         Open;
+      End;
+
+      With qu003,SQL do
+      Begin
+         Close;Clear;
+         Add('SELECT DISTINCT K.CustID,CONVERT(VARCHAR(10),K.Transdate,103) as Tanggal,CONVERT(VARCHAR(8),K.Transdate,112),'
+            +'K.SaleID as IP,ISNULL(K.TTLPj-K.Kredit,0) as Kredit,ISNULL(K.Debit,0) as Debit,0 as Retur,0 as Potongan FROM('
+            +'SELECT A.SuppID CustID,A.CurrID,A.Transdate,A.KonsinyasiInvId as SaleID,ISNULL(A.TTLKs,0) as TTLPj,'
+            +'0 as Kredit,(SELECT ISNULL(SUM(L.Amount),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherID=Q.VoucherID '
+            +'WHERE L.Note = A.KonsinyasiInvID AND L.RekeningID='''+sDRPb+''' AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''') as Debit '
+            +'FROM APTrKonsinyasiInvHd A) as K WHERE K.CustID=:CustID '
+            +'AND K.CurrID=:CurrID AND ISNULL(K.TTLPj-K.Kredit,0)<>0 ');
+         if bCheckced then
+            Add(' AND ISNULL(K.TTLPj-K.Kredit-K.Debit,0)<>0 ');
+         Add(' AND CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' '
+            +'ORDER BY CONVERT(VARCHAR(8),K.Transdate,112)');
+         Parameters.ParamByName('CustId').DataType := ftString;
+         Parameters.ParamByName('CurrID').DataType := ftString;
+         Open;
+      end;
+    end;
+
+
+    if RcNota.Checked then
+      bnd002.Enabled := True
+    else
+    begin
+      bnd002.Enabled := False; BndDetail.Color := clWhite;
+      QRLabel3.Enabled := False;
+      if StLap = 'Jual' then
+        QRLabel4.Caption := 'Pelanggan'
+      else
+        QRLabel4.Caption := 'Supplier';
+//      QRLabel1.Enabled := False;
+      QRDBText1.Left := 10;
+    end;
+
+    if Sender=bbPrint then
+       MyReport.Print
+    else
+       MyReport.PreviewModal;
+
+  finally
+     free;
+  end;
+end;
+
+procedure TfmARRptKartuPiutangDlg.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  if StLap = 'Jual' then
+  begin
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Pelanggan';
+       SQLString := 'SELECT CustName as Nama_Pelanggan ,CustId as Kode_Pelanggan FROM ARMsCustomer ORDER BY CustID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('CustID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+  end else
+  begin
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Supplier';
+       SQLString := ' SELECT SuppName as Nama_Pelanggan, SuppID as Kode_Supplier FROM APMsSupplier ORDER BY SuppID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('CustID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+  end;
+end;
+
+procedure TfmARRptKartuPiutangDlg.RcNotaClick(Sender: TObject);
+begin
+  inherited;
+  if RcNota.Checked then
+  begin
+    cbxOuts.Visible := True;
+    cbxOuts.Checked := True;
+  end else
+    cbxOuts.Visible := False;
+end;
+
+procedure TfmARRptKartuPiutangDlg.KodeDariButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  if StLap = 'Jual' then
+  begin
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Pelanggan';
+       SQLString := 'SELECT CustName as Nama_Pelanggan ,CustId as Kode_Pelanggan FROM ARMsCustomer ORDER BY CustID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('CustID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+  end else
+  begin
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Supplier';
+       SQLString := ' SELECT SuppName as Nama_Pelanggan, SuppID as Kode_Supplier FROM APMsSupplier ORDER BY SuppID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('CustID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+  end;
+end;
+
+end.

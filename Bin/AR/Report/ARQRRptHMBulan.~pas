@@ -1,0 +1,24 @@
+unit ARQRRptHMBulan;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv4, DB, ADODB, QuickRpt, QRCtrls, StdCtrls, ExtCtrls;
+
+type
+  TfmRptLv5 = class(TfmRptLv4)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmRptLv5: TfmRptLv5;
+
+implementation
+
+{$R *.dfm}
+
+end.

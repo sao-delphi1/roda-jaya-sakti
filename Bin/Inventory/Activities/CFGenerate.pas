@@ -1,0 +1,133 @@
+unit CFGenerate;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxTL, dxDBCtrl, dxDBGrid, dxPSGlbl, dxPSUtl, dxPSEngn, dxPrnPg,
+  dxBkgnd, dxWrap, dxPrnDev, dxPSCore;
+
+type
+  TfmCFGenerate = class(TfmRptDlg)
+    dgrReport: TdxDBGrid;
+    Edit1: TEdit;
+    Button1: TButton;
+    Button2: TButton;
+    quActVoucherID: TStringField;
+    quActRekeningID: TStringField;
+    quActNote: TStringField;
+    quActAmount: TBCDField;
+    quActUpdDate: TDateTimeField;
+    quActUpdUser: TStringField;
+    quActJenis: TStringField;
+    quActTransDate: TDateTimeField;
+    quActActor: TStringField;
+    quActBankID: TStringField;
+    quActNote_1: TStringField;
+    quActFlagKKBB: TStringField;
+    quActUpdUser_1: TStringField;
+    quActUpdDate_1: TDateTimeField;
+    quActJumlahD: TBCDField;
+    quActJumlahK: TBCDField;
+    quActMOP: TStringField;
+    quActkdcab: TStringField;
+    dgrReportColumn1: TdxDBGridColumn;
+    dgrReportColumn2: TdxDBGridColumn;
+    dgrReportColumn3: TdxDBGridColumn;
+    dgrReportColumn4: TdxDBGridColumn;
+    dgrReportColumn5: TdxDBGridColumn;
+    dgrReportColumn6: TdxDBGridColumn;
+    dgrReportColumn7: TdxDBGridColumn;
+    dgrReportColumn8: TdxDBGridColumn;
+    dgrReportColumn9: TdxDBGridColumn;
+    dgrReportColumn10: TdxDBGridColumn;
+    dgrReportColumn11: TdxDBGridColumn;
+    dgrReportColumn12: TdxDBGridColumn;
+    dgrReportColumn13: TdxDBGridColumn;
+    dgrReportColumn14: TdxDBGridColumn;
+    dgrReportColumn15: TdxDBGridColumn;
+    dgrReportColumn16: TdxDBGridColumn;
+    dgrReportColumn17: TdxDBGridColumn;
+    dgrReportColumn18: TdxDBGridColumn;
+    saveDlg: TSaveDialog;
+    dxReport: TdxComponentPrinter;
+    bbExcel: TBitBtn;
+    bbCancel: TBitBtn;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure bbExcelClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmCFGenerate: TfmCFGenerate;
+
+implementation
+
+uses Search;
+
+{$R *.dfm}
+
+procedure TfmCFGenerate.Button1Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Cari Kas';
+       SQLString := 'SELECT BankId as Kode_Kas, BankName as Nama_Kas, RekeningID '
+                   +'FROM CFMsBank WHERE FgActive=''Y'' AND FgBank=''T'' ORDER BY BankId';
+       if ShowModal = MrOK then
+       begin
+           Edit1.Text := Res[2];
+       end;
+    finally
+       Free;
+    end;
+end;
+
+procedure TfmCFGenerate.Button2Click(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('select A.VoucherID,A.RekeningID,A.Note,Amount,A.UpdDate,A.UpdUser,Jenis,TransDate,Actor,BankID,B.Note,FlagKKBB,B.UpdUser,B.UpdDate,B.JumlahD,B.JumlahK,MOP,kdcab '
+       +'from CFTrKKBBDt A inner join CFtrkkbbhd B on A.voucherid=B.voucherid '
+       +'where A.voucherid in (select voucherid from CFTrKKBBDt where RekeningID='''+edit1.Text+''') ');
+    Open;
+  end;
+end;
+
+procedure TfmCFGenerate.FormShow(Sender: TObject);
+begin
+  inherited;
+  quAct.Open;
+
+  Button2Click(Button2);
+end;
+
+procedure TfmCFGenerate.bbExcelClick(Sender: TObject);
+begin
+  inherited;
+  if saveDlg.Execute then
+    begin
+      if Pos('.XLS', uppercase(saveDlg.FileName)) > 0 then
+        dgrReport.SaveToXLS(saveDlg.FileName, true)
+      else
+        dgrReport.SaveToXLS(saveDlg.FileName + '.xls', true);
+    end;
+end;
+
+procedure TfmCFGenerate.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+end.

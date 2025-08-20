@@ -1,0 +1,383 @@
+inherited fmINMsNoUnit: TfmINMsNoUnit
+  Left = 380
+  Top = 241
+  Caption = 'Master No Unit'
+  ClientHeight = 420
+  ClientWidth = 1161
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 371
+    inherited pa3: TdxContainer
+      Height = 192
+      object Label3: TLabel
+        Left = 96
+        Top = 40
+        Width = 32
+        Height = 13
+        Caption = 'Label3'
+      end
+      object Panel1: TPanel
+        Left = -388
+        Top = -309
+        Width = 174
+        Height = 161
+        Color = 13676331
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 10
+          Top = 16
+          Width = 88
+          Height = 13
+          Caption = 'Nomor Unit Lama :'
+        end
+        object Label2: TLabel
+          Left = 10
+          Top = 62
+          Width = 84
+          Height = 13
+          Caption = 'Nomor Unit Baru :'
+        end
+        object dxDBButtonEdit6: TdxDBButtonEdit
+          Left = 0
+          Top = 0
+          Width = 109
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          CharCase = ecUpperCase
+          DataField = 'NoUnit'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit6ButtonClick
+          ExistButtons = True
+        end
+        object Edit1: TEdit
+          Left = 0
+          Top = 0
+          Width = 121
+          Height = 21
+          TabOrder = 1
+        end
+        object Button1: TButton
+          Left = 0
+          Top = 0
+          Width = 75
+          Height = 25
+          Caption = 'UBAH'
+          TabOrder = 2
+          OnClick = Button1Click
+        end
+        object Button2: TButton
+          Left = 0
+          Top = 0
+          Width = 75
+          Height = 25
+          Caption = 'GABUNG'
+          TabOrder = 3
+          OnClick = Button2Click
+        end
+      end
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 408
+    Width = 1161
+  end
+  inherited pa2: TdxContainer
+    Height = 371
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 968
+    Height = 371
+    inherited pcParent: TdxPageControl
+      Width = 968
+      Height = 371
+      inherited ts01: TdxTabSheet
+        inherited bbSave: TdxButton
+          Left = 797
+          Top = 349
+        end
+        inherited bbCancel: TdxButton
+          Left = 877
+          Top = 349
+        end
+        object dbgProduct: TdxDBGrid
+          Left = 0
+          Top = 0
+          Width = 968
+          Height = 371
+          Bands = <
+            item
+            end>
+          DefaultLayout = True
+          HeaderPanelRowCount = 1
+          KeyField = 'NoUnit'
+          SummaryGroups = <>
+          SummarySeparator = ', '
+          Align = alClient
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          BandFont.Charset = DEFAULT_CHARSET
+          BandFont.Color = clWindowText
+          BandFont.Height = -11
+          BandFont.Name = 'MS Sans Serif'
+          BandFont.Style = []
+          DataSource = dsMain
+          Filter.Criteria = {00000000}
+          HeaderFont.Charset = ANSI_CHARSET
+          HeaderFont.Color = clWindowText
+          HeaderFont.Height = -13
+          HeaderFont.Name = 'Times New Roman'
+          HeaderFont.Style = []
+          HideFocusRect = True
+          HideSelection = True
+          LookAndFeel = lfFlat
+          OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+          OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowAutoHeight, edgoUseBitmap]
+          PreviewFont.Charset = DEFAULT_CHARSET
+          PreviewFont.Color = clBlue
+          PreviewFont.Height = -11
+          PreviewFont.Name = 'MS Sans Serif'
+          PreviewFont.Style = []
+          object dbgProductProductID: TdxDBGridColumn
+            Caption = 'No Unit'
+            CharCase = ecUpperCase
+            Width = 111
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'NoUnit'
+          end
+          object dbgProductColumn12: TdxDBGridColumn
+            Caption = 'Serial Number'
+            Width = 143
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'SNID'
+          end
+          object dbgProductName: TdxDBGridColumn
+            CharCase = ecUpperCase
+            Width = 226
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Description'
+          end
+          object dbgTypeClassUnit: TdxDBGridButtonColumn
+            Caption = 'Type Class Unit'
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'TypeClassUnit'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgTypeClassUnitButtonClick
+          end
+          object dbgProductColumn7: TdxDBGridColumn
+            Caption = 'Payload (Ton)'
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Payload'
+          end
+          object dbgProductColumn5: TdxDBGridButtonColumn
+            Alignment = taLeftJustify
+            Caption = 'Group'
+            MinWidth = 16
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LGroup'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgProductColumn5ButtonClick
+          end
+          object dbgProductColumn6: TdxDBGridImageColumn
+            Alignment = taLeftJustify
+            Caption = 'Jenis'
+            MinWidth = 16
+            Width = 92
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'jenis'
+            Descriptions.Strings = (
+              'Alat Berat'
+              'Alat Kecil')
+            ImageIndexes.Strings = (
+              '0'
+              '1')
+            ShowDescription = True
+            Values.Strings = (
+              'B'
+              'K')
+          end
+          object dbgProductColumn8: TdxDBGridImageColumn
+            Alignment = taLeftJustify
+            Caption = 'Active'
+            MinWidth = 16
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'FgActive'
+            Descriptions.Strings = (
+              'Ya'
+              'Tidak')
+            ImageIndexes.Strings = (
+              '0'
+              '1')
+            ShowDescription = True
+            Values.Strings = (
+              'Y'
+              'T')
+          end
+          object dbgProductLokasi: TdxDBGridButtonColumn
+            Caption = 'Lokasi Awal'
+            Width = 89
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Lokasi'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgProductLokasiButtonClick
+          end
+          object dbgProductLLokasi: TdxDBGridColumn
+            Caption = 'Lokasi Akhir'
+            Width = 91
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LLokasi'
+          end
+          object dbgProductUpdDate: TdxDBGridColumn
+            Caption = 'Last Updated'
+            ReadOnly = True
+            TabStop = False
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'UpdDate'
+          end
+          object dbgProductUser: TdxDBGridColumn
+            Caption = 'Updated By'
+            ReadOnly = True
+            TabStop = False
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'UpdUser'
+          end
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1161
+    inherited sbLast: TSpeedButton
+      Left = 1124
+    end
+    inherited sbNext: TSpeedButton
+      Left = 1097
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 1070
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 1043
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 1017
+    end
+    inherited BvlPeriod: TBevel
+      Left = 771
+    end
+    inherited laPeriod: TLabel
+      Left = 775
+    end
+  end
+  inherited quMain: TADOQuery
+    BeforeDelete = quMainBeforeDelete
+    OnCalcFields = quMainCalcFields
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'select * from inmsnounit')
+    object quMainNoUnit: TStringField
+      FieldName = 'NoUnit'
+      Size = 50
+    end
+    object quMainDescription: TStringField
+      FieldName = 'Description'
+      Size = 100
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+      DisplayFormat = 'dd/MM/yyyy'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quMainFgGroup: TStringField
+      FieldName = 'FgGroup'
+    end
+    object quMaingroupid: TStringField
+      FieldName = 'groupid'
+      Size = 100
+    end
+    object quMainjenis: TStringField
+      FieldName = 'jenis'
+      Size = 10
+    end
+    object quMainLGroup: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LGroup'
+      Size = 100
+      Calculated = True
+    end
+    object quMainPayload: TBCDField
+      FieldName = 'Payload'
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quMainFgActive: TStringField
+      FieldName = 'FgActive'
+      Size = 10
+    end
+    object quMainTypeClassUnit: TStringField
+      FieldName = 'TypeClassUnit'
+      Size = 100
+    end
+    object quMainLokasi: TStringField
+      FieldName = 'Lokasi'
+    end
+    object quMainLLokasi: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LLokasi'
+      Calculated = True
+    end
+    object quMainSNID: TStringField
+      FieldName = 'SNID'
+      Size = 50
+    end
+  end
+end

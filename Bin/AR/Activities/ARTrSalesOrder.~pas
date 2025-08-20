@@ -1,0 +1,464 @@
+unit ARTrSalesOrder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxPageControl, dxEdLib, dxButton, dxCore, dxContainer, Buttons,
+  dxDBELib, dxEditor, DBCtrls;
+
+type
+  TfmARTrSalesOrder = class(TfmStdLv31)
+    quDetilPOID: TStringField;
+    quDetilItemID: TStringField;
+    quDetilPRID: TStringField;
+    quDetilNumAll: TAutoIncField;
+    quDetilQty: TIntegerField;
+    quDetilPrice: TBCDField;
+    quDetilUpdDate: TDateTimeField;
+    quDetilUpdUser: TStringField;
+    quDetilUOMID: TStringField;
+    DBText1: TDBText;
+    DBText2: TDBText;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label23: TLabel;
+    DBText5: TDBText;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label11: TLabel;
+    Label10: TLabel;
+    DBText3: TDBText;
+    Label12: TLabel;
+    Label13: TLabel;
+    GroupBox1: TGroupBox;
+    Label21: TLabel;
+    DBText8: TDBText;
+    Label22: TLabel;
+    DBText9: TDBText;
+    dxDBEdit1: TdxDBEdit;
+    dxDBEdit3: TdxDBEdit;
+    dxDBButtonEdit3: TdxDBButtonEdit;
+    dxDBDateEdit1: TdxDBDateEdit;
+    dxDBImageEdit2: TdxDBImageEdit;
+    dxDBButtonEdit2: TdxDBButtonEdit;
+    dxDBButtonEdit1: TdxDBButtonEdit;
+    dxDBButtonEdit4: TdxDBButtonEdit;
+    dxDBEdit2: TdxDBEdit;
+    quGudang: TADOQuery;
+    quItem: TADOQuery;
+    quCustomer: TADOQuery;
+    quTemp: TADOQuery;
+    StringField1: TStringField;
+    StringField2: TStringField;
+    StringField3: TStringField;
+    StringField4: TStringField;
+    StringField5: TStringField;
+    StringField6: TStringField;
+    StringField7: TStringField;
+    StringField8: TStringField;
+    StringField9: TStringField;
+    DateTimeField1: TDateTimeField;
+    StringField10: TStringField;
+    quAct3: TADOQuery;
+    quAct2: TADOQuery;
+    quAct1: TADOQuery;
+    quMainPOID: TStringField;
+    quMainPRID: TStringField;
+    quMainCustID: TStringField;
+    quMainTransdate: TDateTimeField;
+    quMainNote: TStringField;
+    quMainTTLSO: TBCDField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainFgTax: TStringField;
+    quMainTglKirim: TDateTimeField;
+    quMainFgCetak: TStringField;
+    quMainProductID: TStringField;
+    quMainTaxAmount: TBCDField;
+    quMainDiscType: TWordField;
+    quMainDiscAmount: TBCDField;
+    quMainDiscount: TBCDField;
+    quMainDP: TBCDField;
+    quMainSalesID: TStringField;
+    quMainAdministrasi: TBCDField;
+    quMainWareHouseID: TStringField;
+    quMainJenis: TStringField;
+    quMainCurrID: TStringField;
+    quMainLuCurrName: TStringField;
+    quMainLSalesName: TStringField;
+    quMainStatus: TStringField;
+    quMainLuCustomer: TStringField;
+    quMainLuLocation: TStringField;
+    procedure FormShow(Sender: TObject);
+    procedure quMainCalcFields(DataSet: TDataSet);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure quMainAfterPost(DataSet: TDataSet);
+    procedure quMainBeforeDelete(DataSet: TDataSet);
+    procedure quMainBeforeEdit(DataSet: TDataSet);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure dxDBButtonEdit1ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBButtonEdit4ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+
+  private
+    { Private declarations }
+    procedure CeKStatus;
+    procedure CeKStatusDetil;
+    procedure CeKretur;
+  public
+    { Public declarations }
+    KodeBarang,KdSbm,JenisSbm : string;
+    Jumlah,JumSbm : Currency;
+  end;
+
+var
+  fmARTrSalesOrder: TfmARTrSalesOrder;
+
+implementation
+
+uses ConMain, Search, UnitGeneral, MyUnit,
+  ARQRRptSuratJalan, Allitem, ARSN,RptMultiCetak;
+
+{$R *.dfm}
+
+procedure TfmARTrSalesOrder.CeKStatus;
+Begin
+  with quAct, SQL do
+  begin
+    Close; Clear;
+    Add(' SELECT TOP 1 KonInvPelID FROM ARTrKonInvPelHd  '
+       +' WHERE SOID='''+quMainPOID.AsString+'''');
+    Open;
+    if not IsEmpty then
+    begin
+      MsgInfo('Sudah ada Invoice ['+quAct.FieldByName('KonInvPelID').AsString+'], tidak bisa edit/Delete lagi');
+      Abort;
+    end;
+  end;
+End;
+
+procedure TfmARTrSalesOrder.CekStatusDetil;
+Begin
+  with quAct, SQL do
+     begin
+        Close; Clear;
+        Add('SELECT TOP 1 KonInvPelID FROM ARTrKonInvPelDt '
+           +' WHERE KonTransBrgID='''+quMainPOID.AsString+''' AND ItemID='''+quDetilItemID.AsString+''' ');
+        Open;
+        if not IsEmpty then
+        begin
+           MsgInfo('Sudah ada Invoice ['+quAct.FieldByName('KonInvPelID').AsString+'], tidak bisa edit/Delete lagi');
+           Abort;
+        end;
+     end;
+End;
+
+procedure TfmARTrSalesOrder.CeKretur;
+Begin
+  with quAct, SQL do
+     begin
+        Close; Clear;
+        Add(' SELECT top 1 KonReturID FROM ARTrKonReturDt  '
+           +' WHERE KonTransBrgID='''+quMainPOID.Value+'''');
+        Open;
+        if not IsEmpty then
+        begin
+           MsgInfo('Sudah ditarik dengan nota retur ['+quAct.FieldByName('KonReturID').AsString+'], tidak bisa edit/Delete lagi');
+           Abort;
+        end;
+     end;
+End;
+
+procedure TfmARTrSalesOrder.FormShow(Sender: TObject);
+begin
+  FFieldOrder := 'CONVERT(VARCHAR(8),A.TransDate,112), POID';
+  FFieldTgl   := 'A.TransDate';
+  //SettingDxGrid(dbg);
+  inherited;
+  quMain.Active := TRUE;
+  quDetil.Active := TRUE;
+  //ts01.TabVisible := FALSE;
+end;
+
+procedure TfmARTrSalesOrder.quMainCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT CurrName FROM SAMsValuta WHERE CurrID='''+quMainCurrID.AsString+''' ');
+    Open;
+  end;
+  quMainLuCurrName.AsString := quAct.FieldByName('CurrName').AsString;
+  with quAct1,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT SalesName FROm ARMsSales WHERE SalesID='''+quMainSalesID.AsString+''' ');
+    Open;
+  end;
+  quMainLSalesName.AsString := quAct1.FieldByName('SalesName').AsString;
+  with quAct2,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT TOP 1 KontransBrgID FROM ARTrKonTransBrgHd WHERE SOID='''+quMainPOID.AsString+''' ');
+    Open;
+  end;
+  if quAct2.RecordCount <> 0 then
+    quMainStatus.AsString := quAct2.FieldByName('KontransBrgID').AsString
+  else
+    quMainStatus.AsString := 'BELUM ADA DO';
+end;
+
+procedure TfmARTrSalesOrder.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetBtnOperationVisible(bbSave,bbCancel,FActDS);
+  SetReadOnly(dxDBEdit1,TRUE);
+  SetReadOnly(dxDBEdit3,TRUE);
+  SetReadOnly(dxDBButtonEdit3,quMain.State <>dsInsert);
+end;
+
+procedure TfmARTrSalesOrder.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainTransDate.AsDateTime:= Date;
+  quMainWareHouseID.Value:= sDGK;
+  quMainCurrID.AsString := 'IDR';
+  quMainJenis.AsString := 'S';
+  quMainCurrID.FocusControl;
+end;
+
+procedure TfmARTrSalesOrder.quMainAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  if quMain.State <> dsInsert then
+  begin
+    if quMainJenis.AsString <> JenisSbm then
+    begin
+      with quAct1,SQL do
+      begin
+        Close;Clear;
+        Add('DELETE FROM ARTrPurchaseOrderDt WHERE POID='''+quMainPOID.AsString+''' ');
+        Add('DELETE FROM AllItem WHERE VoucherNo='''+quMainPOID.AsString+''' ');
+        ExecSQL;
+      end;
+    end;
+  end;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE AllItem SET Transdate='''+FormatDateTime('yyyy-MM-dd',quMainTransDate.AsDateTime)+''','
+       +'WarehouseID='''+quMainWareHouseID.AsString+''',TempField2='''+quMainLuCustomer.AsString+''' '
+       +'WHERE VoucherNo='''+quMainPOID.AsString+''' ');
+    ExecSQL;
+  end;
+  quDetil.Requery();
+  quDetil.Append;
+end;
+
+procedure TfmARTrSalesOrder.quMainBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  CeKStatus;
+  CeKretur;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('DELETE FROM AllItem WHERE VoucherNo='''+quMainPOID.AsString+''' AND FgTrans=59');
+    ExecSQL;
+  end;
+end;
+
+procedure TfmARTrSalesOrder.quMainBeforeEdit(DataSet: TDataSet);
+begin
+  inherited;
+  if quMain.State <> dsInsert then
+  JenisSbm := quMainJenis.AsString;
+  CeKStatus;
+  CeKretur;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    ADd('SELECT * FROM ARTrPurchaseOrderDt WHERE POID='''+quMainPOID.AsString+''' ');
+    Open;
+  end;
+  if quAct.RecordCount >= 10 then
+  begin
+    pesan('1 Transkasi cuma bisa input 10 barang');
+    Abort;
+  end;
+end;
+
+procedure TfmARTrSalesOrder.quMainBeforePost(DataSet: TDataSet);
+var ST: String;
+begin
+  inherited;
+  If Trim(quMainTransDate.AsString)='' then
+  Begin
+    MsgInfo('Tanggal Konsinyasi tidak boleh kosong');
+    quMainTransDate.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainWareHouseID.Value)='' then
+  Begin
+    MsgInfo('Dari tidak boleh kosong');
+    quMainWareHouseID.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainLuLocation.Value)='' then
+  Begin
+    MsgInfo('Gudang Dari tidak ada dalam Master');
+    quMainWareHouseID.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainCustID.Value)='' then
+  Begin
+    MsgInfo('Ke Pelanggan tidak boleh kosong');
+    quMainCustID.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainLuCustomer.Value)='' then
+  Begin
+    MsgInfo('Ke Pelanggan tidak ada dalam Master');
+    quMainCustID.FocusControl;
+    Abort;
+  End;
+
+  if TRIM(quMainCurrID.AsString) = '' then quMainCurrID.AsString := 'IDR';
+  if TRIM(quMainLuCurrName.AsString) = '' then
+  begin
+    pesan('Valuta tidak terdaftar');
+    quMainCurrID.FocusControl;
+    Abort;
+  end;
+
+ if quMain.State=dsInsert then
+  Begin
+    if GroupUser <> 'admin' then
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('SELECT FgPass FROM ARMsCustomer WHERE CustID='''+quMainCustID.AsString+''' ');
+        Open;
+      end;
+      if quAct.FieldByName('FgPass').AsString = 'Y' then
+      begin
+        with quAct1,SQL do
+        begin
+          Close;Clear;
+          Add('SELECT SUM(CASE WHEN CONVERT(VARCHAR(8),DATEADD(DAY,K.Term,K.Transdate),112) >= '''+FormatDateTime('yyyyMMdd',quMainTransDate.AsDateTime)+''' '
+             +'THEN 0 ELSE 1 END) as Flag FROM (SELECT A.Transdate,ISNULL(B.LimitAsli,0) as Term,A.CustID,ISNULL(A.TTLKj,0) as Total,'
+             +'ISNULL((SELECT ISNULL(SUM(X.Amount),0) FROM CFTrKKBBDt X INNER JOIN CFTrKKBBHd Y ON X.VoucherID=Y.VoucherID '
+             +'WHERE X.Note=A.KonInvPelID AND Y.Actor=A.CustID AND X.RekeningID='''+sDRPj+''' '
+             +'AND CONVERT(VARCHAR(8),Y.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',quMainTransDate.AsDateTime)+'''),0) as Bayar,'
+             +'ISNULL((SELECT SUM(Y.Qty*Z.Price) FROM ARTrKonReturHd X '
+             +'INNER JOIN ARTrKonReturDt Y ON X.KonReturID=Y.KonReturID LEFT JOIN ARTrKonInvPelDt Z ON Y.KonTransBrgID=Z.KonTransBrgID AND Y.ItemID=Z.ItemID '
+             +'WHERE Z.KonInvPelID=A.KonInvPelID AND X.CustID=A.CustID),0) as Retur '
+             +'FROM ARTrKonInvPelHd A INNER JOIN ARMsCustomer B ON A.CustID=B.CustID) as K '
+             +'WHERE K.CustID='''+quMainCustID.AsString+''' AND ISNULL(K.Total-K.Bayar-K.Retur,0) <> 0');
+          Open;
+        end;
+        if quAct1.FieldByName('Flag').AsInteger <> 0 then
+        begin
+          ShowMessage('Tidak Bisa Input Delivery Order.'+#13
+                     +'Pelanggan ini mempunyai Tagihan yang sudah jatuh tempo tapi belum lunas');
+          quMainCustID.FocusControl;
+          Abort;
+        end;
+
+        with quAct2,SQL do
+        begin
+          Close;Clear;
+          Add('SELECT ISNULL(H.LimitPiutang,0) as Limit,L.CustID,ISNULL(SUM(L.Piutang),0) as Piutang,(SELECT TOP 1 Rate '
+             +'FROM SATrRate ORDER BY CONVERT(VARCHAR(8),Transdate,112) DESC) as Rate FROM ('
+             +'SELECT K.CustID,CASE WHEN K.CurrID=''IDR'' THEN ISNULL(SUM(K.TTLKj-K.Retur-K.Bayar),0) ELSE '
+             +'ISNULL(SUM(K.TTLKj-K.Retur-K.Bayar),0) * (SELECT TOP 1 Rate FROM SATrRate ORDER BY CONVERT(VARCHAR(8),Transdate,112) DESC) END as Piutang FROM ('
+             +'SELECT A.KonInvPelID,A.CurrID,A.TTLKj,A.CustID,ISNULL((SELECT SUM(Y.Qty*Z.Price) FROM ARTrKonReturHd X '
+             +'INNER JOIN ARTrKonReturDt Y ON X.KonReturID=Y.KonReturID LEFT JOIN ARTrKonInvPelDt Z ON Y.KonTransBrgID=Z.KonTransBrgID AND Y.ItemID=Z.ItemID '
+             +'WHERE Z.KonInvPelID=A.KonInvPelID AND X.CustID=A.CustID),0) as Retur,'
+             +'(SELECT ISNULL(SUM(E.Amount),0) FROM CFTrKKBBDt E INNER JOIN CFTrKKBBHd F ON E.VoucherID=F.VoucherID '
+             +'WHERE F.Actor=A.CustID AND F.CurrID=A.CurrID AND E.Note=A.KonInvPelID) as Bayar FROM ARTrKonInvPelHd A) as K '
+             +'GROUP BY K.CustID,K.CurrID) as L INNER JOIN ARMsCustomer H ON L.CustID=H.CustID '
+             +'WHERE L.CustID='''+quMainCustID.AsString+''' GROUP BY L.CustID,H.LimitPiutang ');
+          Open;
+        end;
+        if quAct2.FieldByName('Piutang').AsCurrency > quAct2.FieldByName('Limit').AsCurrency then
+        begin
+          pesan('Limit Piutang '+quMainLuCustomer.AsString+' sudah melebihi batas');
+          quMainCustID.FocusControl;
+          Abort;
+        end;
+      end;
+    end;
+
+    if TRIM(quMainCurrID.AsString) = 'IDR' then
+      ST := 'SOJ/R'+ FormatDateTime('YY/MM-', quMainTransDate.AsDateTime)
+    else
+      ST := 'SOJ/D'+ FormatDateTime('YY/MM-', quMainTransDate.AsDateTime);
+    quMainPOID.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct, 'ARTrPurchaseOrderHd', 'POID', ST, '0') + 1);
+  End;
+
+  quMainUpdUser.Value := dmMain.UserId;
+  quMainUpddate.Value := GetServerDateTime;
+
+end;
+
+procedure TfmARTrSalesOrder.dxDBButtonEdit1ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  quMainLuCustomer.FocusControl;
+  quMainCustID.FocusControl;
+  with TfmSearch.Create(Self) do
+     try
+        Title := 'Pelanggan';
+        SQLString := 'SELECT CustID as Kode_Pelanggan,CustName as Nama_Pelanggan FROM ARMsCustomer ORDER BY CustID';
+        KeyValue := dxDBButtonEdit1.Text;
+        if ShowModal = MrOK then
+        begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainCustID.Value := Res[0];
+        end;
+     finally
+        free;
+     end;
+  quMainSalesID.FocusControl;
+end;
+
+procedure TfmARTrSalesOrder.dxDBButtonEdit4ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  quMainLSalesName.FocusControl;
+  quMainSalesID.FocusControl;
+  with TfmSearch.Create(Self) do
+     try
+        Title := 'Sales';
+        SQLString := 'SELECT SalesID as Kode_Sales,SalesName as Nama_Sales FROM ARMsSales ORDER BY SalesID';
+        KeyValue := dxDBButtonEdit4.Text;
+        if ShowModal = MrOK then
+        begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainSalesID.Value := Res[0];
+        end;
+     finally
+        free;
+     end;
+  quMainNote.FocusControl;
+end;
+
+end.

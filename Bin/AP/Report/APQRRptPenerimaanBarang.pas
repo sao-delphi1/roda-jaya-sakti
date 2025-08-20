@@ -1,0 +1,187 @@
+unit APQRRptPenerimaanBarang;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv0, DB, ADODB, StdCtrls, QRCtrls, QuickRpt, ExtCtrls, jpeg;
+
+type
+  TfmQRRptPenerimaanBarang = class(TfmRptLv0)
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRShape1: TQRShape;
+    GroupFooterBand1: TQRBand;
+    QRLabel19: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel27: TQRLabel;
+    qu002: TADOQuery;
+    bnd001: TQRSubDetail;
+    QRDBText7: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRDBText8: TQRDBText;
+    qlbKeterangan: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel10: TQRLabel;
+    qlbHalaman: TQRLabel;
+    qu003: TADOQuery;
+    ds002: TDataSource;
+    bnd002: TQRSubDetail;
+    QRDBText11: TQRDBText;
+    QRLabel20: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRLabel18: TQRLabel;
+    QRDBText13: TQRDBText;
+    QRLabel14: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRLabel16: TQRLabel;
+    QRImage2: TQRImage;
+    QRLabel7: TQRLabel;
+    QRDBText3: TQRDBText;
+    procedure QRDBText9Print(sender: TObject; var Value: String);
+    procedure bnd001BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure MyReportBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure bnd001AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure BndTitleBeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure bnd002BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel15Print(sender: TObject; var Value: String);
+    procedure BndDetailAfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRLabel7Print(sender: TObject; var Value: String);
+    procedure QRLabel9Print(sender: TObject; var Value: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Data : String;
+    Count,TRec,Halaman,Urut : Currency;
+  end;
+
+var
+  fmQRRptPenerimaanBarang: TfmQRRptPenerimaanBarang;
+
+implementation
+
+uses MyUnit;
+
+{$R *.dfm}
+
+procedure TfmQRRptPenerimaanBarang.QRDBText9Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:= FormatRptqtykurung(Value);
+end;
+
+procedure TfmQRRptPenerimaanBarang.bnd001BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  if TRec = 15 then
+    bnd001.ForceNewPage := True
+  else
+    bnd001.ForceNewPage := False;
+
+  if TRec <> 14 then
+  begin
+    QRShape3.Enabled := False;
+    QRLabel10.Enabled := False;
+  end else
+  begin
+    QRShape3.Enabled := True;
+    QRLabel10.Enabled := True;
+  end;
+
+  if Data = qu002.FieldByName('ItemName').AsString then
+    QRLabel15.Caption := ''
+  else
+  begin
+   count := count+1;
+   QRLabel15.Caption :=CurrToStr(count);
+  End;
+end;
+
+procedure TfmQRRptPenerimaanBarang.MyReportBeforePrint(
+  Sender: TCustomQuickRep; var PrintReport: Boolean);
+begin
+  inherited;
+  Count := 0;
+  Halaman := 0;
+end;
+
+procedure TfmQRRptPenerimaanBarang.bnd001AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  inherited;
+  TRec := TRec + 1;
+  Urut := urut + 1;
+end;
+
+procedure TfmQRRptPenerimaanBarang.BndTitleBeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+  inherited;
+  TRec := 0;
+  Halaman := Halaman + 1;
+  qlbHalaman.Caption := 'Halaman : '+ CurrToStr(Halaman);
+end;
+
+procedure TfmQRRptPenerimaanBarang.bnd002BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  PrintBand := qu003.FieldByName('Expired').AsString <> '';
+end;
+
+procedure TfmQRRptPenerimaanBarang.QRLabel15Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptUrut(CurrToStr(Urut));
+end;
+
+procedure TfmQRRptPenerimaanBarang.BndDetailAfterPrint(
+  Sender: TQRCustomBand; BandPrinted: Boolean);
+begin
+  inherited;
+  Urut := 1;
+end;
+
+procedure TfmQRRptPenerimaanBarang.QRLabel7Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+//  Value := qu001.FieldByName('WarehouseName').AsString;
+end;
+
+procedure TfmQRRptPenerimaanBarang.QRLabel9Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+//  Value := qu001.FieldByName('Alamat').AsString;
+end;
+
+end.

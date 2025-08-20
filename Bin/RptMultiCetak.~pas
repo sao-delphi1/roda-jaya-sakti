@@ -1,0 +1,558 @@
+unit RptMultiCetak;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv0, dxExEdtr, dxCntner, DB, ADODB, ExtCtrls, dxCore,
+  dxButton, StdCtrls, dxEditor, dxEdLib, Printers, DateUtils;
+
+type
+  TfmRptMultiCetak = class(TfmStdLv0)
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
+    CBSampai: TComboBox;
+    CBDari: TComboBox;
+    bbOK1: TdxButton;
+    bbCancel1: TdxButton;
+    rgCetak: TRadioGroup;
+    quData: TADOQuery;
+    quCek: TADOQuery;
+    RbCetak: TRadioGroup;
+    procedure FormShow(Sender: TObject);
+    procedure dt1Change(Sender: TObject);
+    procedure bbCancel1Click(Sender: TObject);
+    procedure bbOK1Click(Sender: TObject);
+  private
+    { Private declarations }
+    Query : String;
+    procedure RefreshData;
+  public
+    { Public declarations }
+    FlagKKBB : string;
+  end;
+
+var
+  fmRptMultiCetak: TfmRptMultiCetak;
+
+implementation
+
+uses ConMain, MyUnit, RptGLTrKMKK, ARQRRptSuratJalan, ARQRRptInvPenjualan,
+  UnitDate;
+
+{$R *.dfm}
+
+procedure TfmRptMultiCetak.RefreshData;
+begin
+  if FlagKKBB = 'DO' then
+  begin
+    Query := 'SELECT KonTransBrgID as VoucherID FROM ARTrKonTransBrgHd '
+            +'WHERE CONVERT(VARCHAR(8),Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+'''  ';
+    if RbCetak.ItemIndex = 0 then
+      Query := Query + ' AND CurrID=''IDR'' ORDER BY CONVERT(VARCHAR(8),Transdate,112),KonTransBrgID'
+    else
+      Query := Query + ' AND CurrID=''USD'' ORDER BY CONVERT(VARCHAR(8),Transdate,112),KonTransBrgID';
+  end else
+  if FlagKKBB = 'INV' then
+  begin
+    Query := 'SELECT KonInvPelID as VoucherID FROM ARTrKonInvPelHd '
+            +'WHERE CONVERT(VARCHAR(8),Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+'''  ';
+    if RbCetak.ItemIndex = 0 then
+      Query := Query + ' AND CurrID=''IDR'' ORDER BY CONVERT(VARCHAR(8),Transdate,112),KonInvPelID'
+    else
+      Query := Query + ' AND CurrID=''USD'' ORDER BY CONVERT(VARCHAR(8),Transdate,112),KonInvPelID';
+  end else
+    Query := 'SELECT VoucherID FROM CFTrKKBBHd '
+            +'WHERE FlagKKBB='''+FlagKKBB+''' AND CONVERT(VARCHAR(8),Transdate,112) '
+            +'BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' '
+            +'ORDER BY VoucherID';
+  with quAct do
+  begin
+    if Active then Close;
+    SQL.Text := Query;
+    Open;
+  end;
+
+  CBDari.Clear;
+  CBSampai.Clear;
+  While Not quAct.Eof do
+  Begin
+    CBDari.Items.Add(quAct.Fieldbyname('VoucherID').AsString);
+    CBSampai.Items.Add(quAct.Fieldbyname('VoucherID').AsString);
+    quAct.Next;
+  End;
+  CBDari.ItemIndex :=0;
+  CBSampai.ItemIndex := 0;
+end;
+
+
+procedure TfmRptMultiCetak.FormShow(Sender: TObject);
+begin
+  inherited;
+  dt1.Date := dmMain.FSysPrd1;
+  dt2.Date := dmMain.FSysPrd2;
+  RefreshData;
+  if FlagKKBB = 'DO' then
+  begin
+    GroupBox2.Caption := 'Nota Delivery Order';
+    RbCetak.Items.Clear;
+    RbCetak.Items.Add('IDR');
+    RbCetak.Items.Add('USD');
+    RbCetak.ItemIndex := 0;
+  end else
+  if FlagKKBB = 'INV' then
+  begin
+    GroupBox2.Caption := 'Nota Invoice';
+    RbCetak.Items.Clear;
+    RbCetak.Items.Add('IDR');
+    RbCetak.Items.Add('USD');
+    RbCetak.ItemIndex := 0;
+  end;
+end;
+
+procedure TfmRptMultiCetak.dt1Change(Sender: TObject);
+begin
+  inherited;
+  RefreshData;
+end;
+
+procedure TfmRptMultiCetak.bbCancel1Click(Sender: TObject);
+begin
+  inherited;
+  Self.Close;
+end;
+
+procedure TfmRptMultiCetak.bbOK1Click(Sender: TObject);
+var sTotal,JumlahD,JumlahK : currency;
+    VoucherID,Actor,Keterangan,SalesName,ProjectID,ProjectName,BGCek,FgPayment,BankName : string;
+    Tanggal,TglFaktur,TglCair : TDateTime;
+    iPrint,JatuhTempo : Integer;
+begin
+  inherited;
+  if FlagKKBB = 'DO' then
+  begin
+    with quData,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT DISTINCT CONVERT(VARCHAR(8),Transdate,112),KonTransBrgID,Note FROM ARTrKonTransBrgHd '
+         +'WHERE KonTransBrgID BETWEEN '''+CBDari.Text+''' AND '''+CBSampai.Text+''' '
+         +'ORDER BY CONVERT(VARCHAR(8),Transdate,112),KonTransBrgID');
+      Open;
+      quData.First;
+      while not Eof do
+      begin
+        VoucherID := quData.FieldByName('KonTransBrgID').AsString;
+        Keterangan := quData.FieldByName('Note').AsString;
+        iPrint := Printer.Printers.IndexOf(sDPB);
+        with TfmQRRptSuratJalan.Create(Self) do
+          try
+            MyReport.PrinterSettings.PrinterIndex := iPrint;
+            with qu001,SQL do
+            Begin
+              Close;Clear;
+              add('SELECT KonTransBrgID,KonTransBrgID as SaleId,Convert(varchar(10),Getdate(),103) as Tgl,'
+                 +'CONVERT(VARCHAR(8),Getdate(),108) as Jam,A.CustId,C.CustName,C.Address,'
+                 +'A.SalesID+'' - ''+D.SalesName as Sales,'
+                 +'CASE WHEN C.KodePOS='''' THEN C.City ELSE C.City+'' - ''+C.KodePOS END as City,'
+                 +'A.WarehouseID+'' - ''+B.WarehouseName as Gudang '
+                 +'FROM ARTrKonTransBrgHd A INNER JOIN INMsWarehouse B ON A.WarehouseID=B.WarehouseID '
+                 +'INNER JOIN ARMsCustomer C ON A.CustId=C.CustId INNER JOIN ARMsSales D ON A.SalesID=D.SalesID '
+                 +'WHERE A.KonTransBrgID='''+VoucherID+'''');
+              Open;
+            End;
+
+            With qu002,SQL do
+            Begin
+              Close;Clear;
+              add(' SELECT  A.ItemId,B.ItemName,B.UOMId,ISNULL(Qty,0) as Qty,B.Tipe,B.Lokasi FROM ARTrKonTransBrgDt A'
+                 +' INNER JOIN INMsItem B ON A.Itemid=B.Itemid WHERE A.KonTransBrgId='''+VoucherID+''' ORDER BY A.UpdDate');
+              Open;
+            End;
+            if Keterangan = '' then
+              qlbKet.Caption := ''
+            else
+              qlbKet.Caption := '* KETERANGAN : '+Keterangan;
+
+            if rgCetak.ItemIndex = 0 then
+              MyReport.PreviewModal
+            else
+              MyReport.Print;
+
+          finally
+            free;
+          end;
+
+
+        quData.Next;
+      end;
+    end;
+  end else
+  if FlagKKBB = 'INV' then
+  begin
+    with quData,SQL do
+    begin
+      Close;Clear;
+          Add('SELECT DISTINCT CONVERT(VARCHAR(8),Transdate,112),KonInvPelId,Note,ISNULL(JatuhTempo,0) as JthTempo,'
+             +'Transdate,ISNULL(Discount,0) as Disc,ISNULL(TTLKj,0) as TTLKj,ISNULL(StKj,0) as StKj,FgTax FROM ARTrKonInvPelHd '
+             +'WHERE KonInvPelId BETWEEN '''+CBDari.Text+''' AND '''+CBSampai.Text+''' '
+             +'ORDER BY CONVERT(VARCHAR(8),Transdate,112),KonInvPelId');
+      Open;
+      quData.First;
+      while not Eof do
+      begin
+        VoucherID := quData.FieldByName('KonInvPelId').AsString;
+        Keterangan := quData.FieldByName('Note').AsString;
+        JatuhTempo := quData.FieldByName('JthTempo').AsInteger;
+        Tanggal := quData.FieldByName('Transdate').AsDateTime;
+        JumlahD := quData.FieldByName('Disc').AsCurrency;
+        JumlahK := quData.FieldByName('StKj').AsCurrency;
+        sTotal := quData.FieldByName('TTLKj').AsCurrency;
+        FgPayment := quData.FieldByName('FgTax').AsString;
+         with TfmQRRptInvPenjualan.Create(Self) do
+         try
+           qlbjatuhTempo.Caption := 'Term Pembayaran : '+IntToStr(JatuhTempo)+' Hari';
+           qlbTempo.Caption := FormatDateTime('dd/MM/yyyy', IncDay(Tanggal,JatuhTempo));
+           if RbCetak.ItemIndex = 0 then
+           begin
+              qlbTerbilang.Caption :=  '* Terbilang '+ convert(FormatFloat(sEditFormat, stotal))+'rupiah #';
+              qlbCurr1.Caption := 'Rp ';
+              qlbCurr2.Caption := 'Rp ';
+              qlbCurr3.Caption := 'Rp ';
+              qlbCurr4.Caption := 'Rp ';
+              qlbCurr5.Caption := 'Rp ';
+           end else
+           begin
+              qlbTerbilang.Caption :=  '* Terbilang '+ convert(FormatFloat(sEditFormat, stotal))+'dollar #';
+              qlbCurr1.Caption := 'US ';
+              qlbCurr2.Caption := 'US ';
+              qlbCurr3.Caption := 'US ';
+              qlbCurr4.Caption := 'US ';
+              qlbCurr5.Caption := 'US ';
+           end;
+           with qu001,SQL do
+           Begin
+             Close;Clear;
+             add('SELECT ''T'' as FgTax,KonInvPelID as SaleId,KonInvPelId, CurrId,A.Discount,A.DP,isnull(TTLKJ,0) as Total,'
+                +'Convert(varchar(10),A.Transdate,103) as Tgl,A.CustId,C.CustName,C.Address,'
+                +'A.SalesID+'' - ''+D.SalesName as Sales,A.SOID,'
+                +'CASE WHEN C.KodePOS='''' THEN C.City ELSE C.City+'' - ''+C.KodePOS END as City '
+                +' FROM ARTrKonInvPelHd A INNER JOIN ARMsCustomer C ON A.CustId=C.CustId'
+                +' INNER JOIN ARMsSales D ON A.SalesID=D.SalesID '
+                +' WHERE A.KonInvPelID='''+VoucherID+'''');
+             Open;
+           End;
+
+           With qu002,SQL do
+           Begin
+             Close;Clear;
+             add('SELECT A.ItemId,B.ItemName,B.UOMId,ISNULL(Qty,0) as Qty,A.Price,B.Tipe FROM ARTrKonInvPelDt A '
+                +'INNER JOIN INMsItem B ON A.Itemid=B.Itemid WHERE A.KonInvPelID='''+VoucherID+''' '
+                +'ORDER BY A.UpdDate,A.ItemID');
+             Open;
+           End;
+
+           LaDiskon.Caption := CurrToStr(JumlahD);
+           laGT.Caption := CurrToStr(sTotal);
+           laSubTotal.Caption := CurrToStr(JumlahK - JumlahD);
+           if FgPayment = 'T' then
+             laPPN.Caption := '0'
+           else
+           laPPN.Caption := CurrToStr(JumlahK * 0.1);
+
+           if Keterangan <> '' then
+              qlbKet.Caption := '* ' + Keterangan
+           else
+              qlbKet.Caption := '';
+
+
+           if FgPayment = 'T' then
+           begin
+             QRLabel18.Enabled := False; QRLabel23.Enabled := False;
+             qlbCurr3.Enabled := False; qlbCurr4.Enabled := False;
+             laSubTotal.Enabled := False; laPPN.Enabled := False;
+             QRLabel20.Top := 41; qlbCurr5.Top := 41; laGT.Top := 41;
+             QRShape6.Top := 58; QRShape5.Enabled := False;
+           end;
+
+           if RbCetak.ItemIndex = 0 then
+             MyReport.PreviewModal
+           else
+             MyReport.Print;
+
+         finally
+            free;
+         end;
+
+        quData.Next;
+      end;
+    end;
+  end else
+  begin
+    with quData,SQL do
+    begin
+      Close;Clear;
+      add('SELECT DISTINCT CONVERT(VARCHAR(8),Transdate,112),VoucherID FROM CFTrKKBBHd WHERE FlagKKBB='''+FlagKKBB+''' '
+         +'AND VoucherID BETWEEN '''+CBDari.Text+''' AND '''+CBSampai.Text+''' ORDER BY CONVERT(VARCHAR(8),Transdate,112),VoucherID');
+      Open;
+      quData.First;
+      while not Eof do
+      begin
+        with quCek,SQL do
+        begin
+          Close;Clear;
+          Add('SELECT DISTINCT A.VoucherID,B.Note,B.RekeningID,C.RekeningName,ISNULL(B.Amount,0) as Jumlah,'
+             +'B.UpdDate,ISNULL(JumlahD,0) as JumlahD,ISNULL(JumlahK,0) as JumlahK,A.Actor,A.Transdate,A.Note,'
+             +'D.SalesName,A.TglFaktur,A.TglCair,A.ProjectID,E.ItemName,A.NoBGCek,A.FgPayment,P.BankName FROM CFTrKKBBHd A '
+             +'INNER JOIN CFTrKKBBDt B ON A.VoucherID=B.VoucherID INNER JOIN CFMsRekening C ON B.RekeningID=C.RekeningID '
+             +'LEFT JOIN ARMsSales D ON A.Actor=D.SalesID LEFT JOIN INMsItem E ON A.ProjectID=E.ItemID AND E.FgItem=''LP'' '
+             +'LEFT JOIN CFMsBank P ON A.BankID=P.BankID '
+             +'WHERE A.VoucherID='''+quData.FieldByName('VoucherID').AsString+''' ');
+          Open;
+        end;
+        VoucherID := quCek.FieldByName('VoucherID').AsString;
+        Actor := quCek.FieldByName('Actor').AsString;
+        Keterangan := quCek.FieldByName('SalesName').AsString;
+        SalesName := quCek.FieldByName('Note').AsString;
+        ProjectID := quCek.FieldByName('ProjectID').AsString;
+        ProjectName := quCek.FieldByName('ItemName').AsString;
+        BGCek := quCek.FieldByName('NoBGCek').AsString;
+        FgPayment := quCek.FieldByName('FgPayment').AsString;
+        JumlahD := quCek.FieldByName('JumlahD').AsCurrency;
+        JumlahK := quCek.FieldByName('JumlahK').AsCurrency;
+        Tanggal := quCek.FieldByName('Transdate').AsDateTime;
+        TglFaktur := quCek.FieldByName('TglFaktur').AsDateTime;
+        TglCair := quCek.FieldByName('TglCair').AsDateTime;
+        BankName := quCek.FieldByName('BankName').AsString;
+
+        if (FlagKKBB = 'KM') or (FlagKKBB = 'BM') then
+        begin
+          With quAct,SQL do
+          Begin
+            Close;Clear;
+            Add('SELECT ISNULL(SUM(Amount),0)+ '''+CurrToStr(JumlahD)+''' as Total FROM CFTrKKBBDt '
+               +'WHERE VoucherID='''+VoucherID+''' AND Jenis=''D''');
+            Open;
+          End;
+        end else
+        if (FlagKKBB = 'KK') or (FlagKKBB = 'BK') or (FlagKKBB = 'CK') or (FlagKKBB = 'CB') or (FlagKKBB = 'PK') or (FlagKKBB = 'PB') then
+        begin
+          With quAct,SQL do
+          Begin
+            Close;Clear;
+            Add('SELECT ISNULL(SUM(Amount),0)+ '''+CurrToStr(JumlahK)+''' as Total FROM CFTrKKBBDt '
+               +'WHERE VoucherID='''+VoucherID+''' AND Jenis=''K''');
+            Open;
+          End;
+        end else
+        if (FlagKKBB = 'GL') or (FlagKKBB = 'GC') then
+        begin
+          With quAct,SQL do
+          Begin
+            Close;Clear;
+            Add('SELECT ISNULL(JumlahD,0) as Total FROM CFTrKKBBHd WHERE VoucherID='''+VoucherID+''' ');
+            Open;
+          End;
+        end;
+
+        if quAct.FieldByName('Total').AsCurrency < 0 then
+          stotal := quAct.FieldByName('Total').AsCurrency*-1
+        else
+          stotal := quAct.FieldByName('Total').AsCurrency;
+
+        if FlagKKBB='GL' then
+        Begin
+          With TfmCFQRRptTrKKBB.Create(Self) do
+          Try
+            qlbTitle.Caption:= sCompanyName;
+            qlbTitleV.Caption := 'GENERAL LEDGER';
+            qlbKas.Visible := False; qlbBank.Visible := False;
+            QRShape2.Visible := False; QRShape6.Visible := False;
+            QRLabel1.Visible := False; QRLabel2.Visible := False;
+            qlbTTerBayar.Visible := False; 
+            qlbJourTransID.Caption := ': ' + VoucherID;
+            qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', Tanggal);
+            qlbterimaDari.Caption := Actor;
+            qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+' Rupiah #';
+
+            qlbKeterangan.Caption := Keterangan;
+            QRLabel16.Caption :='Dibayar oleh';
+
+            With qu001,SQL do
+            Begin
+              Close;Clear;
+              add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+                 +'SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END as Urut,Jenis FROM CFTrKKBBDt) as K '
+                 +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+VoucherID+''' '
+                 +'ORDER BY K.Urut,K.RekeningID');
+              Open;
+            End;
+
+            if rgCetak.ItemIndex = 0 then
+              MyReport.Previewmodal
+            else
+              MyReport.Print;
+          Finally
+            Free;
+          End;
+        End;
+
+        if FlagKKBB='KM' then
+        Begin
+          With TfmCFQRRptTrKKBB.Create(Self) do
+          Try
+            qlbTitle.Caption:= sCompanyName;
+            qlbKas.Enabled := true;
+            qlbBank.Enabled := not qlbKas.Enabled;
+            qlbTitleV.Caption := 'BUKTI PENERIMAAN';
+            qlbTTerBayar.Caption := 'Terima dari';
+            qlbJourTransID.Caption := ': ' + VoucherID;
+            qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy',Tanggal);
+            qlbterimaDari.Caption := Actor;
+            qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'Rupiah #';
+
+            qlbKeterangan.Caption := Keterangan;
+            QRLabel16.Caption :='Dibayar oleh';
+            if sTotal >= 0 then
+              qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+            else
+              qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+            With qu001,SQL do
+            Begin
+              Close;Clear;
+              add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+                 +'SELECT VoucherID,'''+sDRKas+''' as RekeningID,ISNULL(JumlahD,0) as Amount,Note,1 as Urut,''D'' as Jenis FROM CFTrKKBBHd '
+                 +'UNION ALL SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt) as K '
+                 +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+VoucherID+''' '
+                 +'ORDER BY K.Urut,K.RekeningID');
+              Open;
+            End;
+          if rgCetak.ItemIndex = 0 then
+            MyReport.Previewmodal
+          else
+            MyReport.Print;
+          Finally
+            Free;
+          End;
+        End;
+
+        if (FlagKKBB = 'KK') or (FlagKKBB = 'CK') or (FlagKKBB = 'PK') then
+        Begin
+          With TfmCFQRRptTrKKBB.Create(Self) do
+          Try
+           qlbTitle.Caption:= sCompanyName;
+            qlbKas.Enabled := true;
+            qlbBank.Enabled := not qlbKas.Enabled;
+            qlbTitleV.Caption := 'BUKTI PENGELUARAN';
+            qlbTTerBayar.Caption := 'Dibayar kepada';
+            qlbJourTransID.Caption := ': ' + VoucherID;
+            qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy',Tanggal);
+            if FlagKKBB = 'PCK' then
+              qlbterimaDari.Caption := Actor
+            else
+              qlbterimaDari.Caption := SalesName;
+            qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+
+            qlbKeterangan.Caption := Keterangan;
+            QRLabel16.Caption :='Diterima oleh';
+            With qu001,SQL do
+            Begin
+              Close;Clear;
+              add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+                 +'SELECT VoucherID,'''+sDRKas+''' as RekeningID,ISNULL(JumlahK,0) as Amount,Note,1 as Urut,''K'' as Jenis FROM CFTrKKBBHd '
+                 +'UNION ALL SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt) as K '
+                 +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+VoucherID+''' '
+                 +'ORDER BY K.Urut,K.RekeningID');
+              Open;
+            End;
+          if rgCetak.ItemIndex = 0 then
+            MyReport.Previewmodal
+          else
+            MyReport.Print;
+          Finally
+            Free;
+          End;
+        End;
+
+        if FlagKKBB='BM' then
+        Begin
+          With TfmCFQRRptTrKKBB.Create(Self) do
+          Try
+            qlbTitle.Caption:= sCompanyName;
+            qlbKas.Enabled := false;
+            qlbBank.Enabled := not qlbKas.Enabled;
+            qlbTitleV.Caption := 'BUKTI PENERIMAAN';
+            qlbTTerBayar.Caption := 'Diterima dari';
+            qlbJourTransID.Caption := ': ' + VoucherID;
+            qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy',Tanggal);
+            qlbterimaDari.Caption := Actor;
+            qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+            qlbKeterangan.Caption := Keterangan;
+            QRLabel16.Caption :='Dibayar oleh';
+            With qu001,SQL do
+            Begin
+              Close;Clear;
+              add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+                 +'SELECT VoucherID,B.RekeningID,ISNULL(JumlahD,0) as Amount,A.Note,1 as Urut,''D'' as Jenis FROM CFTrKKBBHd A '
+                 +'INNER JOIN CFMsBank B ON A.BankID=B.BankID UNION ALL SELECT VoucherID,RekeningID,Amount,Note,'
+                 +'CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt) as K '
+                 +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+VoucherID+''' '
+                 +'ORDER BY K.Urut,K.RekeningID');
+              Open;
+            End;
+          if rgCetak.ItemIndex = 0 then
+            MyReport.Previewmodal
+          else
+            MyReport.Print;
+          Finally
+            Free;
+          End;
+        End;
+
+        if (FlagKKBB = 'BK') or (FlagKKBB = 'CB') or (FlagKKBB = 'PB') then
+        Begin
+          With TfmCFQRRptTrKKBB.Create(Self) do
+          Try
+            qlbTitle.Caption:= sCompanyName;
+            qlbKas.Enabled := false;
+            qlbBank.Enabled := not qlbKas.Enabled;
+            qlbTitleV.Caption := 'BUKTI PENGELUARAN';
+            qlbTTerBayar.Caption := 'Dibayar kepada';
+            qlbJourTransID.Caption := ': ' + VoucherID;
+            qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy',Tanggal);
+            if FlagKKBB = 'BNK' then
+              qlbterimaDari.Caption := Actor
+            else
+              qlbterimaDari.Caption := SalesName;
+            qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+            qlbKeterangan.Caption := Keterangan;
+            QRLabel16.Caption :='Diterima oleh';
+            With qu001,SQL do
+            Begin
+              Close;Clear;
+              add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+                 +'SELECT VoucherID,B.RekeningID,ISNULL(JumlahK,0) as Amount,A.Note,1 as Urut,''K'' as Jenis FROM CFTrKKBBHd A '
+                 +'INNER JOIN CFMsBank B ON A.BankID=B.BankID UNION ALL SELECT VoucherID,RekeningID,Amount,Note,'
+                 +'CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt) as K '
+                 +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+VoucherID+''' '
+                 +'ORDER BY K.Urut,K.RekeningID');
+              Open;
+            End;
+          if rgCetak.ItemIndex = 0 then
+            MyReport.Previewmodal
+          else
+            MyReport.Print;
+          Finally
+            Free;
+          End;
+        End;
+        quData.Next;
+      end;
+    end;
+  end;
+end;
+
+end.

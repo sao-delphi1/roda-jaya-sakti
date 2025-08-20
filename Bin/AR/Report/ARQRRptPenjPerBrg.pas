@@ -1,0 +1,107 @@
+unit ARQRRptPenjPerBrg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv3, DB, ADODB, QuickRpt, QRCtrls, StdCtrls, ExtCtrls;
+
+type
+  TfmARQRRptPenjPerBrg = class(TfmRptLv3)
+    QRLabel3: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRLabel7: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRDBText8: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRLabel21: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    qrlValuta: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRDBText11: TQRDBText;
+    procedure QRDBText7Print(sender: TObject; var Value: String);
+    procedure QRDBText8Print(sender: TObject; var Value: String);
+    procedure MyReportBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QRLabel21Print(sender: TObject; var Value: String);
+    procedure QRExpr1Print(sender: TObject; var Value: String);
+    procedure QRDBText6Print(sender: TObject; var Value: String);
+    procedure BndDetailAfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    GrandTotal : currency ;
+    Tanggaldari,TanggalSampai : TDateTime ;
+  end;
+
+var
+  fmARQRRptPenjPerBrg: TfmARQRRptPenjPerBrg;
+
+implementation
+
+uses MyUnit;
+
+{$R *.dfm}
+
+procedure TfmARQRRptPenjPerBrg.QRDBText7Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+   Value := FormatRptqtykurung(Value)
+end;
+
+procedure TfmARQRRptPenjPerBrg.QRDBText8Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value)
+end;
+
+procedure TfmARQRRptPenjPerBrg.MyReportBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  inherited;
+  GrandTotal := 0;
+end;
+
+procedure TfmARQRRptPenjPerBrg.QRLabel21Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := 'Grand Total : '+FormatRptkurung(CurrToStr(GrandTotal));
+end;
+
+procedure TfmARQRRptPenjPerBrg.QRExpr1Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptqtykurung(Value);
+end;
+
+procedure TfmARQRRptPenjPerBrg.QRDBText6Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(value);
+end;
+
+procedure TfmARQRRptPenjPerBrg.BndDetailAfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  inherited;
+  GrandTotal := GrandTotal + qu001.FieldByName('Total').AsCurrency
+end;
+
+end.

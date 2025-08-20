@@ -1,0 +1,27 @@
+inherited fmAPOtoFPP: TfmAPOtoFPP
+  Left = 595
+  Top = 93
+  Caption = 'Otorisasi FPP'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    inherited laTitle: TLabel
+      Width = 135
+      Caption = 'Otorisasi FPP'
+    end
+  end
+  inherited paBottom: TPanel
+    inherited bbPreview: TBitBtn
+      Enabled = False
+      Visible = False
+    end
+    inherited bbPrint: TBitBtn
+      Enabled = False
+      Visible = False
+    end
+    inherited bbExit: TBitBtn
+      Enabled = False
+      Visible = False
+    end
+  end
+end

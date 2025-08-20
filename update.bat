@@ -1,0 +1,7 @@
+DEL SAO.exe
+
+XCOPY \\192.168.44.44\SAO\SAO.exe
+
+SAO.exe
+
+EXIT

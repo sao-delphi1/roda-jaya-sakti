@@ -1,0 +1,83 @@
+unit RptTerimaSolar;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv4, DB, ADODB, QuickRpt, QRCtrls, StdCtrls, ExtCtrls;
+
+type
+  TfmRptTerimaSolar = class(TfmRptLv4)
+    QRDBImage1: TQRDBImage;
+    QRLabel19: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel48: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape2: TQRShape;
+    QRLabel26: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRDBText9: TQRDBText;
+    procedure QRLabel18Print(sender: TObject; var Value: String);
+    procedure QRLabel25Print(sender: TObject; var Value: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmRptTerimaSolar: TfmRptTerimaSolar;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmRptTerimaSolar.QRLabel18Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := qu001.FieldBYName('UserA').ASString;
+end;
+
+procedure TfmRptTerimaSolar.QRLabel25Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := qu001.FieldBYName('Jabatan').ASString;
+end;
+
+end.

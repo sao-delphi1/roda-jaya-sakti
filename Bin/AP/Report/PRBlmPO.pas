@@ -1,0 +1,87 @@
+unit PRBlmPO;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, dxCntner, dxEditor, dxExEdtr, dxEdLib, StdCtrls, DB,
+  ADODB, Buttons, ExtCtrls;
+
+type
+  TfmPRBlmPO = class(TfmRptDlg)
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    procedure FormShow(Sender: TObject);
+    procedure bbPreviewClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmPRBlmPO: TfmPRBlmPO;
+
+implementation
+
+uses ConMain,UnitGeneral,UnitDate,MyUnit,QRPRBlmPO;
+{$R *.dfm}
+
+procedure TfmPRBlmPO.FormShow(Sender: TObject);
+begin
+  inherited;
+  dt1.Date := Date;
+  dt2.Date := Date;
+end;
+
+procedure TfmPRBlmPO.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  with TfmQRPRBlmPO.Create(Self) do
+    try
+      qrlTitle.Caption := laTitle.Caption;
+      qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt1.date)+' s/d '+FormatDateTime('dd/MM/yyyy',dt2.date);
+
+      with qu001,SQL do
+      Begin
+      Close;Clear;
+      Add('SELECT DISTINCT K.PRID,CONVERT(VARCHAR(10),K.TransDate,103) as Tanggal,K.Transdate, '
+         +'CONVERT(VARCHAR(10),K.TransDate,103)+'' - ''+K.PRID as Nota FROM ( '
+         +'SELECT A.PRID,B.Transdate,A.ItemID,C.ItemName,A.Qty,C.UOMID2, '
+         +'ISNULL((SELECT SUM(D.Jumlah) FROM APTrPurchaseOrderdt D WHERE D.PRID=A.PRID AND D.ItemID=A.ItemID),0) as JumPO '
+         +'FROM APTrPurchaseRequestDt A '
+         +'Inner join APTrPurchaseRequestHd B on A.PRID=B.PRID AND B.FgForm=''PR'' '
+         +'inner join INMsItem C on A.ItemID=C.itemid ) as K WHERE K.Qty-K.JumPO>0 '
+         +'AND CONVERT(VARCHAR(8),K.TransDate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.date)+''' '
+         +'ORDER BY K.Transdate,K.PRID ');
+      Open;
+      End;
+
+      with qu002,SQL do
+      Begin
+      Close;Clear;
+      Add('SELECT K.*,K.Qty-K.JumPO as Sisa,K.UOMID2 as UOMID FROM ( '
+         +'SELECT A.PRID,B.Transdate,A.ItemID,C.ItemName,A.Qty,C.UOMID2, '
+         +'ISNULL((SELECT SUM(D.Jumlah) FROM APTrPurchaseOrderdt D WHERE D.PRID=A.PRID AND D.ItemID=A.ItemID),0) as JumPO '
+         +'FROM APTrPurchaseRequestDt A '
+         +'Inner join APTrPurchaseRequestHd B on A.PRID=B.PRID AND B.FgForm=''PR'' '
+         +'inner join INMsItem C on A.ItemID=C.itemid ) as K WHERE K.Qty-K.JumPO>0 AND K.PRID=:PRID '
+         +'ORDER BY K.ItemName ');
+         Parameters.ParamByName('PRID').DataType := ftString;
+      Open;
+      End;
+
+      if Sender=bbPreview then
+        MyReport.Previewmodal
+      else
+        MyReport.Print;
+
+    finally
+      free;
+    end;
+
+end;
+
+end.

@@ -1,0 +1,36 @@
+unit Control;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv2, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxCore, dxContainer, Buttons;
+
+type
+  TfmQC = class(TfmStdLv2)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    StatusF : String;
+    { Public declarations }
+  end;
+
+var
+  fmQC: TfmQC;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmQC.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := False;
+end;
+
+end.

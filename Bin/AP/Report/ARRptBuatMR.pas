@@ -1,0 +1,132 @@
+unit ARRptBuatMR;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxEditor, dxEdLib, dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmARRptBuatMR = class(TfmRptDlg)
+    GroupBox1: TGroupBox;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    Label1: TLabel;
+    rbAll: TRadioButton;
+    rbSelect: TRadioButton;
+    dbgList: TdxDBGrid;
+    dbgListUserID: TdxDBGridMaskColumn;
+    procedure FormShow(Sender: TObject);
+    procedure bbPreviewClick(Sender: TObject);
+    procedure rbSelectClick(Sender: TObject);
+    procedure rbAllClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmARRptBuatMR: TfmARRptBuatMR;
+
+implementation
+
+uses ConMain, ARQRRptBuatMR, UnitGeneral;
+
+{$R *.dfm}
+
+procedure TfmARRptBuatMR.FormShow(Sender: TObject);
+begin
+  inherited;
+  if (GroupUser = 'admin') then
+  begin
+    rbAll.Visible := true;
+    rbSelect.Visible := true;
+    dbgList.Visible := true;
+    height := 347;
+  end else
+  begin
+    rbAll.Visible := False;
+    rbSelect.Visible := False;
+    dbgList.Visible := False;
+    height := 224;
+   end;
+
+  quAct.Open;
+  dt1.Date := Date;
+  dt2.Date := Date;
+end;
+
+procedure TfmARRptBuatMR.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  with TfmARQRRptBuatMR.Create(Self) do
+    try
+      qrlTitle.Caption := laTitle.Caption;
+      qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt1.date)+' s/d '+FormatDateTime('dd/MM/yyyy',dt2.date);
+
+      with qu001,SQL do
+      begin
+        Close;Clear;
+        Add('SELECT A.ITEMID,C.ITEMNAME,SUM(CASE WHEN A.UOMID=C.UOMID2 THEN A.QTY ELSE A.QTY*C.KONVERSI END) AS JUMLAHUOMID2,C.UOMID2 '
+            +'FROM APTRPURCHASEREQUESTDT A '
+            +'INNER JOIN APTRPURCHASEREQUESTHD B ON A.PRID=B.PRID '
+            +'INNER JOIN INMSITEM C ON A.ITEMID=C.ITEMID '
+            +'WHERE B.FgForm=''MR'' AND CONVERT(VARCHAR(8),B.TRANSDATE,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' ');
+        if rbselect.Checked then
+        Add('AND B.UPDUSER IN '+SelGrid(quAct,dbgList,'UserID'))
+        else
+        if rball.Checked then
+        Add('AND B.UPDUSER IN (Select K.UserID from SysMsUser K) ')
+        else
+        Add('AND B.UPDUSER IN ('''+dmmain.UserId+''') ');
+        Add('GROUP BY A.ITEMID,C.ITEMNAME,C.UOMID2 ');
+        Open;
+        if IsEmpty then
+        begin
+          MsgInfo('No Data !');
+          Abort;
+        end;
+      end;
+
+      if Sender=bbPreview then
+         MyReport.PreviewModal
+      else
+         MyReport.Print;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmARRptBuatMR.rbSelectClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmARRptBuatMR.rbAllClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+end.

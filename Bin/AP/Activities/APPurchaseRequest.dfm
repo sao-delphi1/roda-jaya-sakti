@@ -1,0 +1,1076 @@
+inherited fmAPPurchaseRequest: TfmAPPurchaseRequest
+  Left = 479
+  Top = 487
+  Caption = 'Purchase Request'
+  ClientHeight = 520
+  ClientWidth = 1097
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 471
+    inherited pa3: TdxContainer
+      Height = 292
+      object cbBerat: TCheckBox
+        Left = -413
+        Top = -388
+        Width = 97
+        Height = 17
+        Caption = 'Tampilkan Berat'
+        TabOrder = 0
+      end
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 508
+    Width = 1097
+  end
+  inherited pa2: TdxContainer
+    Height = 471
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 904
+    Height = 471
+    inherited pcParent: TdxPageControl
+      Width = 904
+      Height = 471
+      inherited ts01: TdxTabSheet
+        Font.Height = -13
+        ParentFont = False
+        object DBText1: TDBText [0]
+          Left = 214
+          Top = 60
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LSalesName'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label1: TLabel [1]
+          Left = 46
+          Top = 12
+          Width = 59
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Nota PR :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label2: TLabel [2]
+          Left = 52
+          Top = 37
+          Width = 53
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Tanggal :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label4: TLabel [3]
+          Left = 29
+          Top = 60
+          Width = 76
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Request By :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label5: TLabel [4]
+          Left = 29
+          Top = 133
+          Width = 76
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Keterangan :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label13: TLabel [5]
+          Left = 5
+          Top = 168
+          Width = 162
+          Height = 17
+          Caption = 'Detail Purchase Request'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold, fsUnderline]
+          ParentFont = False
+        end
+        object Label3: TLabel [6]
+          Left = 946
+          Top = 1100
+          Width = 63
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Company :'
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+          Visible = False
+        end
+        object Label6: TLabel [7]
+          Left = 76
+          Top = 84
+          Width = 29
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Site :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object DBText2: TDBText [8]
+          Left = 1126
+          Top = 1100
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LWarehouse'
+          DataSource = dsMain
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Visible = False
+        end
+        object DBText3: TDBText [9]
+          Left = 214
+          Top = 84
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LSites'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label7: TLabel [10]
+          Left = 28
+          Top = 109
+          Width = 77
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Department :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object DBText4: TDBText [11]
+          Left = 214
+          Top = 108
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LDivisi'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        inherited bbSave: TdxButton
+          Left = 649
+          Top = 81
+          Width = 114
+          Height = 31
+          Font.Charset = ANSI_CHARSET
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Caption = 'Simpan (F3)'
+          TabOrder = 6
+        end
+        inherited bbCancel: TdxButton
+          Left = 764
+          Top = 81
+          Width = 114
+          Height = 31
+          Font.Charset = ANSI_CHARSET
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Caption = 'Batal (Esc)'
+          TabOrder = 7
+        end
+        object dbg: TdxDBGrid
+          Left = 1
+          Top = 185
+          Width = 981
+          Height = 254
+          Bands = <
+            item
+              Alignment = taLeftJustify
+              Caption = 'List Item(s)'
+            end>
+          DefaultLayout = True
+          HeaderPanelRowCount = 1
+          KeyField = 'ItemID'
+          SummaryGroups = <>
+          SummarySeparator = ', '
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 8
+          OnEnter = dbgEnter
+          BandFont.Charset = ANSI_CHARSET
+          BandFont.Color = clWindowText
+          BandFont.Height = -13
+          BandFont.Name = 'Arial'
+          BandFont.Style = [fsBold]
+          DataSource = dsDetil
+          Filter.Criteria = {00000000}
+          HeaderFont.Charset = ANSI_CHARSET
+          HeaderFont.Color = clWindowText
+          HeaderFont.Height = -12
+          HeaderFont.Name = 'Times New Roman'
+          HeaderFont.Style = [fsBold]
+          HideFocusRect = True
+          HideSelection = True
+          LookAndFeel = lfFlat
+          OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+          OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+          PreviewFont.Charset = DEFAULT_CHARSET
+          PreviewFont.Color = clBlue
+          PreviewFont.Height = -11
+          PreviewFont.Name = 'MS Sans Serif'
+          PreviewFont.Style = []
+          object dbgItemID: TdxDBGridButtonColumn
+            Caption = 'Part Number'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Width = 106
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'ItemID'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgItemIDButtonClick
+          end
+          object dbgItemName: TdxDBGridColumn
+            Caption = 'Nama Barang'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ReadOnly = True
+            TabStop = False
+            Width = 229
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LItemName'
+          end
+          object dbgColumn11: TdxDBGridColumn
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Width = 112
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'TypeUnit'
+          end
+          object dbgColumn10: TdxDBGridButtonColumn
+            Width = 107
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'NoUnit'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgColumn10ButtonClick
+          end
+          object dbgMRID: TdxDBGridButtonColumn
+            Caption = 'Nota MR'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Visible = False
+            Width = 182
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'MRID'
+            Buttons = <
+              item
+                Default = True
+              end>
+          end
+          object dbgLKonversi: TdxDBGridColumn
+            Caption = 'Konversi'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Visible = False
+            Width = 35
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LKonversi'
+          end
+          object dbgQty: TdxDBGridColumn
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Width = 70
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Jumlah'
+          end
+          object dbgUOM: TdxDBGridButtonColumn
+            Caption = 'Satuan'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Width = 57
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'UOMID'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgUOMButtonClick
+          end
+          object dbgColumn12: TdxDBGridButtonColumn
+            Caption = 'User'
+            Width = 100
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LReqBy'
+            Buttons = <
+              item
+                Default = True
+              end>
+            OnButtonClick = dbgColumn12ButtonClick
+          end
+          object dbgNote: TdxDBGridColumn
+            Caption = 'Keterangan'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            Width = 167
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Note'
+          end
+          object dbgProduct: TdxDBGridColumn
+            Caption = 'Produk'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ReadOnly = True
+            TabStop = False
+            Visible = False
+            Width = 67
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LuProduct'
+          end
+          object dbgGroup: TdxDBGridColumn
+            Caption = 'Group'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ReadOnly = True
+            TabStop = False
+            Visible = False
+            Width = 83
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'LuGroup'
+          end
+        end
+        object TmbBrg: TdxButton
+          Tag = 1111
+          Left = 1
+          Top = 441
+          Width = 91
+          Height = 26
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Version = '1.0.2e'
+          OnClick = TmbBrgClick
+          Caption = '(+) Barang'
+          TabOrder = 9
+          TabStop = False
+        end
+        object KrgBrg: TdxButton
+          Tag = 2222
+          Left = 93
+          Top = 441
+          Width = 92
+          Height = 26
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Version = '1.0.2e'
+          OnClick = KrgBrgClick
+          Caption = '(-) Barang'
+          TabOrder = 10
+          TabStop = False
+        end
+        object bbSimpanDetil: TdxButton
+          Tag = 4444
+          Left = 186
+          Top = 441
+          Width = 92
+          Height = 26
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Version = '1.0.2e'
+          OnClick = bbSimpanDetilClick
+          Caption = 'Simpan'
+          TabOrder = 11
+          TabStop = False
+        end
+        object BtlBrg: TdxButton
+          Tag = 4444
+          Left = 279
+          Top = 441
+          Width = 92
+          Height = 26
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Version = '1.0.2e'
+          OnClick = BtlBrgClick
+          Caption = 'Batal'
+          TabOrder = 12
+          TabStop = False
+        end
+        object bbCetak: TdxButton
+          Tag = 4444
+          Left = 372
+          Top = 441
+          Width = 122
+          Height = 26
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Version = '1.0.2e'
+          OnClick = bbCetakClick
+          Caption = 'Cetak'
+          TabOrder = 13
+          TabStop = False
+        end
+        object dxDBEdit1: TdxDBEdit
+          Left = 108
+          Top = 9
+          Width = 200
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          CharCase = ecUpperCase
+          DataField = 'PRID'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBDateEdit1: TdxDBDateEdit
+          Left = 108
+          Top = 33
+          Width = 135
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'TransDate'
+          DataSource = dsMain
+          StyleController = SCEdit
+          UseEditMask = True
+          StoredValues = 4
+        end
+        object dxDBButtonEdit1: TdxDBButtonEdit
+          Left = 108
+          Top = 57
+          Width = 103
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          OnKeyPress = dxDBButtonEdit1KeyPress
+          DataField = 'SalesID'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit1ButtonClick
+          ExistButtons = True
+        end
+        object dxDBEdit2: TdxDBEdit
+          Left = 108
+          Top = 129
+          Width = 439
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          OnKeyPress = dxDBEdit2KeyPress
+          DataField = 'Note'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object GroupBox1: TGroupBox
+          Left = 724
+          Top = 9
+          Width = 233
+          Height = 59
+          Ctl3D = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentCtl3D = False
+          ParentFont = False
+          TabOrder = 14
+          object Label21: TLabel
+            Left = 24
+            Top = 13
+            Width = 36
+            Height = 17
+            Alignment = taRightJustify
+            Caption = 'User :'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBText8: TDBText
+            Left = 68
+            Top = 13
+            Width = 132
+            Height = 17
+            DataField = 'UpdUser'
+            DataSource = dsMain
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label22: TLabel
+            Left = 15
+            Top = 34
+            Width = 45
+            Height = 17
+            Alignment = taRightJustify
+            Caption = 'Waktu :'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBText9: TDBText
+            Left = 68
+            Top = 34
+            Width = 156
+            Height = 17
+            DataField = 'UpdDate'
+            DataSource = dsMain
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+        end
+        object dxDBButtonEdit2: TdxDBButtonEdit
+          Left = 372
+          Top = 665
+          Width = 103
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 15
+          Visible = False
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'warehouseID'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit2ButtonClick
+          ExistButtons = True
+        end
+        object dxDBButtonEdit3: TdxDBButtonEdit
+          Left = 108
+          Top = 81
+          Width = 103
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          OnKeyPress = dxDBButtonEdit3KeyPress
+          DataField = 'SiteID'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit3ButtonClick
+          ExistButtons = True
+        end
+        object dxDBButtonEdit4: TdxDBButtonEdit
+          Left = 108
+          Top = 105
+          Width = 103
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 4
+          OnKeyPress = dxDBButtonEdit4KeyPress
+          DataField = 'DivisiID'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit4ButtonClick
+          ExistButtons = True
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1097
+    inherited sbLast: TSpeedButton
+      Left = 1060
+    end
+    inherited sbNext: TSpeedButton
+      Left = 1033
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 1006
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 979
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 953
+    end
+    inherited BvlPeriod: TBevel
+      Left = 707
+    end
+    inherited laPeriod: TLabel
+      Left = 711
+    end
+  end
+  inherited quMain: TADOQuery
+    BeforeEdit = quDetilBeforeEdit
+    BeforeDelete = quMainBeforeDelete
+    OnCalcFields = quMainCalcFields
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'SELECT * FROM APTrPurchaseRequestHd'
+      '')
+    object quMainTransdate: TDateTimeField
+      FieldName = 'Transdate'
+    end
+    object quMainSalesID: TStringField
+      FieldName = 'SalesID'
+    end
+    object quMainFgForm: TStringField
+      FieldName = 'FgForm'
+      Size = 2
+    end
+    object quMainNote: TStringField
+      FieldName = 'Note'
+      Size = 200
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quMainLSalesName: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LSalesName'
+      Size = 100
+      Calculated = True
+    end
+    object quMainNoPR: TStringField
+      FieldName = 'NoPR'
+    end
+    object quMainSiteID: TStringField
+      FieldName = 'SiteID'
+    end
+    object quMainwarehouseID: TStringField
+      FieldName = 'warehouseID'
+    end
+    object quMainLWarehouse: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LWarehouse'
+      Size = 100
+      Calculated = True
+    end
+    object quMainLSites: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LSites'
+      Size = 50
+      Calculated = True
+    end
+    object quMainDivisiID: TStringField
+      FieldName = 'DivisiID'
+      Size = 50
+    end
+    object quMainLDivisi: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LDivisi'
+      Size = 50
+      Calculated = True
+    end
+    object quMainacc1: TStringField
+      FieldName = 'acc1'
+      Size = 50
+    end
+    object quMainacc2: TStringField
+      FieldName = 'acc2'
+      Size = 50
+    end
+    object quMainacc3: TStringField
+      FieldName = 'acc3'
+      Size = 50
+    end
+    object quMainKdCab: TStringField
+      FieldName = 'KdCab'
+      Size = 50
+    end
+    object quMaintglupload: TDateTimeField
+      FieldName = 'tglupload'
+    end
+    object quMainFgSelesai: TStringField
+      FieldName = 'FgSelesai'
+      Size = 30
+    end
+    object quMainFgDivisi: TStringField
+      FieldName = 'FgDivisi'
+      Size = 10
+    end
+    object quMainPRID: TStringField
+      FieldName = 'PRID'
+      Size = 50
+    end
+  end
+  inherited ActionList: TActionList
+    Left = 384
+    Top = 4
+    inherited ActSave: TAction
+      Caption = '&Save (F3)'
+    end
+    inherited ActCancel: TAction
+      Caption = 'Cancel'
+    end
+    object ActPrint: TAction
+      Category = 'Data'
+      Caption = 'Print'
+      ShortCut = 120
+    end
+  end
+  inherited quDetil: TADOQuery
+    BeforeInsert = quDetilBeforeInsert
+    BeforeEdit = quDetilBeforeEdit
+    AfterPost = quMainAfterPost
+    BeforeDelete = quDetilBeforeDelete
+    OnCalcFields = quDetilCalcFields
+    OnNewRecord = quDetilNewRecord
+    Parameters = <
+      item
+        Name = 'PRID'
+        DataType = ftString
+        NumericScale = 255
+        Precision = 255
+        Size = 20
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT * FROM APTrPurchaseRequestDT'
+      'WHERE PRID=:PRID')
+    object quDetilItemID: TStringField
+      FieldName = 'ItemID'
+      OnChange = quDetilItemIDChange
+    end
+    object quDetilQty: TBCDField
+      FieldName = 'Qty'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quDetilUOMID: TStringField
+      FieldName = 'UOMID'
+      OnChange = quDetilUOMIDChange
+    end
+    object quDetilNote: TStringField
+      FieldName = 'Note'
+      Size = 500
+    end
+    object quDetilUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quDetilUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quDetilLItemName: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LItemName'
+      Size = 200
+      Calculated = True
+    end
+    object quDetilMRID: TStringField
+      FieldName = 'MRID'
+    end
+    object quDetilNumAll: TAutoIncField
+      FieldName = 'NumAll'
+      ReadOnly = True
+    end
+    object quDetilFgNum: TIntegerField
+      FieldName = 'FgNum'
+    end
+    object quDetilJumlah: TBCDField
+      FieldName = 'Jumlah'
+      OnChange = quDetilJumlahChange
+      DisplayFormat = '#,0'
+      Precision = 18
+    end
+    object quDetilTypeUnit: TStringField
+      FieldName = 'TypeUnit'
+      Size = 50
+    end
+    object quDetilNoUnit: TStringField
+      FieldName = 'NoUnit'
+      Size = 50
+    end
+    object quDetilReqBy: TStringField
+      FieldName = 'ReqBy'
+      Size = 50
+    end
+    object quDetilLReqBy: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LReqBy'
+      Size = 100
+      Calculated = True
+    end
+    object quDetilFgOto: TStringField
+      FieldName = 'FgOto'
+    end
+    object quDetilNoteoto: TStringField
+      FieldName = 'Noteoto'
+      Size = 1000
+    end
+    object quDetilFgConfirm: TStringField
+      FieldName = 'FgConfirm'
+      Size = 10
+    end
+    object quDetilConfirmDate: TDateTimeField
+      FieldName = 'ConfirmDate'
+    end
+    object quDetilconfirmby: TStringField
+      FieldName = 'confirmby'
+      Size = 50
+    end
+    object quDetilPRID: TStringField
+      FieldName = 'PRID'
+      Size = 50
+    end
+  end
+  inherited dsDetil: TDataSource
+    OnStateChange = dsDetilStateChange
+  end
+  object quItem: TADOQuery
+    Connection = dmMain.dbConn
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT A.ItemID,A.ItemName,A.ProductID,A.GroupID, '
+      
+        'B.ProductDesc,C.GroupDesc,A.UOMID,A.UOMID2,ISNULL(A.Konversi,0) ' +
+        'as Konversi'
+      'FROM INMsItem A'
+      'INNER JOIN INMsProduct B ON A.ProductID = B.ProductID'
+      'INNER JOIN INMsGroup C ON A.GroupID = C.GroupID')
+    Left = 592
+    Top = 12
+    object quItemUOMID: TStringField
+      FieldName = 'UOMID'
+    end
+    object quItemUOMID2: TStringField
+      FieldName = 'UOMID2'
+    end
+    object quItemItemID: TStringField
+      FieldName = 'ItemID'
+    end
+    object quItemItemName: TStringField
+      FieldName = 'ItemName'
+      Size = 150
+    end
+    object quItemProductID: TStringField
+      FieldName = 'ProductID'
+    end
+    object quItemGroupID: TStringField
+      FieldName = 'GroupID'
+    end
+    object quItemProductDesc: TStringField
+      FieldName = 'ProductDesc'
+      Size = 150
+    end
+    object quItemGroupDesc: TStringField
+      FieldName = 'GroupDesc'
+      Size = 200
+    end
+    object quItemKonversi: TIntegerField
+      FieldName = 'Konversi'
+      ReadOnly = True
+    end
+  end
+  object quCalc: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 560
+    Top = 12
+  end
+  object quCetak: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 540
+    Top = 52
+  end
+end

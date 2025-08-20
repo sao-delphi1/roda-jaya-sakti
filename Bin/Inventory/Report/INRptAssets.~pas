@@ -1,0 +1,72 @@
+unit INRptAssets;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxPSGlbl, dxPSUtl, dxPSEngn, dxPrnPg, dxBkgnd, dxWrap,
+  dxPrnDev, dxPSCore, dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmINRptAssets = class(TfmRptDlg)
+    dgrReport: TdxDBGrid;
+    dgrReportColumn1: TdxDBGridColumn;
+    dgrReportColumn2: TdxDBGridColumn;
+    dgrReportColumn3: TdxDBGridColumn;
+    dgrReportColumn4: TdxDBGridColumn;
+    dgrReportColumn5: TdxDBGridColumn;
+    dgrReportColumn6: TdxDBGridColumn;
+    dgrReportColumn7: TdxDBGridColumn;
+    dgrReportColumn8: TdxDBGridColumn;
+    dgrReportColumn9: TdxDBGridColumn;
+    dgrReportColumn10: TdxDBGridColumn;
+    dgrReportColumn11: TdxDBGridColumn;
+    quActAssetsID: TStringField;
+    quActAssetsName: TStringField;
+    quActTglBeli: TStringField;
+    quActTglJual: TStringField;
+    quActAssetsValue: TBCDField;
+    quActJenis: TStringField;
+    quActDisusut: TStringField;
+    quActLamaSusut: TIntegerField;
+    quActStatus: TStringField;
+    quActRekeningD: TStringField;
+    quActRekeningK: TStringField;
+    saveDlg: TSaveDialog;
+    dxReport: TdxComponentPrinter;
+    bbExcel: TBitBtn;
+    procedure FormShow(Sender: TObject);
+    procedure bbExcelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmINRptAssets: TfmINRptAssets;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmINRptAssets.FormShow(Sender: TObject);
+begin
+  inherited;
+  quAct.Active := TRUE;
+end;
+
+procedure TfmINRptAssets.bbExcelClick(Sender: TObject);
+begin
+  inherited;
+  if saveDlg.Execute then
+    begin
+      if Pos('.XLS', uppercase(saveDlg.FileName)) > 0 then
+        dgrReport.SaveToXLS(saveDlg.FileName, true)
+      else
+        dgrReport.SaveToXLS(saveDlg.FileName + '.xls', true)
+    end
+end;
+
+end.

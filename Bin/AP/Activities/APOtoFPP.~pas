@@ -1,0 +1,25 @@
+unit APOtoFPP;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls;
+
+type
+  TfmAPOtoFPP = class(TfmRptDlg)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAPOtoFPP: TfmAPOtoFPP;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,116 @@
+unit INMsLayout;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxPageControl, dxEdLib, dxButton, dxCore, dxContainer, Buttons,
+  dxTL, dxDBCtrl, dxDBGrid, dxDBTLCl, dxGrClms;
+
+type
+  TfmINMsLayout = class(TfmStdLv31)
+    dbgUOM: TdxDBGrid;
+    quMainLayoutID: TStringField;
+    quMainLayoutName: TStringField;
+    quMainNote: TStringField;
+    quMainUpdUser: TStringField;
+    quMainUpdDate: TDateTimeField;
+    quMainSiteID: TStringField;
+    quMainWarehouseID: TStringField;
+    quMainFgActive: TStringField;
+    dbgUOMColumn1: TdxDBGridColumn;
+    dbgUOMColumn2: TdxDBGridColumn;
+    dbgUOMColumn3: TdxDBGridBlobColumn;
+    dbgUOMColumn4: TdxDBGridImageColumn;
+    dbgUOMColumn5: TdxDBGridColumn;
+    dbgUOMColumn6: TdxDBGridColumn;
+    procedure dsMainStateChange(Sender: TObject);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure bbFindClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmINMsLayout: TfmINMsLayout;
+
+implementation
+
+uses MyUnit, Search, ConMain, UnitGeneral;
+
+{$R *.dfm}
+
+procedure TfmINMsLayout.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dbgUOMColumn1,quMain.State<>dsInsert);
+  SetReadOnly(dbgUOMColumn5,TRUE);
+  SetReadOnly(dbgUOMColumn6,TRUE);
+end;
+
+procedure TfmINMsLayout.quMainBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+  if TRIM(quMainLayoutID.ASString)='' then
+  begin
+    ShowMessage('Kode Rak tidak boleh kosong');
+    quMainLayoutID.FocusControl;
+    Abort;
+  end;
+
+  if TRIM(quMainLayoutName.ASString)='' then
+  begin
+    ShowMessage('Nama Rak tidak boleh kosong');
+    quMainLayoutName.FocusControl;
+    Abort;
+  end;
+
+  quMainUpdUser.AsString := dmMain.Userid;
+  quMainUpdDate.AsDateTime := GetServerDateTime;
+end;
+
+procedure TfmINMsLayout.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainFgActive.AsString := 'Y';
+  quMainLayoutID.FocusControl;
+end;
+
+procedure TfmINMsLayout.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  begin
+    try
+      Title := 'Master Layout';
+      SQLString := 'SELECT LayoutID as Kode_Rak,LayoutName as Nama_Rak,Note as Keterangan,case when fgactive=''Y'' then ''Ya'' Else ''Tidak'' end as Aktif '
+                  +'from INMsLayout';
+      if ShowModal = MrOk then
+      begin
+        qumain.Locate('LayoutID',Res[0],[]);
+      end;
+    finally
+      free;
+    end;
+  end;
+end;
+
+procedure TfmINMsLayout.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := False;
+end;
+
+procedure TfmINMsLayout.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+end;
+
+end.

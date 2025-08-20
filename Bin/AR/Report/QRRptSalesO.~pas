@@ -1,0 +1,143 @@
+unit QRRptSalesO;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ARQRRptSuratJalan, DB, ADODB, QuickRpt, StdCtrls, QRCtrls,
+  ExtCtrls;
+
+type
+  TfmQRRptSalesO = class(TfmQRRptSuratJalan)
+    QRExpr2: TQRExpr;
+    QRBand1: TQRBand;
+    QRShape7: TQRShape;
+    QRShape2: TQRShape;
+    qlbBank: TQRLabel;
+    qlbRekening: TQRLabel;
+    qlbTerbilang: TQRLabel;
+    qlbCabang: TQRLabel;
+    qlbNamaRekening: TQRLabel;
+    qlbValuta: TQRLabel;
+    QRExpr1: TQRExpr;
+    laGT: TQRLabel;
+    qlbCurr1: TQRLabel;
+    qlbCurr5: TQRLabel;
+    QRShape8: TQRShape;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel31: TQRLabel;
+    qlbCurr2: TQRLabel;
+    LaDiskon: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel35: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRLabel38: TQRLabel;
+    QRShape6: TQRShape;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRShape11: TQRShape;
+    QRShape12: TQRShape;
+    QRShape13: TQRShape;
+    QRLabel39: TQRLabel;
+    GroupFooterBand2: TQRBand;
+    QRShape18: TQRShape;
+    QRShape19: TQRShape;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRShape20: TQRShape;
+    QRShape21: TQRShape;
+    QRShape22: TQRShape;
+    QRShape23: TQRShape;
+    QRLabel43: TQRLabel;
+    QRShape24: TQRShape;
+    QRLabel44: TQRLabel;
+    QRShape25: TQRShape;
+    QRDBText15: TQRDBText;
+    procedure QRDBText14Print(sender: TObject; var Value: String);
+    procedure QRExpr2Print(sender: TObject; var Value: String);
+    procedure QRExpr1Print(sender: TObject; var Value: String);
+    procedure bnd001BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure BndDetailBeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure bnd001AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRLabel15Print(sender: TObject; var Value: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Urut : integer;
+  end;
+
+var
+  fmQRRptSalesO: TfmQRRptSalesO;
+
+implementation
+
+uses UnitGeneral, MyUnit, RptLv0;
+{$R *.dfm}
+
+procedure TfmQRRptSalesO.QRDBText14Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:= FormatRptkurung(Value);
+end;
+
+procedure TfmQRRptSalesO.QRExpr2Print(sender: TObject; var Value: String);
+begin
+  inherited;
+  Value:= FormatRptkurung(Value);
+end;
+
+procedure TfmQRRptSalesO.QRExpr1Print(sender: TObject; var Value: String);
+begin
+  inherited;
+  Value:= FormatRpt(Value);
+end;
+
+procedure TfmQRRptSalesO.bnd001BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  if Urut <> 14 then
+  QRShape25.Enabled := FALSE
+  else
+  QRShape25.Enabled := TRUE;
+
+  if urut > 10 then
+  GroupFooterBand2.AlignToBottom := TRUE
+  ELSE
+  GroupFooterBand2.AlignToBottom := FALSE;
+end;
+
+procedure TfmQRRptSalesO.BndDetailBeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  Urut := 1;
+end;
+
+procedure TfmQRRptSalesO.bnd001AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  inherited;
+  Urut := Urut +1 ;
+  if Urut > 15 then
+  MyReport.NewPage;
+end;
+
+procedure TfmQRRptSalesO.QRLabel15Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptUrut(InttoStr(Urut));
+end;
+
+end.

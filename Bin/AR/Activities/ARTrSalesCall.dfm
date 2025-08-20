@@ -1,0 +1,635 @@
+inherited fmARTrSalesCall: TfmARTrSalesCall
+  Left = 239
+  Top = 147
+  Caption = 'Form Sales Call'
+  ClientHeight = 429
+  ClientWidth = 730
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 380
+    inherited pa3: TdxContainer
+      Height = 201
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 417
+    Width = 730
+  end
+  inherited pa2: TdxContainer
+    Height = 380
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 537
+    Height = 380
+    inherited pcParent: TdxPageControl
+      Width = 537
+      Height = 380
+      inherited ts01: TdxTabSheet
+        object Label1: TLabel [0]
+          Left = 17
+          Top = 16
+          Width = 69
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Sales Call No :'
+        end
+        object Label2: TLabel [1]
+          Left = 41
+          Top = 36
+          Width = 45
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Tanggal :'
+        end
+        object Label3: TLabel [2]
+          Left = 29
+          Top = 56
+          Width = 57
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Pelanggan :'
+        end
+        object Label4: TLabel [3]
+          Left = 54
+          Top = 76
+          Width = 32
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Sales :'
+        end
+        object DBText5: TDBText [4]
+          Left = 220
+          Top = 76
+          Width = 42
+          Height = 13
+          AutoSize = True
+          DataField = 'LSalesName'
+          DataSource = dsMain
+        end
+        object Label30: TLabel [5]
+          Left = 65
+          Top = 96
+          Width = 21
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'UP :'
+        end
+        object Label33: TLabel [6]
+          Left = 55
+          Top = 116
+          Width = 31
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Email :'
+        end
+        object Label5: TLabel [7]
+          Left = 327
+          Top = 76
+          Width = 27
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Telp :'
+        end
+        object Label32: TLabel [8]
+          Left = 331
+          Top = 96
+          Width = 23
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Fax :'
+        end
+        object Label6: TLabel [9]
+          Left = 43
+          Top = 136
+          Width = 43
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Respon :'
+        end
+        object Label7: TLabel [10]
+          Left = 25
+          Top = 156
+          Width = 61
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Keterangan :'
+        end
+        object Label8: TLabel [11]
+          Left = 13
+          Top = 176
+          Width = 73
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Promo Barang :'
+        end
+        object Label9: TLabel [12]
+          Left = 350
+          Top = 176
+          Width = 35
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Harga :'
+        end
+        object Label10: TLabel [13]
+          Left = 30
+          Top = 194
+          Width = 56
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Spesifikasi :'
+        end
+        object Label11: TLabel [14]
+          Left = 180
+          Top = 36
+          Width = 63
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Tgl Berakhir :'
+        end
+        object Label12: TLabel [15]
+          Left = 59
+          Top = 282
+          Width = 27
+          Height = 13
+          Alignment = taRightJustify
+          Caption = 'Foto :'
+        end
+        inherited bbSave: TdxButton
+          Left = 366
+          Top = 351
+        end
+        inherited bbCancel: TdxButton
+          Left = 443
+          Top = 351
+        end
+        object GroupBox2: TGroupBox
+          Left = 338
+          Top = 1
+          Width = 197
+          Height = 50
+          Ctl3D = False
+          ParentCtl3D = False
+          TabOrder = 2
+          object Label21: TLabel
+            Left = 16
+            Top = 10
+            Width = 28
+            Height = 13
+            Alignment = taRightJustify
+            Caption = 'User :'
+          end
+          object DBText8: TDBText
+            Left = 53
+            Top = 9
+            Width = 132
+            Height = 17
+            DataField = 'UpdUser'
+            DataSource = dsMain
+          end
+          object Label22: TLabel
+            Left = 7
+            Top = 30
+            Width = 38
+            Height = 13
+            Alignment = taRightJustify
+            Caption = 'Waktu :'
+          end
+          object DBText9: TDBText
+            Left = 54
+            Top = 30
+            Width = 132
+            Height = 17
+            DataField = 'UpdDate'
+            DataSource = dsMain
+          end
+        end
+        object dxDBEdit1: TdxDBEdit
+          Left = 91
+          Top = 12
+          Width = 164
+          Color = clWhite
+          TabOrder = 3
+          TabStop = False
+          DataField = 'SCID'
+          DataSource = dsMain
+          ReadOnly = True
+          StyleController = SCEdit
+          StoredValues = 64
+        end
+        object dxButton1: TdxButton
+          Tag = 4444
+          Left = 372
+          Top = 287
+          Width = 92
+          Height = 26
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Version = '1.0.2e'
+          OnClick = dxButton1Click
+          Caption = 'CETAK'
+          TabOrder = 4
+          TabStop = False
+        end
+        object dxDBDateEdit1: TdxDBDateEdit
+          Left = 91
+          Top = 32
+          Width = 89
+          TabOrder = 5
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'TransDate'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit3: TdxDBEdit
+          Left = 91
+          Top = 52
+          Width = 246
+          TabOrder = 6
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Customer'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBButtonEdit1: TdxDBButtonEdit
+          Left = 91
+          Top = 72
+          Width = 124
+          TabOrder = 7
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'SalesID'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit1ButtonClick
+          ExistButtons = True
+        end
+        object dxDBEdit7: TdxDBEdit
+          Left = 91
+          Top = 92
+          Width = 150
+          TabOrder = 8
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'UP'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit2: TdxDBEdit
+          Left = 358
+          Top = 72
+          Width = 150
+          TabOrder = 9
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Phone'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit8: TdxDBEdit
+          Left = 358
+          Top = 92
+          Width = 150
+          TabOrder = 10
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Fax'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit9: TdxDBEdit
+          Left = 91
+          Top = 112
+          Width = 382
+          TabOrder = 11
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Email'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit5: TdxDBEdit
+          Left = 91
+          Top = 132
+          Width = 382
+          TabOrder = 12
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Respon'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit4: TdxDBEdit
+          Left = 91
+          Top = 152
+          Width = 382
+          TabOrder = 13
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Note'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit6: TdxDBEdit
+          Left = 91
+          Top = 172
+          Width = 253
+          TabOrder = 14
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'NamaBarang'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit10: TdxDBEdit
+          Left = 388
+          Top = 172
+          Width = 120
+          TabOrder = 15
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'Harga'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBMemo1: TdxDBMemo
+          Left = 91
+          Top = 192
+          Width = 382
+          TabOrder = 16
+          DataField = 'Spesifikasi'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Height = 86
+        end
+        object dxDBDateEdit2: TdxDBDateEdit
+          Left = 248
+          Top = 32
+          Width = 89
+          TabOrder = 17
+          OnKeyPress = dxDBDateEdit1KeyPress
+          DataField = 'EndDate'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object bbLogo: TBitBtn
+          Left = 206
+          Top = 283
+          Width = 65
+          Height = 25
+          Cursor = crHandPoint
+          Hint = 'Ubah Logo Perusahaan'
+          Caption = '&Logo'
+          Enabled = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 18
+          OnClick = bbLogoClick
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333303333
+            333333333337FF3333333333330003333333333333777F333333333333080333
+            3333333F33777FF33F3333B33B000B33B3333373F777773F7333333BBB0B0BBB
+            33333337737F7F77F333333BBB0F0BBB33333337337373F73F3333BBB0F7F0BB
+            B333337F3737F73F7F3333BB0FB7BF0BB3333F737F37F37F73FFBBBB0BF7FB0B
+            BBB3773F7F37337F377333BB0FBFBF0BB333337F73F333737F3333BBB0FBF0BB
+            B3333373F73FF7337333333BBB000BBB33333337FF777337F333333BBBBBBBBB
+            3333333773FF3F773F3333B33BBBBB33B33333733773773373333333333B3333
+            333333333337F33333333333333B333333333333333733333333}
+          NumGlyphs = 2
+        end
+        object bbHpsLogo: TBitBtn
+          Left = 206
+          Top = 319
+          Width = 65
+          Height = 25
+          Cursor = crHandPoint
+          Hint = 'Hapus Logo Perusahaan'
+          Caption = '&Hapus'
+          Enabled = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 19
+          OnClick = bbHpsLogoClick
+          Glyph.Data = {
+            9E050000424D9E05000000000000360400002800000012000000120000000100
+            08000000000068010000120B0000120B00000001000000000000000000000000
+            80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+            A600CCFFFF0099FFFF0066FFFF0033FFFF00FFCCFF00CCCCFF0099CCFF0066CC
+            FF0033CCFF0000CCFF00FF99FF00CC99FF009999FF006699FF003399FF000099
+            FF00FF66FF00CC66FF009966FF006666FF003366FF000066FF00FF33FF00CC33
+            FF009933FF006633FF003333FF000033FF00CC00FF009900FF006600FF003300
+            FF00FFFFCC00CCFFCC0099FFCC0066FFCC0066FFCC0033FFCC0000FFCC00FFCC
+            CC00CCCCCC0099CCCC0066CCCC0033CCCC0000CCCC00FF99CC00CC99CC009999
+            CC006699CC003399CC000099CC00FF66CC00CC66CC009966CC006666CC003366
+            CC000066CC00FF33CC00CC33CC009933CC006633CC003333CC000033CC00FF00
+            CC00CC00CC009900CC006600CC003300CC000000CC00FFFF9900CCFF990099FF
+            990066FF990033FF990000FF9900FFCC9900CCCC990099CC990066CC990033CC
+            990000CC9900FF999900CC99990099999900669999003399990000999900FF66
+            9900CC66990099669900666699003366990000669900FF339900CC3399009933
+            9900663399003333990000339900FF009900CC00990099009900660099003300
+            990000009900FFFF6600CCFF660099FF660066FF660033FF660000FF6600FFCC
+            6600CCCC660099CC660066CC660033CC660000CC6600FF996600CC9966009999
+            6600669966003399660000996600FF666600CC66660099666600666666003366
+            660000666600FF336600CC33660099336600663366003333660000336600FF00
+            6600CC00660099006600660066003300660000006600FFFF3300CCFF330099FF
+            330066FF330033FF330000FF3300FFCC3300CCCC330099CC330066CC330033CC
+            330000CC3300FF993300CC99330099993300669933003399330000993300FF66
+            3300CC66330099663300666633003366330000663300FF333300CC3333009933
+            3300663333003333330000333300FF003300CC00330099003300660033003300
+            330000003300CCFF000099FF000066FF000033FF0000FFCC0000CCCC000099CC
+            000066CC000033CC000000CC0000FF990000CC99000099990000669900003399
+            000000990000FF660000CC66000099660000666600000066000033660000FF33
+            0000CC33000099330000663300003333000000330000CC000000990000006600
+            0000330000000000DD000000BB000000AA000000880000007700000055000000
+            44000000220000DD000000BB000000AA00000088000000770000005500000044
+            000000220000DDDDDD0055555500777777007777770044444400222222001111
+            110077000000550000004400000022000000F0FBFF00A4A0A000808080000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00323232323232
+            32323232323232323232323200003232323232323200DEDEDE00323232323232
+            000032323232323232DEDDDD7272323232323232000032323232323200DDDBDB
+            DB720032323232320000323232323232004EF9F9DB7200323232323200003232
+            3232323232DBF9F94EDE323232323232000032323232323232000000DE003232
+            3232323200003232323232323232DBDE00323232323232320000323232323232
+            3200DBDEDE3232323232323200003232323232323200DBDBDE32323232323232
+            00003232323232323200DBDBDE00323232323232000032323232323232DBDBDB
+            DEDE323232323232000032323232323200DBDBDBDBDE00323232323200003232
+            3232323200DBDBDB1DDE0032323232320000323232323232001DDBDBDBDBDE32
+            323232320000323232323232DBDBDBDBDBDBDB32323232320000323232323232
+            32DBDBDBDB003232323232320000323232323232323200003232323232323232
+            0000}
+        end
+        object DBImage1: TDBImage
+          Left = 91
+          Top = 278
+          Width = 110
+          Height = 91
+          Cursor = crHandPoint
+          DataField = 'Foto'
+          DataSource = dsMain
+          Stretch = True
+          TabOrder = 20
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 730
+    inherited sbLast: TSpeedButton
+      Left = 693
+    end
+    inherited sbNext: TSpeedButton
+      Left = 666
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 639
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 612
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 586
+    end
+    inherited BvlPeriod: TBevel
+      Left = 340
+    end
+    inherited laPeriod: TLabel
+      Left = 344
+    end
+  end
+  inherited quMain: TADOQuery
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'SELECT * FROM ARTrSCHD')
+    Left = 224
+    object quMainCustomer: TStringField
+      FieldName = 'Customer'
+      Size = 200
+    end
+    object quMainUP: TStringField
+      FieldName = 'UP'
+      Size = 200
+    end
+    object quMainPhone: TStringField
+      FieldName = 'Phone'
+    end
+    object quMainFax: TStringField
+      FieldName = 'Fax'
+    end
+    object quMainEmail: TStringField
+      FieldName = 'Email'
+      Size = 100
+    end
+    object quMainRespon: TStringField
+      FieldName = 'Respon'
+      Size = 200
+    end
+    object quMainNote: TStringField
+      FieldName = 'Note'
+      Size = 200
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quMainSalesID: TStringField
+      FieldName = 'SalesID'
+    end
+    object quMainLSalesName: TStringField
+      FieldKind = fkLookup
+      FieldName = 'LSalesName'
+      LookupDataSet = quSales
+      LookupKeyFields = 'SalesID'
+      LookupResultField = 'SalesName'
+      KeyFields = 'SalesID'
+      Size = 80
+      Lookup = True
+    end
+    object quMainLValuta: TStringField
+      FieldKind = fkLookup
+      FieldName = 'LValuta'
+      LookupDataSet = quValuta
+      LookupKeyFields = 'CurrID'
+      LookupResultField = 'CurrName'
+      KeyFields = 'CurrID'
+      Size = 80
+      Lookup = True
+    end
+    object quMainTransdate: TDateTimeField
+      FieldName = 'Transdate'
+    end
+    object quMainCurrID: TStringField
+      FieldName = 'CurrID'
+      Size = 5
+    end
+    object quMainSCID: TStringField
+      FieldName = 'SCID'
+      Size = 50
+    end
+    object quMainNamaBarang: TStringField
+      FieldName = 'NamaBarang'
+      Size = 100
+    end
+    object quMainSpesifikasi: TStringField
+      FieldName = 'Spesifikasi'
+      Size = 500
+    end
+    object quMainHarga: TBCDField
+      FieldName = 'Harga'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quMainEndDate: TDateTimeField
+      FieldName = 'EndDate'
+    end
+    object quMainFoto: TBlobField
+      FieldName = 'Foto'
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActSave: TAction
+      Caption = 'SIMPAN (F3)'
+      ShortCut = 114
+    end
+    inherited ActCancel: TAction
+      Caption = 'BATAL (F4)'
+      ShortCut = 115
+    end
+  end
+  object quSales: TADOQuery
+    Connection = dmMain.dbConn
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'Select SalesID, SalesName From ARMsSales')
+    Left = 396
+    Top = 116
+  end
+  object quValuta: TADOQuery
+    Connection = dmMain.dbConn
+    CursorType = ctStatic
+    BeforePost = quDetilBeforePost
+    AfterPost = quDetilAfterPost
+    DataSource = dsMain
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM SAMSValuta')
+    Left = 364
+    Top = 120
+  end
+  object odLogo: TOpenPictureDialog
+    Filter = 'Bitmaps (*.bmp)|*.bmp'
+    Left = 486
+    Top = 324
+  end
+end

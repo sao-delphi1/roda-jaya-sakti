@@ -1,0 +1,259 @@
+inherited fmRptMultiCetak: TfmRptMultiCetak
+  Left = 330
+  Top = 310
+  Caption = 'MULTI CETAK'
+  ClientHeight = 209
+  ClientWidth = 529
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GroupBox1: TGroupBox [0]
+    Left = 21
+    Top = 12
+    Width = 333
+    Height = 70
+    Caption = 'Periode'
+    Ctl3D = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 0
+    object Label2: TLabel
+      Left = 138
+      Top = 28
+      Width = 51
+      Height = 20
+      Caption = 'sampai'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object dt1: TdxDateEdit
+      Left = 9
+      Top = 24
+      Width = 120
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnChange = dt1Change
+      Date = -700000
+      SaveTime = False
+      UseEditMask = True
+      StoredValues = 4
+    end
+    object dt2: TdxDateEdit
+      Left = 201
+      Top = 24
+      Width = 120
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnChange = dt1Change
+      Date = -700000
+      SaveTime = False
+      UseEditMask = True
+      StoredValues = 4
+    end
+  end
+  object GroupBox2: TGroupBox [1]
+    Left = 21
+    Top = 82
+    Width = 483
+    Height = 70
+    Caption = '[ Voucher ]'
+    Ctl3D = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 212
+      Top = 30
+      Width = 51
+      Height = 20
+      Caption = 'sampai'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+    end
+    object CBSampai: TComboBox
+      Left = 272
+      Top = 26
+      Width = 170
+      Height = 28
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ItemHeight = 20
+      ParentFont = False
+      TabOrder = 0
+    end
+    object CBDari: TComboBox
+      Left = 27
+      Top = 26
+      Width = 170
+      Height = 28
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ItemHeight = 20
+      ParentFont = False
+      TabOrder = 1
+    end
+  end
+  object bbOK1: TdxButton [2]
+    Left = 296
+    Top = 163
+    Width = 100
+    Height = 33
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+    Version = '1.0.2e'
+    OnClick = bbOK1Click
+    Caption = 'CETAK'
+    Colors.ClickedFrom = 15199215
+    Colors.ClickedTo = 15199215
+    Colors.FocusedFrom = 15199215
+    Colors.FocusedTo = 15199215
+    Colors.HighlightFrom = 15199215
+    Colors.HighlightTo = 15199215
+    Glyph.Data = {
+      4E010000424D4E01000000000000760000002800000012000000120000000100
+      040000000000D800000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333330000003333333333333333330000003333344333333333330000003333
+      4224333333333300000033342222433333333300000033422222243333333300
+      000034222A2222433333330000003222A3A222433333330000003A2A333A2224
+      33333300000033A33333A222433333000000333333333A222433330000003333
+      333333A222433300000033333333333A222433000000333333333333A2224300
+      00003333333333333A224300000033333333333333A223000000333333333333
+      333A33000000333333333333333333000000}
+    HotTrack = True
+    ModalResult = 1
+    TabOrder = 2
+  end
+  object bbCancel1: TdxButton [3]
+    Left = 399
+    Top = 163
+    Width = 100
+    Height = 33
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+    Version = '1.0.2e'
+    OnClick = bbCancel1Click
+    Caption = 'TUTUP'
+    Colors.ClickedFrom = 15199215
+    Colors.ClickedTo = 15199215
+    Colors.FocusedFrom = 15199215
+    Colors.FocusedTo = 15199215
+    Colors.HighlightFrom = 15199215
+    Colors.HighlightTo = 15199215
+    Glyph.Data = {
+      4E010000424D4E01000000000000760000002800000012000000120000000100
+      040000000000D800000000000000000000001000000000000000000000000000
+      80000080000000808000800000008000800080800000C0C0C000808080000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333330000003333883333333333330000003339118333339833330000003339
+      1118333911833300000033391111839111183300000033339111181111183300
+      0000333339111111118333000000333333911111183333000000333333311111
+      8333330000003333333911118333330000003333339111118333330000003333
+      3911181118333300000033339111839111833300000033339118333911183300
+      0000333339133333911133000000333333333333391933000000333333333333
+      333333000000333333333333333333000000}
+    HotTrack = True
+    ModalResult = 2
+    TabOrder = 3
+  end
+  object rgCetak: TRadioGroup [4]
+    Left = 21
+    Top = 152
+    Width = 268
+    Height = 46
+    Columns = 2
+    Ctl3D = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ItemIndex = 0
+    Items.Strings = (
+      'Preview'
+      'Lsg Cetak')
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 4
+  end
+  object RbCetak: TRadioGroup [5]
+    Left = 356
+    Top = 12
+    Width = 148
+    Height = 70
+    Columns = 2
+    Ctl3D = False
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ItemIndex = 0
+    Items.Strings = (
+      'Bukti'
+      'Jurnal')
+    ParentCtl3D = False
+    ParentFont = False
+    TabOrder = 5
+    OnClick = dt1Change
+  end
+  inherited quAct: TADOQuery
+    Left = 256
+  end
+  object quData: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 224
+    Top = 4
+  end
+  object quCek: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 288
+    Top = 4
+  end
+end

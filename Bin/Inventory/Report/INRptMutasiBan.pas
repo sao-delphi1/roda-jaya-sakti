@@ -1,0 +1,59 @@
+unit INRptMutasiBan;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv4, DB, ADODB, QuickRpt, QRCtrls, StdCtrls, ExtCtrls;
+
+type
+  TfmINRptMutasiBan = class(TfmRptLv4)
+    bnd003: TQRSubDetail;
+    ds003: TDataSource;
+    qu004: TADOQuery;
+    QRDBText8: TQRDBText;
+    QRDBText1: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRLabel48: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRDBText6: TQRDBText;
+    procedure bnd003BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    nama : string;
+  end;
+
+var
+  fmINRptMutasiBan: TfmINRptMutasiBan;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfmINRptMutasiBan.bnd003BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+  if qu004.RecordCount=0 then
+  PrintBand := False;
+end;
+
+end.

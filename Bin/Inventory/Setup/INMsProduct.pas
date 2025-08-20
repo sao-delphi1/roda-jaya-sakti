@@ -1,0 +1,194 @@
+unit INMsProduct;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, dxPageControl,
+  dxEdLib, dxButton, StdCtrls, ExtCtrls, Buttons, dxCore, dxContainer,
+  dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmINMsProduct = class(TfmStdLv31)
+    dbgProduct: TdxDBGrid;
+    dbgProductProductID: TdxDBGridColumn;
+    dbgProductName: TdxDBGridColumn;
+    quMainProductID: TStringField;
+    quMainProductDesc: TStringField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    dbgProductUser: TdxDBGridColumn;
+    dbgProductUpdDate: TdxDBGridColumn;
+    procedure FormCreate(Sender: TObject);                                               
+    procedure FormShow(Sender: TObject);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure bbFindClick(Sender: TObject);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure quMainBeforeDelete(DataSet: TDataSet);
+    procedure quMainNewRecord(DataSet: TDataSet);
+  private
+    { Private declarations }
+    procedure cekStatus;
+  public
+    { Public declarations }
+    CallFromAnotherMenu : boolean;
+    StLap : string;
+  end;
+
+var
+  fmINMsProduct: TfmINMsProduct;
+
+implementation
+
+uses UnitGeneral, ConMain, Search, StdLv1;
+
+{$R *.dfm}
+procedure TfmINMsProduct.cekStatus;
+Begin
+ if StLap='PR' then
+ begin
+   With quAct,sql do
+    Begin
+      Close;Clear;
+      Add('Select Top 1 ProductId FROM INMsItem WHERE ProductId='''+quMainProductID.Value+'''');
+      Open;
+      if not IsEmpty then
+      Begin
+        MsgInfo('kode Produk ini sudah di pakai di Master Barang');
+        Abort;
+      End;
+    End;
+ end;
+
+ if StLap='DV' then
+ begin
+   With quAct,sql do
+    Begin
+      Close;Clear;
+      Add('Select Top 1 DivisiID FROM APTrPurchaseRequestHD WHERE DivisiID='''+quMainProductID.Value+'''');
+      Open;
+      if not IsEmpty then
+      Begin
+        MsgInfo('kode Divisi ini sudah di pakai di Transaksi');
+        Abort;
+      End;
+    End;
+ end;
+End;
+
+procedure TfmINMsProduct.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := FALSE;
+  SettingDxGrid(dbgProduct);
+end;
+
+procedure TfmINMsProduct.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active:=TRUE;
+  if StLap='PR' then
+  begin
+    with quMain,Sql do
+    begin
+      Close;Clear;
+      Add('SELECT * FROM INMsProduct');
+      Open;
+    end;
+  end else
+  begin
+    Caption := 'Master Departement';
+    dbgProductProductID.Caption := 'Kode_Departement';
+    dbgProductName.Caption := 'Nama Departemen';
+    with quMain,Sql do
+    begin
+      Close;Clear;
+      Add('SELECT DivisiID as ProductID,DivisiName as ProductDesc,UpdDate,Upduser FROM INMsDivisi');
+      Open;
+    End;
+  end;
+  quMain.Last;
+end;
+
+procedure TfmINMsProduct.quMainBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+   if Trim(quMainProductId.value)='' then
+   Begin
+     MsgInfo('Kode tidak boleh kosong');
+     quMainProductId.FocusControl;
+     Abort;
+   End;
+
+   if Trim(quMainProductDesc.value)='' then
+   Begin
+     MsgInfo('Nama belum diisi');
+     quMainProductDesc.FocusControl;
+     Abort;
+   End;
+
+   If (quMain.State = dsInsert) and (stlap='PR') then
+   begin
+      With quAct,SQL do
+      begin
+         Close;Clear;
+         add('Select ProductID FROM INMsProduct WHERE ProductID='''+quMainProductId.Value+'''');
+         Open;
+         If Not IsEmpty then
+         begin
+           MsgInfo('Kode ini sudah dipakai');
+           quMainProductId.FocusControl;
+           Abort;
+         end;
+      End;
+   end;
+
+  quMainUpdDate.Value:= GetServerDateTime;
+  quMainUpdUser.Value:= dmMain.UserId;
+end;
+
+procedure TfmINMsProduct.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  begin
+   try
+     if StLap='PR' then
+     begin
+       Title := 'Master Product';
+       SQLString := 'SELECT ProductId as Product_ID,ProductDesc as Description from INMsProduct';
+     end else
+     begin
+       Title := 'Master Department';
+       SQLString := 'SELECT DivisiID as Kode_Department,DivisiName as Nama_Department from INMsDivisi order BY DivisiName';
+     end;
+     if ShowModal = MrOk then
+     begin
+        qumain.Locate('ProductId',Res[0],[]);
+     end;
+     finally
+       free;
+     end;
+   end;
+end;
+
+procedure TfmINMsProduct.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dbgProductProductID,quMain.State<>dsInsert);
+  SetReadOnly(dbgProductUser,TRUE);
+  SetReadOnly(dbgProductUpdDate,TRUE);
+end;
+procedure TfmINMsProduct.quMainBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  cekStatus;
+end;
+
+procedure TfmINMsProduct.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainProductId.FocusControl;
+end;
+
+end.

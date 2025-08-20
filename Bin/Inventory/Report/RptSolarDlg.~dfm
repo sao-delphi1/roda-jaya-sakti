@@ -1,0 +1,14 @@
+inherited fmRptSolarDlg: TfmRptSolarDlg
+  Left = 543
+  Top = 353
+  Caption = 'Laporan Penggunaan Solar'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Height = 0
+  end
+  inherited paCenter: TPanel
+    Top = 0
+    Height = 530
+  end
+end

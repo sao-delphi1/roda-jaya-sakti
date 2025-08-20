@@ -1,0 +1,24 @@
+unit ConfirmNote;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv0, dxExEdtr, dxCntner, DB, ADODB;
+
+type
+  TfmStdLv5 = class(TfmStdLv0)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmStdLv5: TfmStdLv5;
+
+implementation
+
+{$R *.dfm}
+
+end.

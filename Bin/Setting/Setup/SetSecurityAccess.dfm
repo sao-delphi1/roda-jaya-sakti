@@ -1,0 +1,1314 @@
+inherited fmSetSecurityAccess: TfmSetSecurityAccess
+  Left = 191
+  Top = 49
+  Caption = 'Aksesibilitas'
+  ClientHeight = 595
+  ClientWidth = 947
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paToolBar: TdxContainer
+    Width = 947
+  end
+  object pcMain: TdxPageControl [1]
+    Left = 0
+    Top = 37
+    Width = 947
+    Height = 558
+    Align = alClient
+    HideButtons = False
+    HotTrack = False
+    MultiLine = False
+    OwnerDraw = False
+    RaggedRight = False
+    ScrollOpposite = False
+    TabHeight = 0
+    TabOrder = 1
+    TabPosition = dxtpBottom
+    TabWidth = 0
+  end
+  object dxPageControl1: TdxPageControl [2]
+    Left = 0
+    Top = 37
+    Width = 947
+    Height = 558
+    ActivePage = ts02
+    Align = alClient
+    HideButtons = False
+    HotTrack = False
+    MultiLine = False
+    OwnerDraw = False
+    RaggedRight = False
+    ScrollOpposite = False
+    TabHeight = 0
+    TabOrder = 2
+    TabPosition = dxtpTop
+    TabWidth = 0
+    object ts01: TdxTabSheet
+      Caption = 'Group Trustee'
+      object dxContainer2: TdxContainer
+        Left = 0
+        Top = 0
+        Width = 434
+        Height = 535
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Align = alLeft
+        Version = '1.0.0'
+        Caption = 'dxContainer2'
+        object Panel1: TPanel
+          Left = 0
+          Top = 0
+          Width = 434
+          Height = 25
+          Align = alTop
+          Alignment = taLeftJustify
+          Color = 14467152
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 6
+            Top = 4
+            Width = 97
+            Height = 19
+            Caption = 'Group Trustee'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Times New Roman'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
+        object dxContainer3: TdxContainer
+          Left = 0
+          Top = 25
+          Width = 434
+          Height = 510
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Align = alClient
+          Version = '1.0.0'
+          Caption = 'dxContainer3'
+          object dbgGroup: TdxDBGrid
+            Left = 0
+            Top = 0
+            Width = 434
+            Height = 474
+            Bands = <
+              item
+              end>
+            DefaultLayout = True
+            HeaderPanelRowCount = 1
+            KeyField = 'KdGroup'
+            SummaryGroups = <>
+            SummarySeparator = ', '
+            Align = alClient
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            BandFont.Charset = DEFAULT_CHARSET
+            BandFont.Color = clWindowText
+            BandFont.Height = -11
+            BandFont.Name = 'MS Sans Serif'
+            BandFont.Style = []
+            DataSource = dsGrpTrustee
+            Filter.Criteria = {00000000}
+            HeaderFont.Charset = DEFAULT_CHARSET
+            HeaderFont.Color = clWindowText
+            HeaderFont.Height = -11
+            HeaderFont.Name = 'MS Sans Serif'
+            HeaderFont.Style = [fsBold]
+            HideFocusRect = True
+            HideSelection = True
+            LookAndFeel = lfFlat
+            OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+            OptionsDB = [edgoCanAppend, edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+            OptionsView = [edgoAutoWidth, edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+            PreviewFont.Charset = DEFAULT_CHARSET
+            PreviewFont.Color = clBlue
+            PreviewFont.Height = -11
+            PreviewFont.Name = 'MS Sans Serif'
+            PreviewFont.Style = []
+            OnCustomDraw = dbgGroupCustomDraw
+            object dbgGroupColumn1: TdxDBGridColumn
+              Caption = 'Nama Group'
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'KdGroup'
+            end
+            object dbgGroupColumn2: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Hapus'
+              MinWidth = 16
+              Width = 80
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgDelete'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dbgGroupColumn3: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Tambah'
+              MinWidth = 16
+              Width = 80
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgTambah'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dbgGroupColumn4: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Ubah'
+              MinWidth = 16
+              Width = 80
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgEdit'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dbgGroupColumn5: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Gaji'
+              MinWidth = 16
+              Width = 80
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgGaji'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+          end
+          object dxContainer4: TdxContainer
+            Left = 0
+            Top = 474
+            Width = 434
+            Height = 36
+            About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+            Align = alBottom
+            Version = '1.0.0'
+            Caption = 'dxContainer4'
+            object dxButton1: TdxButton
+              Left = 4
+              Top = 6
+              Width = 85
+              About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Version = '1.0.2e'
+              OnClick = dxButton1Click
+              Caption = '&Tambah'
+              TabOrder = 0
+            end
+            object dxButton2: TdxButton
+              Left = 90
+              Top = 6
+              Width = 88
+              About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -15
+              Font.Name = 'Times New Roman'
+              Font.Style = []
+              ParentFont = False
+              Version = '1.0.2e'
+              OnClick = dxButton2Click
+              Caption = '&Hapus'
+              TabOrder = 1
+            end
+          end
+          object dbgPenjualan: TdxDBGrid
+            Left = 0
+            Top = 0
+            Width = 434
+            Height = 474
+            Bands = <
+              item
+              end>
+            DefaultLayout = True
+            KeyField = 'KdGroup'
+            SummaryGroups = <>
+            SummarySeparator = ', '
+            Align = alClient
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            BandFont.Charset = DEFAULT_CHARSET
+            BandFont.Color = clWindowText
+            BandFont.Height = -11
+            BandFont.Name = 'MS Sans Serif'
+            BandFont.Style = []
+            DataSource = dsGrpTrustee
+            Filter.Criteria = {00000000}
+            HeaderFont.Charset = DEFAULT_CHARSET
+            HeaderFont.Color = clWindowText
+            HeaderFont.Height = -11
+            HeaderFont.Name = 'MS Sans Serif'
+            HeaderFont.Style = [fsBold]
+            HideFocusRect = True
+            HideSelection = True
+            LookAndFeel = lfUltraFlat
+            OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+            OptionsDB = [edgoCanAppend, edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+            OptionsView = [edgoAutoHeaderPanelHeight, edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+            PreviewFont.Charset = DEFAULT_CHARSET
+            PreviewFont.Color = clBlue
+            PreviewFont.Height = -11
+            PreviewFont.Name = 'MS Sans Serif'
+            PreviewFont.Style = []
+            object dbgPenjualanColumn1: TdxDBGridColumn
+              Caption = 'Nama Group'
+              Width = 120
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'KdGroup'
+            end
+            object dbgPenjualanColumn2: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Delete'
+              MinWidth = 16
+              Width = 70
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgDelete'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dbgPenjualanColumn4: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Tambah'
+              MinWidth = 16
+              Width = 70
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgTambah'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dbgPenjualanColumn3: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Ubah'
+              MinWidth = 16
+              Width = 70
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgEdit'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+            object dbgPenjualanColumn5: TdxDBGridImageColumn
+              Alignment = taLeftJustify
+              Caption = 'Gaji'
+              MinWidth = 16
+              Width = 70
+              BandIndex = 0
+              RowIndex = 0
+              FieldName = 'FgGaji'
+              Descriptions.Strings = (
+                'Ya'
+                'Tidak')
+              ImageIndexes.Strings = (
+                '0'
+                '1')
+              ShowDescription = True
+              Values.Strings = (
+                'Y'
+                'T')
+            end
+          end
+        end
+      end
+      object Panel2: TPanel
+        Left = 434
+        Top = 0
+        Width = 9
+        Height = 535
+        Align = alLeft
+        BevelOuter = bvNone
+        Color = 14467152
+        TabOrder = 1
+      end
+      object Panel4: TPanel
+        Left = 443
+        Top = 0
+        Width = 504
+        Height = 535
+        Align = alClient
+        ParentColor = True
+        TabOrder = 2
+        object SpeedButton1: TSpeedButton
+          Left = 4
+          Top = 10
+          Width = 29
+          Height = 29
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF000000
+            0000FF00FF00FF00FF00FF00FF0000000000FF00FF00FF00FF0000000000FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF00FF000000
+            0000FF00FF00FF00FF00FF00FF0000000000000000000000000000000000FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF00FF000000
+            0000FF00FF00FF00FF00FF00FF0000000000FF00FF00FF00FF0000000000FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF00FF000000
+            0000FF00FF00FF00FF00FF00FF0000000000FF00FF00FF00FF00000000000000
+            0000000000000000000000000000000000000000000000000000FF00FF000000
+            0000FF00FF00FF00FF00FF00FF0000000000FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+            0000FF00FF00FF00FF0000000000000000000000000000000000000000000000
+            000000000000000000000000000000000000FF00FF00FF00FF00FF00FF000000
+            0000FF00FF00FF00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF000000
+            0000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF000000
+            0000FF00FF00FF00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF000000
+            0000FF00FF00FF00FF0000000000000000000000000000000000000000000000
+            000000000000000000000000000000000000FF00FF00FF00FF00FF00FF000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0000000000FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          OnClick = SpeedButton1Click
+        end
+        object SpeedButton2: TSpeedButton
+          Left = 4
+          Top = 39
+          Width = 29
+          Height = 29
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF00FF00FF000000
+            00000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF00FF00FF000000
+            0000FF00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF00FF00FF000000
+            0000FF00FF000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000FF00FF00FF00FF00FF00FF00FF00FF000000
+            0000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000000
+            0000FF00FF000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000FF00FF00FF00FF00FF00FF00FF00FF000000
+            0000FF00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF00FF00FF000000
+            00000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF0000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          OnClick = SpeedButton2Click
+        end
+        object Label3: TLabel
+          Left = 52
+          Top = 47
+          Width = 75
+          Height = 17
+          Caption = 'Full Collapse'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label2: TLabel
+          Left = 52
+          Top = 18
+          Width = 69
+          Height = 17
+          Caption = 'Full Expand'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object TVMenuGroup: TdxDBTreeList
+          Left = 1
+          Top = 80
+          Width = 502
+          Height = 454
+          Bands = <
+            item
+            end>
+          DefaultLayout = True
+          HeaderPanelRowCount = 1
+          KeyField = 'KdMenu'
+          ParentField = 'Parent'
+          Align = alBottom
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          PopupMenu = poGroup
+          TabOrder = 0
+          BandFont.Charset = DEFAULT_CHARSET
+          BandFont.Color = clWindowText
+          BandFont.Height = -11
+          BandFont.Name = 'MS Sans Serif'
+          BandFont.Style = []
+          DataSource = dsMenuGroupTrustee
+          HeaderFont.Charset = DEFAULT_CHARSET
+          HeaderFont.Color = clWindowText
+          HeaderFont.Height = -11
+          HeaderFont.Name = 'MS Sans Serif'
+          HeaderFont.Style = []
+          HideFocusRect = True
+          HideSelection = True
+          LookAndFeel = lfFlat
+          PreviewFont.Charset = ANSI_CHARSET
+          PreviewFont.Color = clBlue
+          PreviewFont.Height = -13
+          PreviewFont.Name = 'Times New Roman'
+          PreviewFont.Style = []
+          RootValue = '0'
+          ShowHeader = False
+          StateImages = imState
+          StateIndexFieldName = 'MyState'
+          TreeLineColor = clGrayText
+          object TVMenuGroupNmMenu: TdxDBTreeListColumn
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'NmMenu'
+          end
+        end
+        object GroupBox3: TGroupBox
+          Left = 190
+          Top = 4
+          Width = 283
+          Height = 67
+          Caption = '[ Pintas ]'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          object Label7: TLabel
+            Left = 25
+            Top = 21
+            Width = 33
+            Height = 17
+            Caption = 'Grant'
+          end
+          object Label8: TLabel
+            Left = 25
+            Top = 40
+            Width = 45
+            Height = 17
+            Caption = 'Revoke'
+          end
+          object Label9: TLabel
+            Left = 151
+            Top = 21
+            Width = 58
+            Height = 17
+            Caption = 'Full Grant'
+          end
+          object Label10: TLabel
+            Left = 151
+            Top = 40
+            Width = 70
+            Height = 17
+            Caption = 'Full Revoke'
+          end
+          object Label15: TLabel
+            Left = 74
+            Top = 21
+            Width = 22
+            Height = 17
+            Caption = ': F1'
+          end
+          object Label16: TLabel
+            Left = 74
+            Top = 40
+            Width = 22
+            Height = 17
+            Caption = ': F2'
+          end
+          object Label17: TLabel
+            Left = 227
+            Top = 21
+            Width = 22
+            Height = 17
+            Caption = ': F3'
+          end
+          object Label18: TLabel
+            Left = 227
+            Top = 40
+            Width = 22
+            Height = 17
+            Caption = ': F4'
+          end
+        end
+      end
+    end
+    object ts02: TdxTabSheet
+      Caption = 'User Trustee'
+      object dbgUser: TdxDBGrid
+        Left = 0
+        Top = 0
+        Width = 947
+        Height = 498
+        Bands = <
+          item
+          end>
+        DefaultLayout = True
+        HeaderPanelRowCount = 1
+        SummaryGroups = <>
+        SummarySeparator = ', '
+        Align = alClient
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        BandFont.Charset = DEFAULT_CHARSET
+        BandFont.Color = clWindowText
+        BandFont.Height = -11
+        BandFont.Name = 'MS Sans Serif'
+        BandFont.Style = []
+        DataSource = dsUser
+        Filter.Criteria = {00000000}
+        HeaderFont.Charset = ANSI_CHARSET
+        HeaderFont.Color = clWindowText
+        HeaderFont.Height = -12
+        HeaderFont.Name = 'Times New Roman'
+        HeaderFont.Style = [fsBold]
+        HideFocusRect = True
+        HideSelection = True
+        LookAndFeel = lfFlat
+        OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+        OptionsDB = [edgoCanAppend, edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+        OptionsView = [edgoAutoWidth, edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+        PreviewFont.Charset = DEFAULT_CHARSET
+        PreviewFont.Color = clBlue
+        PreviewFont.Height = -11
+        PreviewFont.Name = 'MS Sans Serif'
+        PreviewFont.Style = []
+        object dbgUserUserId: TdxDBGridColumn
+          Caption = 'Username'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Width = 110
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'UserId'
+        end
+        object dbgUserKdGroup: TdxDBGridButtonColumn
+          Caption = 'Group'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Width = 100
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'KdGroup'
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dbgUserKdGroupButtonClick
+        end
+        object dbgUserColumn9: TdxDBGridButtonColumn
+          Caption = 'ID KARYAWAN'
+          Width = 150
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'LNama'
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dbgUserColumn9ButtonClick
+        end
+        object dbgUserColumn10: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'Acc PO'
+          MinWidth = 16
+          Width = 60
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgAccPO'
+          Descriptions.Strings = (
+            'YA'
+            'TIDAK')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object dbgUserColumn11: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'Acc GRN'
+          MinWidth = 16
+          Width = 60
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgAccGRN'
+          Descriptions.Strings = (
+            'YA'
+            'TIDAK')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object dbgUserColumn12: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'Acc INV'
+          MinWidth = 16
+          Width = 60
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgAccAR'
+          Descriptions.Strings = (
+            'YA'
+            'TIDAK')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object dbgUserColumn13: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'Acc FPP'
+          MinWidth = 16
+          Width = 60
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgAccFPP'
+          Descriptions.Strings = (
+            'YA'
+            'TIDAK')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object dbgUserColumn14: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'Acc REF'
+          MinWidth = 16
+          Width = 60
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgReference'
+          Descriptions.Strings = (
+            'YA'
+            'TIDAK')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object dbgUserColumn15: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'PR Back Date'
+          MinWidth = 16
+          Width = 100
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgPRBackDate'
+          Descriptions.Strings = (
+            'Ya'
+            'Tidak')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'Y'
+            'T')
+        end
+        object dbgUserEmail: TdxDBGridColumn
+          Caption = 'E-mail'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Visible = False
+          Width = 300
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'Email'
+        end
+        object dbgUserFgHPP: TdxDBGridImageColumn
+          Alignment = taLeftJustify
+          Caption = 'HPP'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          MinWidth = 16
+          Visible = False
+          Width = 100
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FgHPP'
+          Descriptions.Strings = (
+            'Tidak'
+            'Ya')
+          ImageIndexes.Strings = (
+            '0'
+            '1')
+          ShowDescription = True
+          Values.Strings = (
+            'T'
+            'Y')
+        end
+        object dbgUserColumn7: TdxDBGridColumn
+          Caption = 'Handphone'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          Visible = False
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'NomorHP'
+        end
+        object dbgUserUpdDate: TdxDBGridColumn
+          Caption = 'Last Updated'
+          Color = 13676331
+          DisableEditor = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          TabStop = False
+          Width = 100
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'UpdDate'
+        end
+        object dbgUserUpdUser: TdxDBGridColumn
+          Caption = 'Updated By'
+          Color = 13676331
+          DisableEditor = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          TabStop = False
+          Width = 100
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'UpdUser'
+        end
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 498
+        Width = 947
+        Height = 37
+        Align = alBottom
+        ParentColor = True
+        TabOrder = 1
+        object dxButton3: TdxButton
+          Left = 4
+          Top = 6
+          Width = 85
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Version = '1.0.2e'
+          OnClick = dxButton3Click
+          Caption = '&Add User'
+          TabOrder = 0
+        end
+        object dxButton4: TdxButton
+          Left = 91
+          Top = 6
+          Width = 88
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Version = '1.0.2e'
+          OnClick = dxButton4Click
+          Caption = '&Remove User'
+          TabOrder = 1
+        end
+      end
+    end
+  end
+  object quDSGroup: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM SysMsMenuGroupTrustee')
+    Left = 448
+    Top = 204
+    object quDSGroupKdGroup: TStringField
+      FieldName = 'KdGroup'
+    end
+    object quDSGroupUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quDSGroupUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quDSGroupKdMenu: TIntegerField
+      FieldName = 'KdMenu'
+    end
+  end
+  object dsMenuGroupTrustee: TDataSource
+    DataSet = quMenuGrpTrustee
+    OnStateChange = dsMenuGroupTrusteeStateChange
+    Left = 344
+    Top = 108
+  end
+  object quMenuGrpTrustee: TADOQuery
+    Connection = dmMain.dbConn
+    DataSource = dsGrpTrustee
+    Parameters = <
+      item
+        Name = 'KdGroup'
+        Attributes = [paNullable]
+        DataType = ftString
+        NumericScale = 255
+        Precision = 255
+        Size = 20
+        Value = ''
+      end>
+    SQL.Strings = (
+      'SELECT A.KdMenu, A.NmMenu, A.Parent'
+      ', CASE WHEN B.KdGroup IS NULL THEN 1 ELSE 2 END as MyState '
+      'FROM SysMenu A'
+      
+        'LEFT OUTER JOIN SysMsMenuGroupTrustee B ON A.KdMenu=B.KdMenu AND' +
+        ' KdGroup=:KdGroup'
+      'WHERE A.FgActive='#39'Y'#39
+      'ORDER BY A.KdMenu'
+      ''
+      '')
+    Left = 316
+    Top = 108
+    object quMenuGrpTrusteeKdMenu: TIntegerField
+      FieldName = 'KdMenu'
+    end
+    object quMenuGrpTrusteeNmMenu: TStringField
+      FieldName = 'NmMenu'
+      Size = 50
+    end
+    object quMenuGrpTrusteeParent: TIntegerField
+      FieldName = 'Parent'
+    end
+    object quMenuGrpTrusteeMyState: TIntegerField
+      FieldName = 'MyState'
+      ReadOnly = True
+    end
+  end
+  object dsGrpTrustee: TDataSource
+    DataSet = quGrpTrustee
+    OnStateChange = dsGrpTrusteeStateChange
+    Left = 84
+    Top = 92
+  end
+  object quGrpTrustee: TADOQuery
+    Connection = dmMain.dbConn
+    BeforePost = quGrpTrusteeBeforePost
+    BeforeDelete = quGrpTrusteeBeforeDelete
+    OnNewRecord = quGrpTrusteeNewRecord
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM SysMsGroupTrustee'
+      'ORDER BY KdGroup'
+      '')
+    Left = 56
+    Top = 92
+    object quGrpTrusteeKdGroup: TStringField
+      FieldName = 'KdGroup'
+    end
+    object quGrpTrusteeUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quGrpTrusteeUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quGrpTrusteeFgEdit: TStringField
+      FieldName = 'FgEdit'
+    end
+    object quGrpTrusteeFgDelete: TStringField
+      FieldName = 'FgDelete'
+    end
+    object quGrpTrusteeFgTambah: TStringField
+      FieldName = 'FgTambah'
+    end
+    object quGrpTrusteeFgGaji: TStringField
+      FieldName = 'FgGaji'
+      Size = 10
+    end
+  end
+  object quUser: TADOQuery
+    Connection = dmMain.dbConn
+    BeforePost = quUserBeforePost
+    OnCalcFields = quUserCalcFields
+    OnNewRecord = quUserNewRecord
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT * FROM SysMsUser'
+      '')
+    Left = 244
+    Top = 352
+    object quUserUserId: TStringField
+      FieldName = 'UserId'
+    end
+    object quUserPassWd: TStringField
+      FieldName = 'PassWd'
+    end
+    object quUserKdGroup: TStringField
+      FieldName = 'KdGroup'
+    end
+    object quUserUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+      DisplayFormat = 'dd/MM/yyyy'
+    end
+    object quUserUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quUserFgHPP: TStringField
+      FieldName = 'FgHPP'
+      Size = 1
+    end
+    object quUserEmail: TStringField
+      FieldName = 'Email'
+      Size = 50
+    end
+    object quUserNomorHP: TStringField
+      FieldName = 'NomorHP'
+      Size = 50
+    end
+    object quUserNama: TStringField
+      FieldName = 'Nama'
+      Size = 50
+    end
+    object quUserJabatan: TStringField
+      FieldName = 'Jabatan'
+      Size = 50
+    end
+    object quUserLNama: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LNama'
+      Size = 100
+      Calculated = True
+    end
+    object quUserFgAccPO: TStringField
+      FieldName = 'FgAccPO'
+      Size = 10
+    end
+    object quUserFgAccFPP: TStringField
+      FieldName = 'FgAccFPP'
+      Size = 10
+    end
+    object quUserFgAccAR: TStringField
+      FieldName = 'FgAccAR'
+      Size = 10
+    end
+    object quUserFgAccGRN: TStringField
+      FieldName = 'FgAccGRN'
+      Size = 10
+    end
+    object quUserFgReference: TStringField
+      FieldName = 'FgReference'
+      Size = 10
+    end
+    object quUserFgPRBackDate: TStringField
+      FieldName = 'FgPRBackDate'
+      Size = 10
+    end
+  end
+  object dsUser: TDataSource
+    DataSet = quUser
+    OnStateChange = dsUserStateChange
+    Left = 272
+    Top = 352
+  end
+  object poGroup: TPopupMenu
+    OnPopup = poGroupPopup
+    Left = 424
+    Top = 136
+    object mi01: TMenuItem
+      Caption = 'Grant Menu'
+      ShortCut = 112
+      OnClick = mi01Click
+    end
+    object mi02: TMenuItem
+      Caption = 'Revoke Menu'
+      ShortCut = 113
+      OnClick = mi02Click
+    end
+    object mi03: TMenuItem
+      Caption = 'Grant All'
+      ShortCut = 114
+      OnClick = mi03Click
+    end
+    object mi04: TMenuItem
+      Caption = 'Revoke All'
+      ShortCut = 115
+      OnClick = mi04Click
+    end
+    object mi05: TMenuItem
+      Caption = 'Cancel'
+    end
+  end
+  object imState: TImageList
+    Left = 236
+    Top = 180
+    Bitmap = {
+      494C010103000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001002000000000000010
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF0732DEFF0732DEFF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FFAB4B14FFAE4B
+      13FFAE4B13FFB04B14FFB04B14FFB04B14FFB04A12FFB04912FFAF4C14FFAD4C
+      15FF000000FF000000FF000000FF000000FF000000FF0732DEFF0732DEFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF0732DEFF0732DEFF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC7DDC7FFC7DDC7FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FFAA4B15FFAC4A
+      10FFD05524FFF1614AFFF86B53FFF97A5BFFF98067FFF9705DFFF26149FFC354
+      2CFFAA4A13FF000000FF000000FF000000FF000000FF0732DEFF0732DEFF0732
+      DEFF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF0732DEFF0732DEFF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC7DDC7FF006600FF006600FFC7DDC7FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FFA94B14FFAF4A
+      13FFDA572DFFF67257FFFC8C69FFFB7F5BFFFCBFB0FFFBC7C1FFF36047FFCD57
+      37FFAA4C18FF000000FF000000FF000000FF000000FF0732DEFF0732DDFF0732
+      DEFF0732DEFF000000FF000000FF000000FF000000FF000000FF000000FF0732
+      DEFF0732DEFF000000FF000000FF000000FF000000FF000000FF000000FFC7DD
+      C7FF006600FF1EB231FF1FB133FF006600FFC7DDC7FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FFB24B
+      18FFE4623CFFFE8E6DFFFF8A63FFFF9072FFFFEEEBFFFFEEEBFFF77E62FFC253
+      2EFFA84B18FF000000FF000000FF000000FF000000FF000000FF0534EDFF0732
+      DFFF0732DEFF0732DEFF000000FF000000FF000000FF000000FF0732DEFF0732
+      DEFF000000FF000000FF000000FF000000FF000000FF000000FFC7DDC7FF0066
+      00FF31C24FFF22B738FF1AB02DFF21B437FF006600FFC7DDC7FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FFAF4D
+      1BFFD86740FFFD8A5DFFF58059FFDEB5AAFFE8F6F5FFFED8CAFFFF906DFFCF66
+      3EFFA84914FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF0732DEFF0732DEFF0732DDFF000000FF0732DDFF0732DEFF0732DEFF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC7DDC7FF006600FF47D3
+      6DFF3BCB5EFF25A83BFF006600FF1BA92EFF1DB132FF006600FFC7DDC7FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FFE66D39FF934840FF49396EFF294187FF374B8AFF6E556DFFD96C42FFCF63
+      2DFF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF0732DDFF0633E6FF0633E6FF0633E9FF0732DCFF000000FF0000
+      00FF000000FF000000FF000000FF000000FFC7DDC7FF006600FF4FD679FF53DE
+      7FFF31B54DFF006600FFC7DDC7FF006600FF179D27FF1EAE31FF006600FFC7DD
+      C7FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000FF1C3395FF0138ADFF0A38A3FF05309EFF00258DFF2B2F7EFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF0633E3FF0732E3FF0534EFFF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC7DDC7FF006600FF41C5
+      63FF006600FFC7DDC7FF000000FF000000FFC7DDC7FF006600FF19AA2BFF0066
+      00FFC7DDC7FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF001641FF1658CAFF1C55BCFF1B56BCFF1C54BBFF1954BCFF0338ACFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF0732DDFF0534EDFF0533E9FF0434EFFF0434F5FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FFC7DDC7FF0066
+      00FFC7DDC7FF000000FF000000FF000000FF000000FFC7DDC7FF4A924AFF149D
+      21FF006600FFC7DDC7FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF143E80FF2677F3FF2069D8FF1E64CFFF1F62CDFF2168D2FF1E5EC5FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF0434F4FF0534EFFF0533EBFF000000FF000000FF0434F4FF0335F8FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FFE3EEE3FFC7DD
+      C7FF006600FF006600FFC7DDC7FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF123E75FF2676D9FF2165BDFF1F63CAFF1D5CC3FF2472DBFF256FDBFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0335
+      FCFF0534EFFF0434F8FF000000FF000000FF000000FF000000FF0335FCFF0335
+      FBFF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC7DDC7FF006600FF006600FFC7DDC7FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0505
+      05FF0D1113FF020812FF164572FF3295F2FF2E8AF1FF3193F8FF277AEDFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF0335FBFF0335
+      FBFF0335FCFF000000FF000000FF000000FF000000FF000000FF000000FF0335
+      FBFF0335FBFF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC7DDC7FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF3B38
+      36FF3B3836FF38332CFF123454FF288CD5FF36A2F3FF339DEEFF1C50B7FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF0335FBFF0335FBFF0335
+      FBFF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF0335FBFF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF3E3C3AFF757474FF6C6967FF3C414BFF162A3FFF112136FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0335FBFF0335FBFF0335FBFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000FF91908EFF91908EFF857F7AFF342E29FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0335FBFF0335FBFF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFFFFFFCFFFF0000C00F9FF9F9FF0000
+      C0078FF3F0FF0000C00787E7E07F0000E007C3CFC03F0000E007F11F801F0000
+      F00FF83F000F0000F81FFC7F83070000F01FF83FC7830000E01FF19FFFC10000
+      E01FE3CFFFF00000E01FC7E7FFFD0000E01F8FFBFFFF0000F03F1FFFFFFF0000
+      F87F3FFFFFFF0000FFFFFFFFFFFF000000000000000000000000000000000000
+      000000000000}
+  end
+end

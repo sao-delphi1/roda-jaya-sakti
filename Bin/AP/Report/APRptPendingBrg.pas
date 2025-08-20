@@ -1,0 +1,263 @@
+unit APRptPendingBrg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, ComCtrls, StdCtrls, DB, dxExEdtr, dxCntner, ADODB,
+  Buttons, ExtCtrls, dxPSGlbl, dxPSUtl, dxPSEngn, dxPrnPg, dxBkgnd, dxWrap,
+  dxPrnDev, dxTL, dxDBCtrl, dxDBGrid, dxPSCore;
+
+type
+  TfmAPRptPendingBrg = class(TfmRptDlg)
+    grbKartu: TGroupBox;
+    Label3: TLabel;
+    bbRefresh: TBitBtn;
+    dtpSmp: TDateTimePicker;
+    dgrReport: TdxDBGrid;
+    quReport: TADOQuery;
+    dsReport: TDataSource;
+    saveDlg: TSaveDialog;
+    dxReport: TdxComponentPrinter;
+    quReportPRID: TStringField;
+    quReportItemID: TStringField;
+    quReportQty: TBCDField;
+    quReportUOMID: TStringField;
+    quReportNote: TStringField;
+    quReportTypeUnit: TStringField;
+    quReportNoUnit: TStringField;
+    quReportTanggal: TStringField;
+    quReportTransdate: TDateTimeField;
+    quReportSiteID: TStringField;
+    quReportSiteName: TStringField;
+    quReportDivisiName: TStringField;
+    quReportPO: TBCDField;
+    quReportTerima: TBCDField;
+    dgrReportColumn1: TdxDBGridColumn;
+    dgrReportColumn2: TdxDBGridColumn;
+    dgrReportColumn3: TdxDBGridColumn;
+    dgrReportColumn4: TdxDBGridColumn;
+    dgrReportColumn5: TdxDBGridColumn;
+    dgrReportColumn6: TdxDBGridColumn;
+    dgrReportColumn7: TdxDBGridColumn;
+    dgrReportColumn8: TdxDBGridColumn;
+    dgrReportColumn9: TdxDBGridColumn;
+    dgrReportColumn10: TdxDBGridColumn;
+    dgrReportColumn11: TdxDBGridColumn;
+    dgrReportColumn12: TdxDBGridColumn;
+    quReportSisaPO: TBCDField;
+    quReportSisaTerima: TBCDField;
+    dgrReportColumn13: TdxDBGridColumn;
+    dgrReportColumn14: TdxDBGridColumn;
+    CheckBox1: TCheckBox;
+    RadioGroup1: TRadioGroup;
+    bbExcel: TBitBtn;
+    bbCancel: TBitBtn;
+    dgrReportColumn15: TdxDBGridColumn;
+    quReportItemName: TStringField;
+    dgrReportColumn16: TdxDBGridColumn;
+    quReportFgOto: TStringField;
+    quReportStatusA: TStringField;
+    CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
+    dtpdari: TDateTimePicker;
+    Button1: TButton;
+    procedure bbRefreshClick(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure bbExcelClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    sQuery : string ;
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAPRptPendingBrg: TfmAPRptPendingBrg;
+
+implementation
+
+uses MyUnit, UnitGeneral, ConMain, Unitdate, Search;
+{$R *.dfm}
+
+procedure TfmAPRptPendingBrg.bbRefreshClick(Sender: TObject);
+var statusA : string;
+begin
+  inherited;
+  statusA := '''W'',''Y''';
+  if CheckBox3.Checked then statusA := statusA + ',''R''';
+  if CheckBox4.Checked then statusA := statusA + ',''P''';
+  if CheckBox3.Checked then statusA := statusA + ',''X''';
+
+  if RadioGroup1.ItemIndex=0 then
+  begin
+    dgrReportColumn11.Visible := False;
+    dgrReportColumn12.Visible := True;
+    dgrReportColumn13.Visible := False;
+    dgrReportColumn14.Visible := True;
+  end else
+  begin
+    dgrReportColumn11.Visible := True;
+    dgrReportColumn12.Visible := False;
+    dgrReportColumn13.Visible := True;
+    dgrReportColumn14.Visible := False;
+
+  end;
+
+  sQuery := 'SELECT *,Qty-PO as SisaPO,Qty-Terima as SisaTerima FROM ( '
+           +'select E.ItemName,A.PRID,A.ItemID,A.Qty,A.UOMID,A.Note,E.TypeUnit,A.NoUnit,CONVERT(VARCHAR(15),B.Transdate,111) as Tanggal, '
+           +'B.Transdate,B.SiteID,C.SiteName,D.DivisiName, '
+           +'ISNULL((SELECT SUM(X.Qty) FROM APTrPurchaseOrderDt X Where X.PRID=A.PRID AND X.ItemID=A.ItemID AND X.FgNum=A.NumAll),0) as PO, '
+           //+'ISNULL((SELECT SUM(X.Qty) FROM APTrKonsinyasiDt X Where X.Note=A.PRID AND X.ItemID=A.ItemID AND X.FgNum=A.NumAll),0) as Terima
+           +'ISNULL((SELECT SUM(F.Terima) FROM( '
+           +'SELECT X.POID,X.ItemID2,ISNULL((SELECT SUM(M.Jumlah) FROM APTrKonsinyasiDT M WHERE M.POID=X.POID '
+           +'AND M.ItemID=X.ItemID2 AND M.FgNum=X.NumAll),0) as Terima '
+           +'FROM APTrPurchaseOrderDt X Where X.PRID=A.PRID AND X.ItemID=A.ItemID AND X.FgNum=A.NumAll) as F ),0) as Terima,A.FgOto, '
+           +'CASE WHEN ISNULL(A.FGOto,''W'')=''W'' THEN ''On Progress'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''Y'' THEN ''On Progress'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''F'' THEN ''Sent by HO'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''R'' THEN ''Repair'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''P'' THEN ''Pending'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''X'' THEN ''Rejected'' END as StatusA '
+           +'from APTrPurchaseRequestDt A '
+           +'Inner Join APTrPurchaseRequestHd B on A.PRID=B.PRID AND B.FgForm=''PR'' '
+           +'INNER JOIN InMsItem E on A.ItemID=E.ItemID '
+           +'Inner Join INMsSites C on B.SiteID=C.SiteID '
+           +'Inner Join INMsDivisi D on B.DivisiID=D.DivisiID '
+           +') as K WHERE K.FgOto IN ('+statusA+') '
+           +'AND CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dtpdari.Date)+''' '
+           +'AND '''+FormatDateTime('yyyyMMdd',dtpSmp.Date)+''' ';
+  if CheckBox1.Checked then
+  begin
+    if RadioGroup1.ItemIndex = 0 then
+    sQuery := sQuery + 'AND K.Qty-K.Terima <> 0 '
+    else
+    sQuery := sQuery + 'AND K.Qty-K.PO <> 0 ';
+  end;
+    sQuery := sQuery +'ORDER BY K.TransDate,K.SiteName,K.ItemName ';
+
+  with quReport do
+  begin
+    if active then close;
+    SQL.Text := sQuery;
+    //showmessage(sql.Text);
+    Open;
+  end;
+end;
+
+procedure TfmAPRptPendingBrg.RadioGroup1Click(Sender: TObject);
+begin
+  inherited;
+
+  bbRefreshClick(bbRefresh);
+end;
+
+procedure TfmAPRptPendingBrg.CheckBox1Click(Sender: TObject);
+begin
+  inherited;
+  bbRefreshClick(bbRefresh);
+end;
+
+procedure TfmAPRptPendingBrg.FormShow(Sender: TObject);
+begin
+  inherited;
+  dtpSmp.Date := date;
+  dtpdari.Date := encodedate(getyear(date),getmonth(date),1);
+  dtpSmp.SetFocus;
+  bbRefreshClick(bbRefresh);
+end;
+
+procedure TfmAPRptPendingBrg.bbExcelClick(Sender: TObject);
+begin
+  inherited;
+  if saveDlg.Execute then
+    begin
+      if Pos('.XLS', uppercase(saveDlg.FileName)) > 0 then
+        dgrReport.SaveToXLS(saveDlg.FileName, true)
+      else
+        dgrReport.SaveToXLS(saveDlg.FileName + '.xls', true);
+    end;
+end;
+
+procedure TfmAPRptPendingBrg.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+procedure TfmAPRptPendingBrg.Button1Click(Sender: TObject);
+var statusA : string;
+begin
+  inherited;
+  statusA := '''W'',''Y''';
+  if CheckBox3.Checked then statusA := statusA + ',''R''';
+  if CheckBox4.Checked then statusA := statusA + ',''P''';
+  if CheckBox3.Checked then statusA := statusA + ',''X''';
+
+  if RadioGroup1.ItemIndex=0 then
+  begin
+    dgrReportColumn11.Visible := False;
+    dgrReportColumn12.Visible := True;
+    dgrReportColumn13.Visible := False;
+    dgrReportColumn14.Visible := True;
+  end else
+  begin
+    dgrReportColumn11.Visible := True;
+    dgrReportColumn12.Visible := False;
+    dgrReportColumn13.Visible := True;
+    dgrReportColumn14.Visible := False;
+
+  end;
+
+  sQuery := 'SELECT *,Qty-PO as SisaPO,Qty-Terima as SisaTerima FROM ( '
+           +'select E.ItemName,A.PRID,A.ItemID,A.Qty,A.UOMID,A.Note,A.TypeUnit,A.NoUnit,CONVERT(VARCHAR(15),B.Transdate,111) as Tanggal, '
+           +'B.Transdate,B.SiteID,C.SiteName,D.DivisiName, '
+           +'ISNULL((SELECT SUM(X.Qty) FROM APTrPurchaseOrderDt X Where X.PRID=A.PRID AND X.ItemID=A.ItemID AND X.FgNum=A.NumAll),0) as PO, '
+           //+'ISNULL((SELECT SUM(X.Qty) FROM APTrKonsinyasiDt X Where X.Note=A.PRID AND X.ItemID=A.ItemID AND X.FgNum=A.NumAll),0) as Terima,'
+           +'ISNULL((SELECT SUM(F.Terima) FROM( '
+           +'SELECT X.POID,X.ItemID2,ISNULL((SELECT SUM(M.Jumlah) FROM APTrKonsinyasiDT M WHERE M.POID=X.POID '
+           +'AND M.ItemID=X.ItemID2 AND M.FgNum=X.NumAll),0) as Terima '
+           +'FROM APTrPurchaseOrderDt X Where X.PRID=A.PRID AND X.ItemID=A.ItemID AND X.FgNum=A.NumAll) as F ),0) as Terima,A.FgOto, '
+           +'CASE WHEN ISNULL(A.FGOto,''W'')=''W'' THEN ''On Progress'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''Y'' THEN ''On Progress'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''F'' THEN ''Sent by HO'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''R'' THEN ''Repair'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''P'' THEN ''Pending'' '
+           +'     WHEN ISNULL(A.FGOto,''W'')=''X'' THEN ''Rejected'' END as StatusA '
+           +'from APTrPurchaseRequestDt A '
+           +'Inner Join APTrPurchaseRequestHd B on A.PRID=B.PRID AND B.FgForm=''PR'' '
+           +'INNER JOIN InMsItem E on A.ItemID=E.ItemID '
+           +'Inner Join INMsSites C on B.SiteID=C.SiteID '
+           +'Inner Join INMsDivisi D on B.DivisiID=D.DivisiID '
+           +') as K WHERE K.FgOto IN ('+statusA+') '
+           +'AND CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dtpdari.Date)+''' '
+           +'AND '''+FormatDateTime('yyyyMMdd',dtpSmp.Date)+''' ';
+  if CheckBox1.Checked then
+  begin
+    if RadioGroup1.ItemIndex = 0 then
+    sQuery := sQuery + 'AND K.Qty-K.Terima <> 0 '
+    else
+    sQuery := sQuery + 'AND K.Qty-K.PO <> 0 ';
+  end;
+    sQuery := sQuery +'ORDER BY K.TransDate,K.SiteName,K.ItemName ';
+
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Pencarian';
+     SQLString := sQuery;
+
+     if ShowModal = MrOK then
+     begin
+       quReport.Locate('PRID',Res[1],[]);
+     end;
+  finally
+     free;
+  end;
+end;
+
+end.

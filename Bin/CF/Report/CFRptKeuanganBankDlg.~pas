@@ -1,0 +1,204 @@
+unit CFRptKeuanganBankDlg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, dxCntner, dxEditor, dxExEdtr, dxEdLib, StdCtrls, DB,
+  ADODB, Buttons, ExtCtrls, dxTL, dxDBCtrl, dxDBGrid, dxCore, dxButton;
+
+type
+  TfmCFRptKeuanganBankDlg = class(TfmRptDlg)
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    rbSelect: TRadioButton;
+    rbAll: TRadioButton;
+    dbgList: TdxDBGrid;
+    quActBankId: TStringField;
+    quActBankName: TStringField;
+    dbgListBankId: TdxDBGridMaskColumn;
+    dbgListBankName: TdxDBGridMaskColumn;
+    RbValuta: TRadioGroup;
+    RadioGroup1: TRadioGroup;
+    dxButton6: TdxButton;
+    procedure bbPreviewClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure rbSelectClick(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure dxButton6Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmCFRptKeuanganBankDlg: TfmCFRptKeuanganBankDlg;
+
+implementation
+
+uses CFQRRptKeuanganDlg, UnitGeneral, CFQRRptKeuanganBank, StdLv0, UnitDate, MyUnit, Search;
+
+{$R *.dfm}
+
+procedure TfmCFRptKeuanganBankDlg.bbPreviewClick(Sender: TObject);
+var StLap : string;
+begin
+  inherited;
+  if RadioGroup1.ItemIndex=0 then
+  StLap := '''KM'',''KK'''
+  else
+  StLap := '''BM'',''BK''';
+
+  with TfmCFQRRptKeuanganBank.Create(Self) do
+  try
+    qrlTitle.Caption := laTitle.Caption;
+    qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt1.date)+' s/d '+FormatDateTime('dd/MM/yyyy',dt2.date);
+    TanggalDari := dt1.Date;
+    TanggalSampai := dt2.Date;
+
+    if RadioGroup1.ItemIndex=0 then
+    StForm := 'Kas'
+    else
+    StForm := 'Bank';
+
+    With qu001,sql do
+    Begin
+      Close;Clear;
+      Add(' Select Distinct A.BankID as TempField,(A.BankID+''-''+B.BankName) as Bank,B.BankName '
+         +' FROM CFTrKKBBHd A INNER JOIN CFMsBank B ON A.BankId=B.Bankid WHERE A.FlagKKBB IN ('+StLap+') ');
+      if rbSelect.Checked then
+      Add(' AND A.BankID IN '+SelGrid(quAct,dbgList,'BankID'));
+      Add(' ORDER BY A.BankID ');
+      Open;
+    End;
+
+    with qu002,sql do
+    Begin
+      Close;Clear;
+      Add(' Select Distinct ''IDR'' as ValutaId,BankID as TempField'
+         +' FROM CFTrKKBBHd B WHERE FlagKKBB IN ('+StLap+') '
+         +' AND BankID=:tempField ');
+      Open;
+    End;
+
+    qu003.Open;
+
+    if Sender=bbPreview then
+      MyReport.Previewmodal
+    else
+      MyReport.Print;
+
+  finally
+    free;
+  end;
+end;
+
+procedure TfmCFRptKeuanganBankDlg.FormShow(Sender: TObject);
+begin
+  inherited;
+  dt1.Date := EncodeDate(GetYear(date),GetMonth(Date),1);
+  dt2.Date := date;
+  quAct.Active := TRUE;
+
+  if kdcab<>'HO' then
+  begin
+    RadioGroup1.Visible := false;
+  end;
+
+  RadioGroup1Click(RadioGroup1);
+end;
+
+procedure TfmCFRptKeuanganBankDlg.rbSelectClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmCFRptKeuanganBankDlg.RadioGroup1Click(Sender: TObject);
+begin
+  inherited;
+  if RadioGroup1.ItemIndex=0 then
+  begin
+    dbgListBankId.Caption := 'Kode Kas';
+    dbgListBankName.Caption := 'Nama Kas';
+    if kdcab<>'HO' then
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('select * from CFmsbank where fgbank=''T'' AND BankID IN (SELECT DISTINCT ISNULL(BankID,'''') as BankID FROM CFTrKKBBHd Where KdCab='''+KdCab+''') ');
+        Open;
+      end;
+    end else
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('select * from CFmsbank where fgbank=''T'' ');
+        Open;
+      end;
+    end;
+  end else
+  begin
+    dbgListBankId.Caption := 'Kode Bank';
+    dbgListBankName.Caption := 'Nama Bank';
+    if kdcab<>'HO' then
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('select * from CFmsbank where fgbank=''Y'' AND BankID IN (SELECT DISTINCT ISNULL(BankID,'''') as BankID FROM CFTrKKBBHd Where KdCab='''+KdCab+''') ');
+        Open;
+      end;
+    end else
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('select * from CFmsbank where fgbank=''Y'' ');
+        Open;
+      end;
+    end;
+  end;
+end;
+
+procedure TfmCFRptKeuanganBankDlg.dxButton6Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       if RadioGroup1.ItemIndex=0 then
+       begin
+         Title := 'Data Master Kas';
+         SQLString := ' SELECT BankID as Kas_ID,BankName as Nama_Kas FROM CFMsBank Where FgBank=''T'' ';
+         if kdcab<>'HO' then
+         SQLString := SQLString + ' AND BankID IN (SELECT DISTINCT ISNULL(BankID,'''') as BankID FROM CFTrKKBBHd Where KdCab='''+KdCab+''') ';
+       end else
+       begin
+         Title := 'Data Master Bank';
+         SQLString := ' SELECT BankID,BankName FROM CFMsBank Where FgBank=''Y'' ';
+         if kdcab<>'HO' then
+         SQLString := SQLString + ' AND BankID IN (SELECT DISTINCT ISNULL(BankID,'''') as BankID FROM CFTrKKBBHd Where KdCab='''+KdCab+''') ';
+       end;
+       if ShowModal = MrOK then
+       begin
+         quAct.Locate('BankID',Res[0],[]);
+       end;
+    finally
+       free;
+    end;
+end;
+
+end.

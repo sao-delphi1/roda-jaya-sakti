@@ -1,0 +1,101 @@
+unit ARKonfirmasi;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv0, dxExEdtr, dxCntner, DB, ADODB, dxCore, dxButton,
+  StdCtrls;
+
+type
+  TfmARKonfirmasi = class(TfmStdLv0)
+    Label1: TLabel;
+    Label2: TLabel;
+    dxButton4: TdxButton;
+    dxButton3: TdxButton;
+    dxButton1: TdxButton;
+    Label3: TLabel;
+    procedure dxButton4Click(Sender: TObject);
+    procedure dxButton3Click(Sender: TObject);
+    procedure dxButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+    procedure insertallitemar;
+    procedure deleteitemar;
+  public
+    { Public declarations }
+  end;
+
+var
+  fmARKonfirmasi: TfmARKonfirmasi;
+
+implementation
+
+{$R *.dfm}
+procedure TfmARKonfirmasi.insertallitemar;
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('INSERT AllItem (VoucherNo,Transdate,WarehouseID,FgTrans,ItemID,Qty,Price,ModuleID,TempField2,barang,SourceNo) '
+       +'SELECT A.POID,B.Transdate,B.WareHouseID,88,A.ItemID,A.Qty,0,''AR'',C.WareHouseName,'
+       +'(SELECT X.City FROM INMsWarehouse X Where X.WarehouseID=B.WarehouseID),A.NumAll FROM ARTrPurchaseOrderDt A '
+       +'INNER JOIN ARTrPurchaseOrderHd B ON A.POID=B.POID INNER JOIN INMsWarehouse C ON B.WareHouseID=C.WarehouseID '
+       +'WHERE A.POID='''+Label3.Caption+''' ');
+    ExecSQL;
+  end;
+end;
+
+procedure TfmARKonfirmasi.deleteitemar;
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('delete from allitem where voucherno='''+Label3.Caption+''' ');
+    ExecSQL;
+  end;
+end;
+
+
+procedure TfmARKonfirmasi.dxButton4Click(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE ARTrPurchaseOrderHd SET FgCetak=''Y'' WHERE POID='''+Label3.Caption+''' ');
+    ExecSQL;
+  end;
+  insertallitemar;
+  ModalResult := MrOK;
+end;
+
+procedure TfmARKonfirmasi.dxButton3Click(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE ARTrPurchaseOrderHd SET FgCetak=''T'' WHERE POID='''+Label3.Caption+''' ');
+    ExecSQL;
+  end;
+  //deleteitemar;
+  ModalResult := MrOK;
+end;
+
+procedure TfmARKonfirmasi.dxButton1Click(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE ARTrPurchaseOrderHd SET FgCetak=''X'' WHERE POID='''+Label3.Caption+''' ');
+    ExecSQL;
+  end;
+  deleteitemar;
+  ModalResult := MrOK;
+end;
+
+end.

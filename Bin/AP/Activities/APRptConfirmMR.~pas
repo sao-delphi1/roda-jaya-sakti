@@ -1,0 +1,171 @@
+unit APRptConfirmMR;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxCore, dxButton, dxTL, dxDBCtrl, dxDBGrid, dxPSGlbl, dxPSUtl,
+  dxPSEngn, dxPrnPg, dxBkgnd, dxWrap, dxPrnDev, dxPSCore;
+
+type
+  TfmAPRptConfirmMR = class(TfmRptDlg)
+    RadioGroup1: TRadioGroup;
+    BtlBrg: TdxButton;
+    CheckBox1: TCheckBox;
+    quActPRID: TStringField;
+    quActItemID: TStringField;
+    quActQty: TBCDField;
+    quActUOMID: TStringField;
+    quActNote: TStringField;
+    quActTypeUnit: TStringField;
+    quActNoUnit: TStringField;
+    quActItemName: TStringField;
+    quActFgConfirm: TStringField;
+    quActConfirmDate: TDateTimeField;
+    quActConfirmBy: TStringField;
+    quActNumAll: TAutoIncField;
+    quActTanggal: TStringField;
+    quActSiteName: TStringField;
+    quActSalesName: TStringField;
+    quActDivisiName: TStringField;
+    quActKdCab: TStringField;
+    dgrReport: TdxDBGrid;
+    dgrReportColumn1: TdxDBGridColumn;
+    dgrReportColumn2: TdxDBGridColumn;
+    dgrReportColumn3: TdxDBGridColumn;
+    dgrReportColumn4: TdxDBGridColumn;
+    dgrReportColumn5: TdxDBGridColumn;
+    dgrReportColumn6: TdxDBGridColumn;
+    dgrReportColumn7: TdxDBGridColumn;
+    dgrReportColumn8: TdxDBGridColumn;
+    dgrReportColumn9: TdxDBGridColumn;
+    dgrReportColumn10: TdxDBGridColumn;
+    dgrReportColumn11: TdxDBGridColumn;
+    dgrReportColumn12: TdxDBGridColumn;
+    dgrReportColumn13: TdxDBGridColumn;
+    dgrReportColumn14: TdxDBGridColumn;
+    dgrReportColumn15: TdxDBGridColumn;
+    dgrReportColumn16: TdxDBGridColumn;
+    dgrReportColumn17: TdxDBGridColumn;
+    bbExcel: TBitBtn;
+    bbCancel: TBitBtn;
+    saveDlg: TSaveDialog;
+    dxReport: TdxComponentPrinter;
+    procedure FormShow(Sender: TObject);
+    procedure dsActStateChange(Sender: TObject);
+    procedure BtlBrgClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure bbExcelClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    FgDivisi : string;
+    { Public declarations }
+  end;
+
+var
+  fmAPRptConfirmMR: TfmAPRptConfirmMR;
+
+implementation
+
+uses StdLv0, MyUnit, UnitGeneral, ConMain;
+
+{$R *.dfm}
+
+procedure TfmAPRptConfirmMR.FormShow(Sender: TObject);
+begin
+  inherited;
+  quAct.Active := TRUE;
+
+  if FgDivisi='SF' then
+  Caption := 'Material Request Safety Belum Konfirmasi'
+  else
+  if FgDivisi='MT' then
+  Caption := 'Material Request Maintenance Belum Konfirmasi'
+  else
+  if FgDivisi='OP' then
+  Caption := 'Material Request Operation Belum Konfirmasi'
+  else
+  if FgDivisi='HR' then
+  Caption := 'Material Request Human Resource Belum Konfirmasi'
+  else
+  Caption := 'Material Request Logistik Belum Konfirmasi';
+
+  if KdCab<>'HO' then
+  begin
+    CheckBox1.Visible := False;
+  end else
+  begin
+    CheckBox1.Checked := TRUE;
+  end;
+
+  BtlBrgClick(BtlBrg);
+end;
+
+procedure TfmAPRptConfirmMR.dsActStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dgrReportColumn1,TRUE);
+  SetReadOnly(dgrReportColumn2,TRUE);
+  SetReadOnly(dgrReportColumn3,TRUE);
+  SetReadOnly(dgrReportColumn4,TRUE);
+  SetReadOnly(dgrReportColumn5,TRUE);
+  SetReadOnly(dgrReportColumn6,TRUE);
+  SetReadOnly(dgrReportColumn7,TRUE);
+  SetReadOnly(dgrReportColumn8,TRUE);
+  SetReadOnly(dgrReportColumn9,TRUE);
+  SetReadOnly(dgrReportColumn10,TRUE);
+  SetReadOnly(dgrReportColumn11,TRUE);
+  SetReadOnly(dgrReportColumn12,TRUE);
+  SetReadOnly(dgrReportColumn13,TRUE);
+  SetReadOnly(dgrReportColumn14,TRUE);
+  SetReadOnly(dgrReportColumn15,TRUE);
+  SetReadOnly(dgrReportColumn16,TRUE);
+  SetReadOnly(dgrReportColumn17,TRUE);
+end;
+
+procedure TfmAPRptConfirmMR.BtlBrgClick(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('select A.PRID,A.ItemID,A.Qty,A.UOMID,A.Note,A.TypeUnit,A.NoUnit,C.ItemName,ISNULL(A.FgConfirm,''T'') as FgConfirm,A.ConfirmDate,'
+       +'A.ConfirmBy,A.NumAll,CONVERT(VARCHAR(10),B.Transdate,103) as Tanggal,F.SiteName,D.SalesName,E.DivisiName,B.KdCab '
+       +'from APTrPurchaseRequestDt A inner join APTrPurchaseRequestHd B on A.PRID=B.PRID AND B.FgForm=''MR'' '
+       +'inner join INMsItem C on A.ItemID=C.ItemID '
+       +'inner join INMsSites F on B.SiteID=F.SiteID '
+       +'inner join ARMsSales D on B.SalesID=D.SalesID '
+       +'inner join INMsDivisi E on B.DivisiID=E.DivisiID ');
+    if RadioGroup1.ItemIndex=0 then
+    Add(' WHERE ISNULL(A.FgConfirm,''T'')=''T'' ');
+    if RadioGroup1.ItemIndex=1 then
+    Add(' WHERE ISNULL(A.FgConfirm,''T'')=''Y'' ');
+    if RadioGroup1.ItemIndex=2 then
+    Add(' WHERE ISNULL(A.FgConfirm,''T'') IN (''T'',''Y'') ');
+    if (KdCab<>'HO') AND (CheckBox1.Checked=FALSE) then
+    Add(' AND B.KdCab='''+KdCab+''' ');
+    Open;
+  end;
+end;
+
+procedure TfmAPRptConfirmMR.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+procedure TfmAPRptConfirmMR.bbExcelClick(Sender: TObject);
+begin
+  inherited;
+  if saveDlg.Execute then
+    begin
+      if Pos('.XLS', uppercase(saveDlg.FileName)) > 0 then
+        dgrReport.SaveToXLS(saveDlg.FileName, true)
+      else
+        dgrReport.SaveToXLS(saveDlg.FileName + '.xls', true);
+    end;
+end;
+
+end.

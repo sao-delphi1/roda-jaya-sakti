@@ -1,0 +1,289 @@
+unit INMsService;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxPageControl, dxEdLib, dxButton, dxCore, dxContainer, Buttons,
+  dxTL, dxDBCtrl, dxDBGrid, dxDBTLCl, dxGrClms;
+
+type
+  TfmInMsService = class(TfmStdLv31)
+    dbgUOM: TdxDBGrid;
+    dbgUOMUOMId: TdxDBGridColumn;
+    dbgUOMUpdUser: TdxDBGridColumn;
+    dbgUOMUpdDate: TdxDBGridColumn;
+    quMainItemID: TStringField;
+    quMainItemName: TStringField;
+    quMainProductID: TStringField;
+    quMainGroupID: TStringField;
+    quMainUOMID: TStringField;
+    quMainGarantee: TStringField;
+    quMainCurrID: TStringField;
+    quMainUserPrice: TBCDField;
+    quMainDealerPrice: TBCDField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainJangkaGarantee: TBCDField;
+    quMainMinimumStok: TBCDField;
+    quMainCtk: TStringField;
+    quMainKomisi: TBCDField;
+    quMainFgActive: TStringField;
+    quMainNote: TStringField;
+    quMainJenis: TStringField;
+    quMainTipe: TStringField;
+    quMainLokasi: TStringField;
+    quMainUOMID2: TStringField;
+    quMainKonversi: TBCDField;
+    quMainItemName2: TStringField;
+    quMainSementara: TStringField;
+    dbgUOMColumn4: TdxDBGridColumn;
+    dbgUOMColumn5: TdxDBGridButtonColumn;
+    dbgUOMColumn6: TdxDBGridButtonColumn;
+    quMainFgUOMID: TStringField;
+    quMaintypeunit: TStringField;
+    quMainmerk: TStringField;
+    quMainLType: TStringField;
+    quMainFgPO: TStringField;
+    dbgUOMColumn7: TdxDBGridImageColumn;
+    dbgUOMColumn8: TdxDBGridButtonColumn;
+    dbgUOMColumn9: TdxDBGridImageColumn;
+    procedure FormCreate(Sender: TObject);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure bbFindClick(Sender: TObject);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure CekStatus;
+    procedure quMainBeforeDelete(DataSet: TDataSet);
+    procedure quMainBeforeEdit(DataSet: TDataSet);
+    procedure dbgUOMColumn5ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dbgUOMColumn6ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quMainCalcFields(DataSet: TDataSet);
+    procedure dbgUOMColumn8ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmInMsService: TfmInMsService;
+
+implementation
+
+uses StdLv2,UnitGeneral,MyUnit,UnitDate,Search, ConMain;
+
+{$R *.dfm}
+
+procedure TfmInMsService.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := FALSE;
+end;
+
+procedure TfmInMsService.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dbgUOMUOMId,TRUE);
+  SetReadOnly(dbgUOMUpdUser,TRUE);
+  SetReadOnly(dbgUOMUpdDate,TRUE);
+end;
+
+procedure TfmInMsService.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+      begin
+       try
+         Title := 'Master Service';
+         SQLString := 'SELECT ItemID as Service,ItemName as Nama_Jasa from INmsItem Where Ctk<>''Y'' ';
+         if ShowModal = MrOk then
+         begin
+            qumain.Locate('ItemId',Res[0],[]);
+         end;
+       finally
+         free;
+       end;
+    end;
+end;
+
+procedure TfmInMsService.quMainBeforePost(DataSet: TDataSet);
+var ST : string;
+begin
+  inherited;
+  if Trim(quMainItemName.value)='' then
+   Begin
+     MsgInfo('Nama Jasa tidak boleh kosong');
+     quMainItemName.FocusControl;
+     Abort;
+   End;
+
+   if quMain.State=dsInsert then
+   Begin
+     ST := 'JS/';
+     quMainItemID.AsString  := ST + FormatFloat('000', RunNumberGL(quAct, 'INMsItem', 'ItemID', ST, '0') + 1);
+   End;
+
+  quMainItemName2.AsString := quMainItemName.AsString;
+  quMainSementara.AsString := quMainItemName.AsString;
+  quMainUpdDate.Value:= GetServerDateTime;
+  quMainUpdUser.Value:= dmMain.UserId;
+end;
+
+procedure TfmInMsService.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+end;
+
+procedure TfmInMsService.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainGarantee.AsString :='0';
+  quMainMinimumStok.AsInteger := 0;
+  quMainJangkaGarantee.AsInteger:=0;
+  quMainCurrID.AsString :='IDR';
+  quMainDealerPrice.AsInteger:=0;
+  quMainUserPrice.AsInteger:=0;
+  quMainKomisi.AsInteger :=0;
+  quMainFgActive.AsString := 'Y';
+  quMainJenis.AsString := 'J';
+  quMainItemName.FocusControl;
+  quMainCtk.AsString := '1';
+  quMainKonversi.AsCurrency := 1;
+  quMainFgPO.AsString := 'Y';
+end;
+
+procedure TfmINMSService.CekStatus;
+Begin
+ With quAct,sql do
+ Begin
+  Close;Clear;
+  Add(' SELECT top 1 1 as kode FROM APTrPurchaseDt WHERE ItemId=:kdbrg1'+
+      ' union select top 1 2 as kode from ARTrPenjualanDt where ItemId=:kdbrg2'+
+      ' union select top 1 3 as kode from INTrTransferItemDt where ItemId=:kdbrg3'+
+      ' union select top 1 4 as kode from INTrAdjustmentDt where ItemID=:kdbrg4'+
+      ' union select top 1 5 as kode from ARTrKonTransBrgDt where ItemId=:kdbrg5'+
+      ' union select top 1 6 as kode from APTrKonsinyasiDt where ItemID=:kdbrg6 '+
+      ' union select top 1 7 as kode from ARTrServiceDt where ItemID=:kdbrg7 '+
+      ' union select top 1 8 as kode from ARTrServiceDtPS where ItemID=:kdbrg8 ');                                                                       
+      Parameters.ParamByName('kdbrg1').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg2').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg3').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg4').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg5').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg6').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg7').Value := quMainItemID.AsString;
+      Parameters.ParamByName('kdbrg8').Value := quMainItemID.AsString;
+      Open;
+      if Not IsEmpty then
+      begin
+        case quAct.FieldByName('kode').AsInteger of
+          1 : pesan('Kode Barang sedang digunakan di transaksi PEMBELIAN');
+          2 : pesan('Kode Barang sedang digunakan di transaksi PENJUALAN');
+          3 : pesan('Kode Barang sedang digunakan di transaksi TRANSFER Antar Cabang');
+          4 : pesan('Kode Barang sedang digunakan di transaksi Adjusment');
+          5 : pesan('Kode Barang sedang digunakan di transaksi TRANSFER Konsiyasi');
+          6 : pesan('Kode Barang sedang digunakan di transaksi Terima Barang Konsiyasi');
+          7 : pesan('Kode Barang sedang digunakan di transaksi Service');
+          8 : pesan('Kode Barang sedang digunakan di transaksi Penggunaan SparePart');
+        end;
+        Abort;
+     end;
+  End;   
+End;
+procedure TfmInMsService.quMainBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  CekStatus;
+end;
+
+procedure TfmInMsService.quMainBeforeEdit(DataSet: TDataSet);
+begin
+  inherited;
+//  CekStatus;
+end;
+
+procedure TfmInMsService.dbgUOMColumn5ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  begin
+   try
+     Title := 'Satuan';
+     SQLString := 'SELECT UOMID as Kode_Satuan'
+                 +' FROM INMsUOM'
+                 +' ORDER BY UOMID';
+     if ShowModal = MrOk then
+     begin
+       if quMain.State = dsBrowse then quMain.edit;
+          quMainUOMID.Value:= res[0];
+          quMainUOMID2.Value:= res[0];
+     end;
+   finally
+     free;
+   end;
+  end;
+end;
+
+procedure TfmInMsService.dbgUOMColumn6ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  begin
+   try
+     Title := 'Type Unit';
+     SQLString := 'SELECT TypeUnit,Description FROM INMsTypeUnit ORDER BY TypeUnit';
+     if ShowModal = MrOk then
+     begin
+       if quMain.State = dsBrowse then quMain.edit;
+          quMaintypeunit.Value:= res[0];
+     end;
+   finally
+     free;
+   end;
+  end;
+end;
+
+procedure TfmInMsService.quMainCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT Description FROM INMsTypeUnit WHERE TypeUnit='''+quMaintypeunit.AsString+''' ');
+    Open;
+  end;
+  quMainLType.AsString := quAct.FieldByName('Description').AsString;
+end;
+
+procedure TfmInMsService.dbgUOMColumn8ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  begin
+   try
+     Title := 'Satuan';
+     SQLString := 'select ''Y'' as PO '
+                 +'UNION ALL  '
+                 +'SELECT ''T'' ';
+     if ShowModal = MrOk then
+     begin
+       if quMain.State = dsBrowse then quMain.edit;
+          quMainFgPO.Value:= res[0];
+     end;
+   finally
+     free;
+   end;
+  end;
+end;
+
+end.

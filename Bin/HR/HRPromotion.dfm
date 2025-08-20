@@ -1,0 +1,609 @@
+inherited fmHRPromotion: TfmHRPromotion
+  Left = 647
+  Top = 392
+  Caption = 'Perpindahan Karyawan'
+  ClientHeight = 338
+  ClientWidth = 681
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 289
+    inherited pa3: TdxContainer
+      Height = 110
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 326
+    Width = 681
+  end
+  inherited pa2: TdxContainer
+    Height = 289
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 488
+    Height = 289
+    inherited pcParent: TdxPageControl
+      Width = 488
+      Height = 289
+      inherited ts01: TdxTabSheet
+        object Label1: TLabel [0]
+          Left = 52
+          Top = 12
+          Width = 84
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'No Reff :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label2: TLabel [1]
+          Left = 52
+          Top = 37
+          Width = 84
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Tanggal :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label3: TLabel [2]
+          Left = 24
+          Top = 61
+          Width = 112
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Kode Karyawan :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object DBText1: TDBText [3]
+          Left = 230
+          Top = 60
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LNama'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label4: TLabel [4]
+          Left = 52
+          Top = 157
+          Width = 84
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Lokasi Akhir :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label5: TLabel [5]
+          Left = 24
+          Top = 181
+          Width = 112
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Department Akhir :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label6: TLabel [6]
+          Left = 32
+          Top = 205
+          Width = 104
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Jabatan Akhir :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label7: TLabel [7]
+          Left = 52
+          Top = 84
+          Width = 84
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Lokasi Awal :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label8: TLabel [8]
+          Left = 24
+          Top = 108
+          Width = 112
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Department Awal :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object Label9: TLabel [9]
+          Left = 40
+          Top = 132
+          Width = 96
+          Height = 16
+          Alignment = taRightJustify
+          AutoSize = False
+          Caption = 'Jabatan Awal :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          Transparent = True
+        end
+        object DBText2: TDBText [10]
+          Left = 230
+          Top = 84
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LLokAwal'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText5: TDBText [11]
+          Left = 230
+          Top = 108
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LDepAwal'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText6: TDBText [12]
+          Left = 230
+          Top = 156
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LLokAkhir'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText7: TDBText [13]
+          Left = 230
+          Top = 180
+          Width = 54
+          Height = 17
+          AutoSize = True
+          DataField = 'LDepAkhir'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        inherited bbSave: TdxButton
+          Left = 285
+          Top = 244
+          Width = 95
+          Height = 30
+          TabOrder = 9
+        end
+        inherited bbCancel: TdxButton
+          Left = 381
+          Top = 244
+          Width = 95
+          Height = 30
+          TabOrder = 10
+        end
+        object dxDBEdit1: TdxDBEdit
+          Left = 146
+          Top = 8
+          Width = 150
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          CharCase = ecUpperCase
+          DataField = 'ReffID'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBDateEdit1: TdxDBDateEdit
+          Left = 146
+          Top = 32
+          Width = 119
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          DataField = 'TransDate'
+          DataSource = dsMain
+          StyleController = SCEdit
+          UseEditMask = True
+          StoredValues = 4
+        end
+        object dxDBButtonEdit1: TdxDBButtonEdit
+          Left = 146
+          Top = 56
+          Width = 80
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          DataField = 'SalesID'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit1ButtonClick
+          ExistButtons = True
+        end
+        object dxDBButtonEdit2: TdxDBButtonEdit
+          Left = 146
+          Top = 152
+          Width = 80
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 6
+          DataField = 'LokAkhir'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit2ButtonClick
+          ExistButtons = True
+        end
+        object dxDBButtonEdit3: TdxDBButtonEdit
+          Left = 146
+          Top = 176
+          Width = 80
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
+          DataField = 'DepAkhir'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit3ButtonClick
+          ExistButtons = True
+        end
+        object dxDBButtonEdit4: TdxDBButtonEdit
+          Left = 146
+          Top = 200
+          Width = 151
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 8
+          DataField = 'JabAkhir'
+          DataSource = dsMain
+          StyleController = SCEdit
+          Buttons = <
+            item
+              Default = True
+            end>
+          OnButtonClick = dxDBButtonEdit4ButtonClick
+          ExistButtons = True
+        end
+        object dxDBEdit2: TdxDBEdit
+          Left = 146
+          Top = 80
+          Width = 80
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          CharCase = ecUpperCase
+          DataField = 'LokAwal'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit3: TdxDBEdit
+          Left = 146
+          Top = 104
+          Width = 80
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 4
+          CharCase = ecUpperCase
+          DataField = 'DepAwal'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object dxDBEdit4: TdxDBEdit
+          Left = 146
+          Top = 128
+          Width = 150
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          CharCase = ecUpperCase
+          DataField = 'JabAwal'
+          DataSource = dsMain
+          StyleController = SCEdit
+        end
+        object GroupBox1: TGroupBox
+          Left = 12
+          Top = 230
+          Width = 249
+          Height = 57
+          Ctl3D = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentCtl3D = False
+          ParentFont = False
+          TabOrder = 11
+          object Label10: TLabel
+            Left = 22
+            Top = 11
+            Width = 36
+            Height = 17
+            Alignment = taRightJustify
+            Caption = 'User :'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBText3: TDBText
+            Left = 66
+            Top = 12
+            Width = 132
+            Height = 17
+            DataField = 'UpdUser'
+            DataSource = dsMain
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label11: TLabel
+            Left = 13
+            Top = 32
+            Width = 45
+            Height = 17
+            Alignment = taRightJustify
+            Caption = 'Waktu :'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DBText4: TDBText
+            Left = 66
+            Top = 32
+            Width = 174
+            Height = 17
+            DataField = 'UpdDate'
+            DataSource = dsMain
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Times New Roman'
+            Font.Style = []
+            ParentFont = False
+          end
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 681
+    inherited sbLast: TSpeedButton
+      Left = 644
+    end
+    inherited sbNext: TSpeedButton
+      Left = 617
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 590
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 563
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 537
+    end
+    inherited BvlPeriod: TBevel
+      Left = 291
+    end
+    inherited laPeriod: TLabel
+      Left = 295
+    end
+  end
+  inherited quMain: TADOQuery
+    BeforeDelete = quMainBeforeDelete
+    OnCalcFields = quMainCalcFields
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'select * from hrpromotion')
+    object quMainReffID: TStringField
+      FieldName = 'ReffID'
+      Size = 50
+    end
+    object quMainSalesID: TStringField
+      FieldName = 'SalesID'
+      Size = 50
+    end
+    object quMainJabAwal: TStringField
+      FieldName = 'JabAwal'
+      Size = 50
+    end
+    object quMainJabAkhir: TStringField
+      FieldName = 'JabAkhir'
+      Size = 50
+    end
+    object quMainLokAwal: TStringField
+      FieldName = 'LokAwal'
+      Size = 50
+    end
+    object quMainLokAkhir: TStringField
+      FieldName = 'LokAkhir'
+      Size = 50
+    end
+    object quMainDepAwal: TStringField
+      FieldName = 'DepAwal'
+      Size = 50
+    end
+    object quMainDepAkhir: TStringField
+      FieldName = 'DepAkhir'
+      Size = 50
+    end
+    object quMainupddate: TDateTimeField
+      FieldName = 'upddate'
+    end
+    object quMainupduser: TStringField
+      FieldName = 'upduser'
+      Size = 50
+    end
+    object quMainTransDate: TDateTimeField
+      FieldName = 'TransDate'
+    end
+    object quMainLNama: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LNama'
+      Size = 100
+      Calculated = True
+    end
+    object quMainLLokAwal: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LLokAwal'
+      Size = 100
+      Calculated = True
+    end
+    object quMainLLokAkhir: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LLokAkhir'
+      Size = 100
+      Calculated = True
+    end
+    object quMainLDepAwal: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LDepAwal'
+      Size = 100
+      Calculated = True
+    end
+    object quMainLDepAkhir: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LDepAkhir'
+      Size = 100
+      Calculated = True
+    end
+  end
+end

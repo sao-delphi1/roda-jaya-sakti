@@ -1,0 +1,166 @@
+unit ARRptKaryawan;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls;
+
+type
+  TfmARRptKaryawan = class(TfmRptDlg)
+    ComboBox1: TComboBox;
+    Label7: TLabel;
+    Edit1: TEdit;
+    Label1: TLabel;
+    ComboBox2: TComboBox;
+    Edit2: TEdit;
+    procedure bbPreviewClick(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmARRptKaryawan: TfmARRptKaryawan;
+
+implementation
+
+uses StdLv0, ARQRRptKaryawan, UnitGeneral, Search, RptLv0, DateUtils, UnitDate;
+
+{$R *.dfm}
+
+procedure TfmARRptKaryawan.bbPreviewClick(Sender: TObject);
+var title,dari,sampai,Periode : string;
+begin
+  inherited;
+  if ComboBox1.ItemIndex = 4 then
+  begin
+    periode := combobox2.text + ' ' + edit2.Text;
+    if combobox2.ItemIndex = 0 then
+    begin
+      dari := (edit2.text)+'0101';
+      sampai := (edit2.text)+'0131';
+    end;
+    if combobox2.ItemIndex = 1 then
+    begin
+      dari := (edit2.text)+'0201';
+      sampai := (edit2.text)+'0231';
+    end;
+    if combobox2.ItemIndex = 2 then
+    begin
+      dari := (edit2.text)+'0301';
+      sampai := (edit2.text)+'0331';
+    end;
+    if combobox2.ItemIndex = 3 then
+    begin
+      dari := (edit2.text)+'0401';
+      sampai := (edit2.text)+'0431';
+    end;
+    if combobox2.ItemIndex = 4 then
+    begin
+      dari := (edit2.text)+'0501';
+      sampai := (edit2.text)+'0531';
+    end;
+    if combobox2.ItemIndex = 5 then
+    begin
+      dari := (edit2.text)+'0601';
+      sampai := (edit2.text)+'0631';
+    end;
+    if combobox2.ItemIndex = 6 then
+    begin
+      dari := (edit2.text)+'0701';
+      sampai := (edit2.text)+'0731';
+    end;
+    if combobox2.ItemIndex = 7 then
+    begin
+      dari := (edit2.text)+'0801';
+      sampai := (edit2.text)+'0831';
+    end;
+    if combobox2.ItemIndex = 8 then
+    begin
+      dari := (edit2.text)+'0901';
+      sampai := (edit2.text)+'0931';
+    end;
+    if combobox2.ItemIndex = 9 then
+    begin
+      dari := (edit2.text)+'1001';
+      sampai := (edit2.text)+'1031';
+    end;
+    if combobox2.ItemIndex = 10 then
+    begin
+      dari := (edit2.text)+'1101';
+      sampai := (edit2.text)+'1131';
+    end;
+    if combobox2.ItemIndex = 11 then
+    begin
+      dari := (edit2.text)+'1201';
+      sampai := (edit2.text)+'1231';
+    end;
+  end;
+
+  if ComboBox1.ItemIndex = 0 then title := 'DAFTAR KARYAWAN AKTIF PT RODA JAYA SAKTI'
+  else if ComboBox1.ItemIndex = 1 then title := 'DAFTAR KARYAWAN DENGAN MASA KERJA DIATAS ' + EDIT1.Text + ' TAHUN'
+  else if ComboBox1.ItemIndex = 2 then title := 'DAFTAR KARYAWAN LAKI-LAKI'
+  else if ComboBox1.ItemIndex = 3 then title := 'DAFTAR KARYAWAN PEREMPUAN'
+  else if ComboBox1.ItemIndex = 4 then title := 'DAFTAR KARYAWAN YANG BERAKHIR PADA ' + Periode
+  else title := 'SEMUA KARYAWAN TERDAFTAR PT RODA JAYA SAKTI';
+
+  with TfmARQRRptKaryawan.Create(Self) do
+   try
+     qrlTitle.Caption := title; qrlPeriode.Enabled := False;
+
+     with qu001,SQL do
+     Begin
+       Close;Clear;
+       add(' Select K.SalesID,K.SalesName,K.KdKaryawan,CONVERT(VARCHAR(10),K.JOINDATE,103) AS JOINDATE,K.Jabatan,K.Lokasi,K.Wilayah,K.Status,K.BirthDate, '
+          +' K.Agama,DATEDIFF(yyyy,K.BirthDAte,getdate()) as Umur,K.KdJenKel,ISNULL(CONVERT(VARCHAR(10),K.EndDate,103),''-'') as EndDate, '
+          +' ISNULL(K.PKWT,''-'') as PKWT FROM ( '
+          +' SELECT A.SALESID,A.SALESNAME,A.NIK as KdKaryawan,A.tglgabung as JOINDATE,A.FgActive,A.Jabatan, '
+          +' (SELECT B.SiteName FROM INmsSites B WHERE B.SiteID=A.Location) AS LOKASI, '
+          +' (SELECT B.NMMASTER FROM ALLMASTER B WHERE B.KDMASTER=A.department) AS WILAYAH, '
+          +' (SELECT B.NMMASTER FROM ALLMASTER B WHERE B.KDMASTER=A.FgSTATUS) AS STATUS, '
+          +' (SELECT B.NMMASTER FROM ALLMASTER B WHERE B.KDMASTER=A.AGAMA) AS AGAMA, '
+          +' A.jeniskel as KDJENKEL,A.tgllahir as BIRTHDATE, '
+          +' (select top 1 C.EndDate from ARMsSalesKK C where C.SalesID=A.SalesID order by C.EndDate desc) as EndDate, '
+          +' (select top 1 C.ItemID from ARMsSalesKK C where C.SalesID=A.SalesID order by C.EndDate desc) as PKWT '
+          +' FROM ARMSSALES A ) as K ');
+       if ComboBox1.ItemIndex = 0 then add('WHERE K.FGACTIVE=1 ')
+       else if ComboBox1.ItemIndex = 1 then add('WHERE DATEDIFF(YYYY,K.JOINDATE,GETDATE()) >= '''+EDIT1.TEXT+''' ')
+       else if ComboBox1.ItemIndex = 2 then add('WHERE K.KDJENKEL=''P'' ')
+       else if ComboBox1.ItemIndex = 3 then add('WHERE K.KDJENKEL=''W'' ')
+       else if ComboBox1.ItemIndex = 4 then add('WHERE CONVERT(VARCHAR(8),K.EndDate,112) Between '''+dari+''' and '''+sampai+'''  ')
+       else add(' ');
+       add('Order By K.SalesName ');
+       //showmessage(sql.text);
+       Open;
+     End;
+
+     MyReport.PreviewModal;
+   finally
+      free;
+   end;
+end;
+
+procedure TfmARRptKaryawan.ComboBox1Change(Sender: TObject);
+begin
+  inherited;
+  IF COMBOBOX1.ItemIndex = 1 THEN
+  BEGIN LABEL1.Visible := TRUE; Edit1.Visible := TRUE; END ELSE
+  BEGIN LABEL1.Visible := FALSE; Edit1.Visible := FALSE; END;
+
+  IF COMBOBOX1.ItemIndex = 4 THEN
+  BEGIN ComboBox2.Visible := TRUE; Edit2.Visible := TRUE; END ELSE
+  BEGIN ComboBox2.Visible := FALSE; Edit2.Visible := FALSE; END;
+end;
+
+procedure TfmARRptKaryawan.FormShow(Sender: TObject);
+begin
+  inherited;
+  EDIT2.Text := FormatDateTime('yyyy',Date);
+end;
+
+end.

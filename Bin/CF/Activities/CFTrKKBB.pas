@@ -1,0 +1,1743 @@
+unit CFTrKKBB;
+
+interface
+                                                     
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv41, dxExEdtr, DBCtrls, dxEdLib, dxDBELib, dxEditor,
+  ActnList, DB, dxCntner, ADODB, dxTL, dxDBCtrl, dxDBGrid, dxPageControl,
+  dxButton, StdCtrls, ExtCtrls, Buttons, dxCore, dxContainer, dxDBTLCl,
+  dxGrClms;
+
+type
+  TfmCFTrKKBB = class(TfmStdLv41)
+    Panel1: TPanel;
+    GroupBox2: TGroupBox;
+    Label10: TLabel;
+    DBText3: TDBText;
+    Label11: TLabel;
+    DBText4: TDBText;
+    Label2: TLabel;
+    Label1: TLabel;
+    lblTerbayar: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    DBText1: TDBText;
+    quMainVoucherId: TStringField;
+    quMainTransDate: TDateTimeField;
+    quMainActor: TStringField;
+    quMainBankId: TStringField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainNote: TStringField;
+    quBank: TADOQuery;
+    quMainLBankName: TStringField;
+    quDetilVoucherId: TStringField;
+    quDetilNote: TStringField;
+    quDetilAmount: TBCDField;
+    quDetilUpdDate: TDateTimeField;
+    quDetilUpdUser: TStringField;
+    quMainFlagKKBB: TStringField;
+    quRek: TADOQuery;
+    quDetilRekeningId: TStringField;
+    quDetilLRekName: TStringField;
+    quDetilLGroupRek: TStringField;
+    quGroupRek: TADOQuery;
+    quDetilLGroupName: TStringField;
+    bbs: TdxButton;
+    bbc: TdxButton;
+    dbgListVoucherId: TdxDBGridMaskColumn;
+    dbgListTransDate: TdxDBGridDateColumn;
+    dbgListActor: TdxDBGridMaskColumn;
+    dbgListBankId: TdxDBGridMaskColumn;
+    dbgListUpdDate: TdxDBGridDateColumn;
+    dbgListUpdUser: TdxDBGridMaskColumn;
+    dbgListNote: TdxDBGridMaskColumn;
+    dbgListLBankName: TdxDBGridLookupColumn;
+    dbgListFlagKKBB: TdxDBGridMaskColumn;
+    Label23: TLabel;
+    DBText6: TDBText;
+    quValuta: TADOQuery;
+    quMainCurrId: TStringField;
+    quMainLCurrName: TStringField;
+    DBText2: TDBText;
+    dbgListColumn10: TdxDBGridColumn;
+    DBText5: TDBText;
+    quSales: TADOQuery;
+    quCalc: TADOQuery;
+    ActPrint: TAction;
+    quDetilNumAll: TAutoIncField;
+    quDetilJenis: TStringField;
+    quDetilUserUbah: TStringField;
+    quDetilTglUbah: TDateTimeField;
+    quDetilDivisiID: TStringField;
+    quMainJumlahD: TBCDField;
+    quMainJumlahK: TBCDField;
+    quMainFgPayment: TStringField;
+    Label13: TLabel;
+    Label14: TLabel;
+    quMainNoBGCek: TStringField;
+    Label16: TLabel;
+    quMainTglUbah: TDateTimeField;
+    quMainUserUbah: TStringField;
+    quMainIDVoucher: TStringField;
+    quTotal: TADOQuery;
+    quTotalTotal: TBCDField;
+    quTotalTotalK: TBCDField;
+    quTotalTotalD: TBCDField;
+    dsTotal: TDataSource;
+    dbg: TdxDBGrid;
+    dbgRekId: TdxDBGridButtonColumn;
+    dbgRekName: TdxDBGridColumn;
+    dbgGroup: TdxDBGridColumn;
+    dbgJenis: TdxDBGridImageColumn;
+    dbgNote: TdxDBGridColumn;
+    dbgAmount: TdxDBGridColumn;
+    dbgInvoice: TdxDBGridButtonColumn;
+    Label17: TLabel;
+    quMainTransdate1: TDateTimeField;
+    quMainVoucherNo: TStringField;
+    quMainNoVoucher: TStringField;
+    Label18: TLabel;
+    quMainRate: TBCDField;
+    dxDBEdit1: TdxDBEdit;
+    dxDBDateEdit1: TdxDBDateEdit;
+    dxDBDateEdit2: TdxDBDateEdit;
+    dxDBButtonEdit2: TdxDBButtonEdit;
+    dxDBEdit7: TdxDBEdit;
+    dxDBButtonEdit3: TdxDBButtonEdit;
+    dxDBEdit3: TdxDBEdit;
+    dxDBEdit6: TdxDBEdit;
+    dxDBButtonEdit1: TdxDBButtonEdit;
+    dxDBEdit2: TdxDBEdit;
+    dxDBEdit4: TdxDBEdit;
+    dxDBEdit5: TdxDBEdit;
+    Panel2: TPanel;
+    GroupBox3: TGroupBox;
+    DBText7: TDBText;
+    lbTotal: TLabel;
+    bbBatal: TdxButton;
+    bbSimpan: TdxButton;
+    bbHapus: TdxButton;
+    bbTambah: TdxButton;
+    dbgUrut: TdxDBGridColumn;
+    quDetilUrut: TBCDField;
+    quMainRekeningKas: TStringField;
+    quMainKodeApproval: TStringField;
+    dxDBEdit8: TdxDBEdit;
+    quMainMOP: TStringField;
+    quMainkdcab: TStringField;
+    Label5: TLabel;
+    dxDBImageEdit5: TdxDBImageEdit;
+    dxButton2: TdxButton;
+    dxButton1: TdxButton;
+    dxDBButtonEdit4: TdxDBButtonEdit;
+    quMainLSalesName: TStringField;
+    dxDBEdit9: TdxDBEdit;
+    RbCetak: TRadioGroup;
+    DBText8: TDBText;
+    quMainSiteID: TStringField;
+    quDetilSiteID: TStringField;
+    dxDBButtonEdit5: TdxDBButtonEdit;
+    DBText9: TDBText;
+    Label6: TLabel;
+    quMainLSite: TStringField;
+    dbgColumn9: TdxDBGridButtonColumn;
+    procedure dxDBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
+    procedure dbgEnter(Sender: TObject);
+    procedure quDetilNewRecord(DataSet: TDataSet);
+    procedure dbgRekIdButtonClick(Sender: TObject; AbsoluteIndex: Integer);
+    procedure dsDetilStateChange(Sender: TObject);
+    procedure quDetilBeforePost(DataSet: TDataSet);
+    procedure dxDBButtonEdit1ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quDetilAfterPost(DataSet: TDataSet);
+    procedure quDetilBeforeDelete(DataSet: TDataSet);
+    procedure quMainBeforeDelete(DataSet: TDataSet);
+    procedure dxButton1Click(Sender: TObject);
+    procedure dxDBButtonEdit2ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure bbFindClick(Sender: TObject);
+    procedure dxDBButtonEdit3ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure bbTambahClick(Sender: TObject);
+    procedure bbHapusClick(Sender: TObject);
+    procedure bbSimpanClick(Sender: TObject);
+    procedure bbBatalClick(Sender: TObject);
+    procedure quDetilBeforeEdit(DataSet: TDataSet);
+    procedure quDetilBeforeInsert(DataSet: TDataSet);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure quMainAfterInsert(DataSet: TDataSet);
+    procedure quMainBeforeInsert(DataSet: TDataSet);
+    procedure quDetilAfterDelete(DataSet: TDataSet);
+    procedure dbgInvoiceButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quDetilRekeningIdChange(Sender: TField);
+    procedure quMainAfterPost(DataSet: TDataSet);
+    procedure dxButton2Click(Sender: TObject);
+    procedure quMainBeforeEdit(DataSet: TDataSet);
+    procedure quMainMOPChange(Sender: TField);
+    procedure dxDBButtonEdit4ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quMainCalcFields(DataSet: TDataSet);
+    procedure dxDBDateEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure dxDBButtonEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure dxDBImageEdit5KeyPress(Sender: TObject; var Key: Char);
+    procedure dxDBButtonEdit4KeyPress(Sender: TObject; var Key: Char);
+    procedure dxDBEdit9KeyPress(Sender: TObject; var Key: Char);
+    procedure dxDBEdit2KeyPress(Sender: TObject; var Key: Char);
+    procedure dxDBButtonEdit5ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dbgColumn9ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dsMainDataChange(Sender: TObject; Field: TField);
+    procedure dsMainUpdateData(Sender: TObject);
+  private
+    { Private declarations }
+    Procedure CekStatus;
+    Procedure CekBayar;
+    Procedure CekBalance;
+    Procedure UpdateTotal;
+  public
+    { Public declarations }
+    FgPayment,StatusKKBB,FgBesar,Nota,RekeningID,DataMode,RekSbm,NoteSbm,Voucher,JamInput : string ;
+    JumSbm : currency;
+  end;
+
+var
+  fmCFTrKKBB: TfmCFTrKKBB;
+
+implementation
+
+uses MyUnit, UnitGeneral, ConMain, Search, Allitem, RptGLTrKMKK, StdLv3,
+  ARQRRptBuktiBayar, StrUtils, StdLv2, StdLv1, RptVoucher, RptLv0, StdLv0;
+
+{$R *.dfm}
+
+Procedure TfmCFTrKKBB.CekBalance;
+Begin
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT TOP 1 K.VoucherID,CONVERT(VARCHAR(10),K.Transdate1,103) as Tanggal FROM ('
+       +'SELECT FlagKKBB,VoucherID,Transdate1,ISNULL(JumlahD,0) as Debit,ISNULL(JumlahK,0) as Kredit FROM CFTrKKBBHd) as K '
+       +'WHERE K.Debit<>K.Kredit AND K.FlagKKBB='''+StatusKKBB+''' AND K.VoucherID='''+quMainVoucherId.AsString+''' ');
+    Open;
+  end;
+  if quAct.RecordCount <> 0 then
+  begin
+    pesan('No Voucher ['+quAct.FieldByName('VoucherID').AsString+']'+#13
+         +'Tanggal ['+quAct.FieldByName('Tanggal').AsString+'] belum Balance. Silahkan Check Ulang');
+    Abort;
+  end;
+end;
+
+procedure TfmCFTrKKBB.UpdateTotal;
+Begin
+  if (StatusKKBB = 'KM') or (StatusKKBB = 'BM') or (StatusKKBB = 'ARK') or (StatusKKBB = 'ARB') or (StatusKKBB = 'ARC') then
+  begin
+    with quAct,SQL do
+    Begin
+      Close;Clear;
+      add('UPDATE CFTrKKBBHd SET JumlahK='''+CurrToStr(quTotalTotal.AsCurrency)+''',JumlahD='''+CurrToStr(quTotalTotal.AsCurrency)+''' '
+         +'WHERE VoucherID=:VoucherID');
+      Parameters.ParamByName('VoucherID').Value := quMainVoucherId.AsString;
+      ExecSQL;
+    End;
+  end else
+  if (StatusKKBB = 'KK') or (StatusKKBB = 'BK')  or (StatusKKBB = 'APK') or (StatusKKBB = 'APB') or (StatusKKBB = 'APC') then
+  begin
+    with quAct,SQL do
+    Begin
+      Close;Clear;
+      add('UPDATE CFTrKKBBHd SET JumlahD='''+CurrToStr(quTotalTotal.AsCurrency)+''',JumlahK='''+CurrToStr(quTotalTotal.AsCurrency)+''' '
+         +'WHERE VoucherID=:VoucherID');
+      Parameters.ParamByName('VoucherID').Value := quMainVoucherId.AsString;
+      ExecSQL;
+    End;
+  end else
+  if StatusKKBB = 'JU' then
+  begin
+    with quAct,SQL do
+    Begin
+      Close;Clear;
+      add('UPDATE CFTrKKBBHd SET JumlahD='''+CurrToStr(quTotalTotalD.AsCurrency)+''','
+         +'JumlahK='''+CurrToStr(quTotalTotalK.AsCurrency)+''' WHERE VoucherID=:VoucherID');
+      Parameters.ParamByName('VoucherID').Value := quMainVoucherId.AsString;
+      ExecSQL;
+    End;
+  end;
+End;
+
+Procedure TfmCFTrKKBB.CekBayar;
+Begin //cek pembayaran
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT TOP 1 PiutangID FROM CFTrPiutangInternalDt WHERE VoucherID='''+quMainVoucherId.AsString+''' ');
+    Open;
+    if not IsEmpty then
+    begin
+       MsgInfo('Sudah ada penerimaan ['+quAct.Fieldbyname('PiutangId').AsString +'], tidak bisa edit/Delete lagi');
+       Abort;
+    end;
+  end;
+End;
+
+Procedure TfmCFTrKKBB.CekStatus;
+Begin //cek apakah data sudah disimpan
+  If (Self.quMain.State = dsEdit) or (Self.quMain.State = dsInsert) then
+  begin
+    ShowMessage('Data Header Belum disimpan');
+    quMainNote.FocusControl;
+    Abort;
+  end;
+  if (Self.quDetil.State = dsEdit) or (Self.quDetil.State = dsInsert) then
+  begin
+    ShowMessage('Data Detil Belum disimpan');
+    quDetilRekeningId.FocusControl;
+    Abort;
+  end;
+End;
+
+procedure TfmCFTrKKBB.dxDBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key=#13 then PostMessage(Self.Handle,WM_NEXTDLGCTL,0,0);
+end;
+
+procedure TfmCFTrKKBB.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetBtnOperationVisible(bbs,bbc,FActDS);
+  SetReadOnly(dxDBEdit1,TRUE);
+  if (StatusKKBB = 'KM') or (StatusKKBB = 'KK') then
+    SetReadOnly(dxDBImageEdit5,TRUE);
+  SetReadOnly(dxDBEdit5,TRUE);
+  SetReadOnly(dxDBEdit4,TRUE);
+  SetReadOnly(dxDBButtonEdit4,qumain.State<>dsInsert);
+end;
+
+procedure TfmCFTrKKBB.quMainBeforePost(DataSet: TDataSet);
+Var ST,KKBB  : String;
+begin
+  inherited;
+  if Trim(quMainSiteID.AsString)='' then
+  begin
+    MsgInfo('Site tidak boleh kosong');
+    quMainSiteID.FocusControl;
+    Abort;
+  End;
+
+  if Trim(quMainLSite.AsString)='' then
+  begin
+    MsgInfo('Site tidak ada dalam master');
+    quMainSiteID.FocusControl;
+    Abort;
+  End;
+
+  if Trim(quMainTransDate.AsString)='' then
+  begin
+    MsgInfo('Tanggal tidak boleh kosong');
+    quMainTransDate.FocusControl;
+    Abort;
+  End;
+
+  if Trim(quMainTransDate1.AsString)='' then
+  begin
+    MsgInfo('Tanggal Cair tidak boleh kosong');
+    quMainTransDate1.FocusControl;
+    Abort;
+  End;
+
+  If (StatusKKBB='BM') or (StatusKKBB='BK') or (StatusKKBB='KK') or (StatusKKBB='KM') then
+  Begin
+    if (StatusKKBB='BM') or (StatusKKBB='BK') then KKBB := 'Bank' else KKBB := 'Kas';
+    if TRIM(quMainBankId.AsString)='' then
+    Begin
+     MsgInfo('Kode '+KKBB+' tidak boleh kosong');
+     quMainBankId.FocusControl;
+     Abort;
+    End;
+    if TRIM(quMainLBankName.AsString)='' then
+    Begin
+     MsgInfo('Kode '+KKBB+' tidak ada dalam Master');
+     quMainBankId.FocusControl;
+     Abort;
+    End;
+  End;
+
+  if (quMainMOP.AsString='CEK') or (quMainMOP.AsString='GIRO') then
+  begin
+    if (TRIM(quMainNoBGCek.AsString) = '') then
+    begin
+      pesan('Transaksi menggunakan Cek/Giro, No BG/Cek tidak boleh kosong.');
+      quMainNoBGCek.FocusControl;
+      Abort;
+    end;
+
+    if FormatDateTime('yyyyMMdd',quMainTransdate1.AsDateTime) > FormatDateTime('yyyyMMdd',quMainTransdate.AsDateTime) then
+    begin
+      pesan('Tanggal Cair tidak boleh lebih kecil dari tanggal transaksi');
+      quMainTransdate.FocusControl;
+      Abort;
+    end;
+  end;
+
+  if (quMainMOP.AsString='KAS') or (quMainMOP.AsString='TRF') then
+  begin
+    quMainTransDate.AsDateTime := quMainTransdate1.AsDateTime;
+    quMainNoBGCek.ASString := '';
+  end;
+
+  if quMain.State = dsInsert then
+  Begin
+    if (StatusKKBB = 'KM') or (StatusKKBB = 'ARK') then
+    begin
+      ST := 'KM/'+KdCab+'/'+FormatDateTime('YYMM/', quMainTransDate1.AsDateTime);
+      quMainVoucherId.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct,'CFTrKKBBHd', 'VoucherID', ST, '0') + 1);
+    end else
+    if (StatusKKBB = 'KK') or (StatusKKBB = 'APK') then
+    begin
+      ST := 'KK/'+KdCab+'/'+FormatDateTime('YYMM/', quMainTransDate1.AsDateTime);
+      quMainVoucherId.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct,'CFTrKKBBHd', 'VoucherID', ST, '0') + 1);
+    end else
+    if (StatusKKBB = 'BM') or (StatusKKBB = 'ARB') or (StatusKKBB = 'ARC') then
+    begin
+      ST := 'BM/'+KdCab+'/'+FormatDateTime('YYMM/', quMainTransDate1.AsDateTime);
+      quMainVoucherId.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct,'CFTrKKBBHd', 'VoucherID', ST, '0') + 1);
+    end else
+    if (StatusKKBB = 'BK') or (StatusKKBB = 'APB') or (StatusKKBB = 'APC')then
+    begin
+      ST := 'BK/'+KdCab+'/'+FormatDateTime('YYMM/', quMainTransDate1.AsDateTime);
+      quMainVoucherId.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct,'CFTrKKBBHd', 'VoucherID', ST, '0') + 1);
+    end else
+    if (StatusKKBB = 'JU') then
+    begin
+      ST := 'JU/'+KdCab+'/'+FormatDateTime('YYMM/', quMainTransDate1.AsDateTime);
+      quMainVoucherId.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct, 'CFTrKKBBHd', 'VoucherID', ST, '0') + 1);
+    end;
+
+    quMainUpdDate.AsDateTime := GetServerDateTime;
+    quMainUpdUser.AsString := dmMain.UserId;
+  End;
+
+
+  if (StatusKKBB = 'JU') then
+  quMainTransdate1.AsDateTime := quMainTransDate.AsDateTime;
+
+  quMainVoucherNo.AsString := quMainVoucherId.AsString;
+  quMainTglUbah.AsDateTime := GetServerDateTime;
+  quMainUserUbah.AsString := dmMain.UserId;
+end;
+
+procedure TfmCFTrKKBB.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainCurrId.AsString := 'IDR';
+  quMainTransDate.AsDateTime := Date;
+  quMainTransdate1.AsDateTime := Date;
+  quMainTransDate1.FocusControl;
+  quMainFlagKKBB.AsString := StatusKKBB;
+  quMainJumlahD.AsCurrency := 0;
+  quMainJumlahK.AsCurrency := 0;
+  quMainFgPayment.AsString := 'T';
+  quMainRate.AsCurrency := 1;
+  quMainkdcab.AsString := kdcab;
+  quMainNoBGCek.ASString := '';
+  if (StatusKKBB = 'KK') or (StatusKKBB = 'KM') then
+  quMainMOP.ASString := 'KAS';
+  if (StatusKKBB = 'BK') or (StatusKKBB = 'BM') then
+  quMainMOP.ASString := 'TRF';
+end;
+
+procedure TfmCFTrKKBB.FormShow(Sender: TObject);
+begin
+  FFieldTgl   := 'TransDate1';
+  FFieldOrder := 'VoucherId,CONVERT(VARCHAR(8),TransDate1,112)';
+  if GroupUser='admin' then
+  FAfterWhere:=' AND FlagKKBB='''+StatusKKBB+''' '
+  else
+  FAfterWhere:=' AND FlagKKBB='''+StatusKKBB+''' and ISNULL(kdcab,''HO'')='''+kdcab+''' ';
+  SettingDxGrid(dbg);
+  inherited;
+  quMain.Active  := TRUE;
+  quDetil.Active := TRUE;
+  quTotal.Active := TRUE;
+
+  ts01.TabVisible := False;
+
+  if StatusKKBB = 'KK' then
+  begin
+    Caption := 'Transaksi Kas Keluar';
+    dxDBDateEdit2.Visible := False; Label17.Visible := False; //ok
+    dxDBEdit9.Visible := false; DBText5.Visible := TRUE;
+    Label3.Caption := 'Nama Kas :';
+    Panel1.Height := 200;
+  end;
+  if StatusKKBB = 'KM' then
+  begin
+    Caption := 'Transaksi Kas Masuk';
+    dxDBDateEdit2.Visible := False; Label17.Visible := False; //ok
+    dxDBEdit9.Visible := false; DBText5.Visible := TRUE;
+    Label3.Caption := 'Nama Kas :';
+    Panel1.Height := 200;
+    lblTerbayar.Caption := 'Diterima dari :';
+    dbgNote.Visible := false;
+    dbgInvoice.Visible := true;
+    dbgInvoice.Caption := 'Invoice';
+  end;
+  if StatusKKBB = 'BK' then
+  begin
+    Caption := 'Transaksi Bank Keluar';
+    dxDBDateEdit2.Visible := False; Label17.Visible := False; //ok
+    dxDBEdit9.Visible := false; DBText5.Visible := TRUE;
+    Panel1.Height := 200;
+  end;
+  if StatusKKBB = 'BM' then
+  begin
+    Caption := 'Transaksi Bank Masuk';
+    dxDBDateEdit2.Visible := False; Label17.Visible := False;
+    Panel1.Height := 200;
+    dxDBEdit9.Visible := false; DBText5.Visible := TRUE;
+    lblTerbayar.Caption := 'Diterima dari :';
+    dbgNote.Visible := false;
+    dbgInvoice.Visible := true;
+    dbgInvoice.Caption := 'Invoice';
+  end;
+  if StatusKKBB = 'JU' then
+  begin
+    Caption := 'Jurnal Umum';
+    dxDBDateEdit2.Visible := true;
+    dxDBDateEdit1.Visible := False; Label17.Visible := False; dxDBDateEdit2.Left := dxDBDateEdit1.Left;
+    Label3.Visible := False; dxdbbuttonedit1.visible := false; dbtext1.visible := false;
+    Label5.Visible := False; Label16.Visible := False; dxdbImageedit5.visible := false;
+    dbgNote.Visible := TRUE; dbgInvoice.Visible := FALSE; dxdbedit6.Visible := false;
+    lblTerbayar.Visible := false; dxDBButtonEdit4.visible := false; DBText5.Visible := false;
+    dxButton2.Visible := False; dxDBEdit9.Visible := false; RbCetak.Visible := False;
+    Label4.Top := 72; dxdbEdit2.Top := 66;
+    Label13.Top := 96; Label14.Top := 96;
+    dxdbEdit4.Top := 90; dxdbEdit5.Top := 90;
+    Panel1.Height := 130; lblTerbayar.Visible := False;
+  end;
+
+  if (KdCab<>'HO') and (StatusKKBB<>'JU') then
+  begin
+    dbgInvoice.Visible := False;
+    dbgNote.Visible := True;
+    dxDBEdit9.Visible := True;
+    lblTerbayar.Visible := True;
+    dxDBButtonEdit4.visible := False;
+    DBText5.Visible := False;
+    dxButton1.Visible := False;
+    RbCetak.Visible := False;
+  end;
+end;
+
+procedure TfmCFTrKKBB.dbgEnter(Sender: TObject);
+begin
+  inherited;
+  if quMain.State in dsEditModes then quMain.Post;
+  if quDetil.IsEmpty then quDetil.Append;
+end;
+
+procedure TfmCFTrKKBB.quDetilNewRecord(DataSet: TDataSet);
+Function GenerateNoUrut:Integer;
+begin
+   with quAct,SQL do
+   begin
+      Close; Clear;
+      Add('SELECT Urut FROM CFTrKKBBDt WHERE VoucherId='''+quMainVoucherId.AsString+''' ORDER BY Urut DESC');
+      Open;
+      if IsEmpty then
+        Result := 1
+      else
+        Result := StrToInt(FormatFloat('0',StrToInt(RightStr(fields[0].AsString,3))+1));
+  end;
+end;
+begin
+  inherited;
+  quDetilRekeningId.FocusControl;
+  quDetilAmount.AsCurrency := 0;
+  quDetilSiteID.AsString := quMainSiteID.ASString;
+  if (StatusKKBB='KM') or (StatusKKBB='BM') or (StatusKKBB='ARK') or (StatusKKBB='ARB') or (StatusKKBB = 'ARC') then
+    quDetilJenis.AsString := 'K'
+  else
+    quDetilJenis.AsString := 'D';
+  if StatusKKBB='JU' then
+    quDetilUrut.AsInteger := GenerateNoUrut;
+end;
+
+procedure TfmCFTrKKBB.dbgRekIdButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+   with TfmSearch.Create(Self) do
+    try
+       Title := 'Pilih Jurnal';
+       SQLString := 'SELECT DISTINCT RekeningName as Nama_Rekening,A.RekeningId as Kode_Rekening,'
+                   +'A.GroupRekId as Group_Rekening,B.GroupRekName as Nama_Group_Rekening '
+                   +'FROM CFMsRekening A INNER JOIN CFMsGroupRek B ON A.GroupRekId=B.GroupRekId '
+                   +'WHERE A.FgActive=''Y'' ORDER BY A.GroupRekID';
+       if ShowModal = MrOK then
+       begin
+          if quDetil.State = dsBrowse then quDetil.Edit;
+             quDetilRekeningId.AsString := Res[1];
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmCFTrKKBB.dsDetilStateChange(Sender: TObject);
+begin
+  inherited;
+  if KdCab<>'HO' then
+  SetReadOnly(dbgJenis,TRUE);
+  SetReadOnly(dbgRekName,TRUE);
+  SetReadOnly(dbgGroup,TRUE);
+end;
+
+procedure TfmCFTrKKBB.quDetilBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+  if TRIM(quDetilRekeningId.AsString)='' then
+  begin
+     MsgInfo('Kode Rekening tidak boleh kosong !');
+     quDetilRekeningId.FocusControl;
+     Abort;
+  end;
+
+  if TRIM(quDetilSiteID.AsString)='' then
+  begin
+     MsgInfo('Site tidak boleh kosong !');
+     quDetilSiteID.FocusControl;
+     Abort;
+  end;
+
+  if TRIM(quDetilLRekName.AsString)='' then
+  begin
+     MsgInfo('Kode Rekening tidak ada dalam Master!');
+     quDetilRekeningId.FocusControl;
+     Abort;
+  end;
+
+   With quAct,SQL do
+   Begin
+     Close;Clear;
+     Add('Select Top 1 RekeningId,FgActive FROM CFMsRekening WHERE RekeningId='''+quDetilRekeningId.AsString+'''');
+     Open;
+     if IsEmpty then
+     Begin
+       MsgInfo('Kode Rekening tidak terdaftar dalam master rekening');
+       quDetilRekeningId.FocusControl;
+       Abort;
+     End;
+   End;
+   if quAct.FieldByName('FgActive').AsString = 'T' then
+   begin
+     pesan('Data Rekening sudah tidak aktif, tidak bisa dipakai lagi');
+     quDetilRekeningId.FocusControl;
+     Abort;
+   end;
+
+  if quDetil.State = dsInsert then
+  begin
+    quDetilUpdUser.AsString := dmMain.UserId;
+    quDetilUpdDate.AsDateTime := GetServerDateTime;
+  End;
+
+  if TRIM(qudetilNote.AsString)='' Then
+  Begin
+     MsgInfo('Keterangan tidak boleh kosong !');
+     quDetilNote.FocusControl;
+     Abort;
+  End;
+
+  if TRIM(quDetilAmount.AsString)='' then
+  begin
+    pesan('Jumlah tidak boleh kosong !');
+    quDetilAmount.FocusControl;
+    Abort;
+  end;
+
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT '''+quDetilNote.AsString+''' ');
+    try
+      Open;
+    Except
+      on E :Exception do
+      begin
+        ShowMessage('Field Detil Keterangan Tidak boleh mengandung character petik tunggal');
+        quDetilNote.FocusControl;
+        Abort;
+      end;
+    end;
+  end;
+
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit1ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  if ( StatusKKBB = 'ARK' ) or ( StatusKKBB = 'APK' ) or ( StatusKKBB = 'KM' ) or ( StatusKKBB = 'KK' ) then
+  begin
+   with TfmSearch.Create(Self) do
+    try
+       Title := 'Cari Kas';
+       SQLString := 'SELECT BankId as Kode_Bank, BankName as Nama_Bank'
+                   +' FROM CFMsBank WHERE FgActive=''Y'' AND FgBank=''T'' ORDER BY BankId';
+       if ShowModal = MrOK then
+       begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainBankId.AsString := Res[0];
+       end;
+    finally
+       Free;
+    end;
+  end else
+  begin
+   with TfmSearch.Create(Self) do
+    try
+       Title := 'Cari Bank';
+       SQLString := 'SELECT BankId as Kode_Bank, BankName as Nama_Bank'
+                   +' FROM CFMsBank WHERE FgActive=''Y'' AND FgBank=''Y'' ORDER BY BankId';
+       if ShowModal = MrOK then
+       begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainBankId.AsString := Res[0];
+       end;
+    finally
+       Free;
+    end;
+  end;
+end;
+
+procedure TfmCFTrKKBB.quDetilAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  Nota := quMainVoucherId.AsString;
+  quTotal.Requery();
+  UpdateTotal;
+  qumain.Requery();
+  quMain.Locate('VoucherId',Nota,[]);
+  quDetil.Append;
+end;
+
+procedure TfmCFTrKKBB.quDetilBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  Nota := quMainVoucherId.AsString;
+  CekBayar;
+end;
+
+procedure TfmCFTrKKBB.quMainBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  CekBayar;
+end;
+
+procedure TfmCFTrKKBB.dxButton1Click(Sender: TObject);
+var stotal : Currency;
+  nomorvoucher : string;
+begin
+  inherited;
+  CekStatus;
+  CekBalance;
+  stotal := quTotalTotal.AsCurrency;
+  nomorvoucher := quMainVoucherId.AsString;
+
+  if (StatusKKBB='JU') then
+  Begin
+    With TfmCFQRRptTrKKBB.Create(Self) do
+    Try
+      qlbTitle.Caption:= sCompanyName;
+      qlbTitleV.Caption := 'JURNAL UMUM';
+      QRShape2.Enabled := False; QRShape6.Enabled := False;
+      QRLabel1.Enabled := False; QRLabel2.Enabled := False;
+      qlbKas.Enabled := False; qlbBank.Enabled := False;
+      qlbTTerBayar.Enabled := False; QRLabel8.Enabled := False;
+      RbCetak.Visible := False;
+      qlbJourTransID.Caption := ': ' + nomorvoucher;
+      qlbTitleV.Top := 18;
+      qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate.AsDateTime);
+      qlbterimaDari.Caption := quMainLSalesName.AsString;
+      if UpperCase(quMainCurrId.Value) ='IDR' then
+      qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, quMainJumlahD.AsCurrency))+' Rupiah #';
+      qlbKeterangan.Caption := quMainNote.ASString;
+      QRLabel16.Caption :='Dibayar oleh';
+
+      With qu001,SQL do
+      Begin
+        Close;Clear;
+        add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+           +'SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END as Urut,Jenis,UpdDate FROM CFTrKKBBDt) as K '
+           +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+quMainVoucherId.AsString+''' '
+           +'ORDER BY K.Urut,K.RekeningID');
+        Open;
+      End;
+        if sCetak = '0' then
+          MyReport.Previewmodal
+        else
+          MyReport.Print;
+    Finally
+      Free;
+    End;
+  End;
+
+  if (StatusKKBB='KM') or (StatusKKBB='BM') then
+  Begin
+    if RbCetak.ItemIndex = 0 then
+    begin
+      with TfmQRRptBuktiBayar.Create(Self) do
+      try
+         qlbTerbilang.Caption := '* Terbilang '+ convert(FormatFloat(sEditFormat, stotal))+' Rupiah #';
+         QRLabel6.Caption := 'Keterangan';
+         QRLabel10.Caption := 'Jurnal';
+         QRLabel16.Caption := 'Penarik Dana,';
+         QRLabel18.Caption := 'Penerima Dana,';
+         lbSuppCust.Caption := 'Diterima Dari';
+         qlbNamaInvoice.Caption := 'BUKTI PENERIMAAN';
+         qrLabel9.Caption := 'Total Penerimaan :';
+
+         with qu001,SQL do
+         Begin
+           Close;Clear;
+           add(' Select VoucherID,VoucherID As BuktiBayar,CurrId,Convert(varchar(10),A.Transdate,103) as Tgl,'
+              +' ISNULL(C.CustName,A.Actor) as CustSupp,A.Note,CASE WHEN A.MOP=''KAS'' THEN ''PENERIMAAN KAS'' '
+              +' WHEN A.MOP=''TRF'' THEN ''BANK TRANSFER'' '
+              +' WHEN A.MOP=''CEK'' THEN ''CEK dengan Nomor: ''+A.NoBGCek '
+              +' ELSE ''BILYET GIRO dengan Nomor: ''+A.NoBGCek END as CaraBayar '
+              +' FROM CFTrKKBBHd A LEFT JOIN ARMsCustomer C ON A.Actor=C.CustId'
+              +' WHERE A.VoucherID='''+quMainVoucherId.AsString+'''');
+           Open;
+         End;
+
+         With qu002,sql do
+         Begin
+           Close;Clear;
+           Add('SELECT A.Note+'' (''+C.RekeningName+'')'' as NoInvoice, '
+              +'ISNULL(CASE WHEN Jenis=''K'' THEN Amount ELSE Amount*-1 END,0) as Price,A.RekeningID as Tgl '
+              +'FROM CFTrKKBBdt A '
+              +'INNER JOIN CFMsRekening C ON A.RekeningID=C.RekeningID WHERE A.VoucherID='''+quMainVoucherId.AsString+''' Order BY Jenis DESC ');
+           Open;
+         End;
+
+         if sCetak = '0' then
+           MyReport.PreviewModal
+         else
+           MyReport.Print;
+
+      finally
+         free;
+      end;
+    end else
+    begin
+      With TfmCFQRRptTrKKBB.Create(Self) do
+      Try
+        qlbTitle.Caption:= sCompanyName;
+        if (StatusKKBB='KM') then qlbKas.Enabled := true;
+        qlbBank.Enabled := not qlbKas.Enabled;
+        qlbTitleV.Caption := 'BUKTI PENERIMAAN';
+        qlbTTerBayar.Caption := 'Terima dari';
+        qlbJourTransID.Caption := ': ' + nomorvoucher;
+        qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate1.AsDateTime);
+        qlbterimaDari.Caption := quMainActor.AsString;
+        qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+' Rupiah';
+        qlbKeterangan.Caption := quMainNote.Value;
+        QRLabel16.Caption :='Dibayar oleh';
+
+        if sTotal >= 0 then
+          qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+        else
+          qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+
+        With qu001,sql do
+        Begin
+          Close;Clear;
+          add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+             +'SELECT VoucherID,B.RekeningID,ISNULL(JumlahD,0) as Amount,A.Note,1 as Urut,''D'' as Jenis FROM CFTrKKBBHd A '
+             +'INNER JOIN CFMsBank B ON A.BankID=B.BankID '
+             +'UNION ALL '
+             +'SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt '
+             +') as K '
+             +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+quMainVoucherId.AsString+''' '
+             +'ORDER BY K.Urut,K.RekeningID');
+          Open;
+        End;
+         if sCetak = '0' then
+           MyReport.PreviewModal
+         else
+           MyReport.Print;
+      Finally
+        Free;
+      End;
+    end;
+  End;
+
+  if (StatusKKBB='KK') or (StatusKKBB='BK') then
+  Begin
+    if RbCetak.ItemIndex = 0 then
+    begin
+      with TfmQRRptBuktiBayar.Create(Self) do
+      try
+         qlbTerbilang.Caption := '* Terbilang '+ convert(FormatFloat(sEditFormat, stotal))+' Rupiah #';
+         QRLabel6.Caption := 'Keterangan';
+         QRLabel10.Caption := 'Jurnal';
+         lbSuppCust.Caption := 'Dibayar Kepada';
+         qlbNamaInvoice.Caption := 'BUKTI PEMBAYARAN';
+         qrLabel9.Caption := 'Total Pembayaran :';
+
+         with qu001,SQL do
+         Begin
+           Close;Clear;
+           add(' Select VoucherID,VoucherID As BuktiBayar,CurrId,Convert(varchar(10),A.Transdate,103) as Tgl,'
+              +' ISNULL(C.SuppName,A.Actor) as CustSupp,A.Note,CASE WHEN A.MOP=''KAS'' THEN ''PENERIMAAN KAS'' '
+              +' WHEN A.MOP=''TRF'' THEN ''BANK TRANSFER'' '
+              +' WHEN A.MOP=''CEK'' THEN ''CEK dengan Nomor: ''+A.NoBGCek '
+              +' ELSE ''BILYET GIRO dengan Nomor: ''+A.NoBGCek END as CaraBayar '
+              +' FROM CFTrKKBBHd A LEFT JOIN APMsSupplier C ON A.Actor=C.SuppID'
+              +' WHERE A.VoucherID='''+quMainVoucherId.AsString+'''');
+           Open;
+         End;
+
+         With qu002,sql do
+         Begin
+           Close;Clear;
+           Add('SELECT A.Note+'' (''+C.RekeningName+'')'' as NoInvoice, '
+              +'ISNULL(CASE WHEN Jenis=''D'' THEN Amount ELSE Amount*-1 END,0) as Price,A.RekeningID as Tgl '
+              +'FROM CFTrKKBBdt A '
+              +'INNER JOIN CFMsRekening C ON A.RekeningID=C.RekeningID WHERE A.VoucherID='''+quMainVoucherId.AsString+''' Order BY Jenis ');
+           Open;
+         End;
+
+         if sCetak = '0' then
+           MyReport.PreviewModal
+         else
+           MyReport.Print;
+
+      finally
+         free;
+      end;
+    end else
+    begin
+      With TfmCFQRRptTrKKBB.Create(Self) do
+      Try
+        qlbTitle.Caption:= sCompanyName;
+        if (StatusKKBB='KK') then qlbKas.Enabled := true;
+        qlbBank.Enabled := not qlbKas.Enabled;
+        qlbTitleV.Caption := 'BUKTI PEMBAYARAN';
+        qlbTTerBayar.Caption := 'Dibayar kepada';
+        qlbJourTransID.Caption := ': ' + nomorvoucher;
+        qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate1.AsDateTime);
+        qlbterimaDari.Caption := quMainLSalesName.AsString;
+        qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+' Rupiah';
+
+        qlbKeterangan.Caption := quMainNote.AsString;
+        QRLabel16.Caption :='Diterima oleh';
+        if sTotal >= 0 then
+          qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+        else
+          qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+
+        With qu001,sql do
+        Begin
+          Close;Clear;
+          add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+             +'SELECT VoucherID,B.RekeningId,ISNULL(JumlahK,0) as Amount,A.Note,1 as Urut,''K'' as Jenis FROM CFTrKKBBHd A '
+             +'INNER JOIN CFMsBank B ON A.BankID=B.BankID '
+             +'UNION ALL '
+             +'SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt '
+             +') as K '
+             +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+quMainVoucherId.AsString+''' '
+             +'ORDER BY K.Urut,K.RekeningID');
+          Open;
+        End;
+         if sCetak = '0' then
+           MyReport.PreviewModal
+         else
+           MyReport.Print;
+      Finally
+        Free;
+      End;
+    end;
+  End;
+  {
+  if (StatusKKBB='BM') or (StatusKKBB='ARB') or (StatusKKBB='ARC') then
+  Begin
+    if RbCetak.ItemIndex = 0 then
+    begin
+      with TfmQRRptBuktiBayar.Create(Self) do
+      try
+         if UpperCase(quMainCurrID.AsString)='IDR' then
+           qlbTerbilang.Caption := '* Terbilang '+ convert(FormatFloat(sEditFormat, stotal))+'rupiah #'
+         else
+           qlbTerbilang.Caption := '* Terbilang '+ convert(FormatFloat(sEditFormat, stotal))+'dollar #';
+         with qu001,SQL do
+         Begin
+           Close;Clear;
+           add(' Select VoucherID,VoucherID As BuktiBayar,CurrId,Convert(varchar(10),A.Transdate,103) as Tgl,'
+              +' C.CustName+'' - ''+C.City as CustSupp,A.Note,CASE WHEN A.FlagKKBB=''ARK'' THEN ''KAS'' '
+              +'                                                   WHEN A.FlagKKBB=''ARB'' THEN ''TRANSFER BANK ''+(SELECT X.BankName FROM CFMsBank X WHERE X.BankID=A.BankID) '
+              +'ELSE ''SECARA CHEQUE / GIRO ''+(SELECT X.BankName FROM CFMsBank X WHERE X.BankID=A.BankID) END as CaraBayar '
+              +' FROM CFTrKKBBHd A INNER JOIN ARMsCustomer C ON A.Actor=C.CustId'
+              +' WHERE A.VoucherID='''+quMainVoucherId.AsString+'''');
+           Open;
+         End;
+
+         With qu002,sql do
+         Begin
+           Close;Clear;
+           Add('SELECT CASE WHEN A.RekeningID IN ('''+sDRPj+''','''+sDRPb+''') THEN A.Note ELSE C.RekeningName+'' (''+A.Note+'')'' END as NoInvoice,'
+               +'ISNULL(CASE WHEN Jenis=''K'' THEN Amount ELSE Amount*-1 END,0) as Price,CONVERT(VARCHAR(10),B.Transdate,103) as Tgl FROM CFTrKKBBdt A '
+               +'LEFT JOIN (SELECT Transdate,KonInvPelID FROM ARTrKonInvPelHd UNION ALL SELECT Transdate,KonsinyasiInvID FROM APTrKonsinyasiInvHd) B ON A.Note=B.KonInvPelID '
+               +'INNER JOIN CFMsRekening C ON A.RekeningID=C.RekeningID WHERE A.VoucherID='''+quMainVoucherId.AsString+''' ');
+           Open;
+         End;
+
+         if sCetak = '0' then
+           MyReport.PreviewModal
+         else
+           MyReport.Print;
+
+      finally
+         free;
+      end;
+    end else
+    begin
+      With TfmCFQRRptTrKKBB.Create(Self) do
+      Try
+        qlbTitle.Caption:= sCompanyName;
+        qlbKas.Enabled := false;
+        qlbBank.Enabled := not qlbKas.Enabled;
+        qlbTitleV.Caption := 'BUKTI PENERIMAAN';
+        qlbTTerBayar.Caption := 'Diterima dari';
+        qlbJourTransID.Caption := ': ' + nomorvoucher;
+        qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate1.AsDateTime);
+        if StatusKKBB = 'BM' then
+          qlbterimaDari.Caption := quMainActor.AsString
+        else
+          qlbterimaDari.Caption := quMainLSalesName.AsString;
+        if UpperCase(quMainCurrId.Value) ='IDR' then
+           qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+        if UpperCase(quMainCurrId.Value) ='USD' then
+           qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'dollar';
+        qlbKeterangan.Caption := quMainNote.Value;
+        QRLabel16.Caption :='Dibayar oleh';
+        if sTotal >= 0 then
+          qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+        else
+          qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+        With qu001,sql do
+        Begin
+          Close;Clear;
+          add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+             +'SELECT VoucherID,B.RekeningID,ISNULL(JumlahD,0) as Amount,A.Note,1 as Urut,''D'' as Jenis FROM CFTrKKBBHd A '
+             +'INNER JOIN CFMsBank B ON A.BankID=B.BankID UNION ALL SELECT VoucherID,RekeningID,Amount,Note,'
+             +'CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt) as K '
+             +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+quMainVoucherId.AsString+''' '
+             +'ORDER BY K.Urut,K.RekeningID');
+          Open;
+        End;
+         if sCetak = '0' then
+           MyReport.PreviewModal
+         else
+           MyReport.Print;
+      Finally
+        Free;
+      End;
+    end;
+  End;
+
+  if (StatusKKBB='BK') or (StatusKKBB='APB') or (StatusKKBB='APC') then
+  Begin
+    With TfmCFQRRptTrKKBB.Create(Self) do
+    Try
+      qlbTitle.Caption:= sCompanyName;
+      qlbKas.Enabled := false;
+      qlbBank.Enabled := not qlbKas.Enabled;
+      qlbTitleV.Caption := 'BUKTI PENGELUARAN';
+      qlbTTerBayar.Caption := 'Dibayar kepada';
+      qlbJourTransID.Caption := ': ' + nomorvoucher;
+      qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate1.AsDateTime);
+      if StatusKKBB = 'BK' then
+        qlbterimaDari.Caption := quMainActor.AsString
+      else
+        qlbterimaDari.Caption := quMainLSalesName.AsString;
+     if UpperCase(quMainCurrId.Value) ='IDR' then
+         qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+      if UpperCase(quMainCurrId.Value) ='USD' then
+         qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'dollar';
+      qlbKeterangan.Caption := quMainNote.Value;
+      QRLabel16.Caption :='Diterima oleh';
+      if sTotal >= 0 then
+        qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+      else
+        qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+      With qu001,sql do
+      Begin
+        Close;Clear;
+        add('SELECT K.RekeningID,L.RekeningName,K.Amount,K.Note,K.Jenis FROM ('
+           +'SELECT VoucherID,B.RekeningID,ISNULL(JumlahK,0) as Amount,A.Note,1 as Urut,''K'' as Jenis FROM CFTrKKBBHd A '
+           +'INNER JOIN CFMsBank B ON A.BankID=B.BankID UNION ALL SELECT VoucherID,RekeningID,Amount,Note,'
+           +'CASE WHEN Jenis=''D'' THEN 2 ELSE 3 END,Jenis FROM CFTrKKBBDt) as K '
+           +'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID WHERE VoucherId='''+quMainVoucherId.AsString+''' '
+           +'ORDER BY K.Urut,K.RekeningID');
+        Open;
+      End;
+       if sCetak = '0' then
+         MyReport.PreviewModal
+       else
+         MyReport.Print;
+    Finally
+      Free;
+    End;
+  End;
+
+  if StatusKKBB='PIK' then
+  Begin
+    With TfmCFQRRptTrKKBB.Create(Self) do
+    Try
+      qlbTitle.Caption:= sCompanyName;
+      qlbKas.Enabled := True;
+      qlbBank.Enabled := not qlbKas.Enabled;
+      qlbTitleV.Caption := 'BUKTI PINJAMAN';
+      qlbTTerBayar.Caption := 'Dibayar kepada';
+      qlbJourTransID.Caption := ': ' + nomorvoucher;
+      qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate1.AsDateTime);
+      qlbterimaDari.Caption := quMainLSalesName.AsString;
+     if UpperCase(quMainCurrId.Value) ='IDR' then
+         qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+      if UpperCase(quMainCurrId.Value) ='USD' then
+         qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'dollar';
+      qlbKeterangan.Caption := quMainNote.Value;
+      QRLabel16.Caption :='Diterima oleh';
+      if sTotal >= 0 then
+        qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+      else
+        qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+      With qu001,sql do
+      Begin
+        Close;Clear;
+        add('Select A.RekeningID, A.Amount, A.Note FROM CFTrKKBBDt A WHERE A.VoucherId='''+quMainVoucherId.AsString+'''');
+        Open;
+      End;
+       if sCetak = '0' then
+         MyReport.PreviewModal
+       else
+         MyReport.Print;
+    Finally
+      Free;
+    End;
+  End;
+
+  if StatusKKBB='PIB' then
+  Begin
+    With TfmCFQRRptTrKKBB.Create(Self) do
+    Try
+      qlbTitle.Caption:= sCompanyName;
+      qlbKas.Enabled := False;
+      qlbBank.Enabled := not qlbKas.Enabled;
+      qlbTitleV.Caption := 'BUKTI PINJAMAN';
+      qlbTTerBayar.Caption := 'Dibayar kepada';
+      qlbJourTransID.Caption := ': ' + nomorvoucher;
+      qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransDate1.AsDateTime);
+      qlbterimaDari.Caption := quMainLSalesName.AsString;
+     if UpperCase(quMainCurrId.Value) ='IDR' then
+         qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'rupiah';
+      if UpperCase(quMainCurrId.Value) ='USD' then
+         qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, stotal))+'dollar';
+      qlbKeterangan.Caption := quMainNote.Value;
+      QRLabel16.Caption :='Diterima oleh';
+      if sTotal >= 0 then
+        qlbTotal.Caption := FormatFloat(sDisFormat, sTotal)
+      else
+        qlbTotal.Caption := '(' + FormatFloat(sDisFormat, abs(sTotal)) + ')';
+      With qu001,sql do
+      Begin
+        Close;Clear;
+        add('Select A.RekeningID, A.Amount, A.Note FROM CFTrKKBBDt A WHERE A.VoucherId='''+quMainVoucherId.AsString+'''');
+        Open;
+      End;
+       if sCetak = '0' then
+         MyReport.PreviewModal
+       else
+         MyReport.Print;
+    Finally
+      Free;
+    End;
+  End; }
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit2ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Valuta';
+       SQLString := 'SELECT CurrId as Kode_Valuta, CurrName as Nama_Valuta'
+               +' FROM SAMsValuta ORDER BY CurrId';
+       if ShowModal = MrOk then
+       begin
+          if quMain.State = dsBrowse then quMain.Edit;
+             quMainCurrID.Value := Res[0];
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmCFTrKKBB.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Data Voucher';
+       if StatusKKBB = 'SA' then
+       begin
+         SQLString := ' SELECT VoucherId '
+                     +' ,A.CurrID as ValutaId,D.CurrName as Nama_Valuta,A.Note as Keterangan'
+                     +' FROM CFTrKKBBHd A '
+                     +' INNER JOIN SAMsValuta D ON A.CurrId=D.CurrId'
+                     +' WHERE A.FlagKKBB=''SA'' ORDER BY VoucherID ';
+       end else
+       begin
+         SQLString := ' SELECT A.VoucherId '
+                     +' ,Convert(varchar(10),B.TransDate1,103) as TanggalVoucher '
+                     +' ,A.Note as Keterangan,A.Amount '
+                     +' ,B.CurrID as ValutaId,D.CurrName as Nama_Valuta'
+                     +' ,B.Actor,B.BankId as Kode_Bank,C.Bankname as Nama_Bank ,B.Note as Keterangan_Voucher '
+                     +' FROM CFTrKKBBdt A '
+                     +' INNER JOIN CFTrkkbbHd B on A.VoucherID=B.VoucherID '
+                     +' LEFT JOIN CFMsBank C ON B.BankID=C.BankID '
+                     +' INNER JOIN SAMsValuta D ON B.CurrId=D.CurrId'
+                     +' WHERE '+FSQLWhere;
+         SQLString := SQLString+' AND B.FlagKKBB='''+StatusKKBB+''' ORDER BY B.Transdate1 ';
+       end;
+       if ShowModal = MrOK then
+       begin
+         quMain.Locate('VoucherId',Res[0],[]);
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit3ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+      if (StatusKKBB = 'PIK') or (StatusKKBB = 'PIB') then
+      begin
+        Title := 'Karyawan';
+        SQLString := 'SELECT SalesID as Kode_Karyawan, SalesName as Karyawan, Jabatan'
+                     +' FROM ARMsSales WHERE FgActive <> 0 ORDER BY SalesID';
+      end;
+      if (StatusKKBB = 'ARK') or (StatusKKBB = 'ARB') or (StatusKKBB = 'ARC') then
+      begin
+        Title := 'Pelanggan';
+        SQLString := 'SELECT CustID as Kode_Pelanggan, CustName as Pelanggan,City'
+                     +' FROM ARMsCustomer ORDER BY CustID';
+      end;
+      if (StatusKKBB = 'APK') or (StatusKKBB = 'APB') or (StatusKKBB = 'APC') then
+      begin
+        Title := 'Supplier';
+        SQLString := 'SELECT SuppID as Kode_Supplier, SuppName as Supplier '
+                     +' FROM APMsSupplier ORDER BY SuppID';
+      end;
+      if ShowModal = MrOK then
+      begin
+        if quMain.State = dsBrowse then quMain.Edit;
+        quMainActor.Value := Res[0];
+        if (StatusKKBB = 'ARK') or (StatusKKBB = 'ARB') or (StatusKKBB = 'ARC') then quMainNote.AsString := 'Penerimaan dari '+quMainLSalesName.aSString;
+        if (StatusKKBB = 'APK') or (StatusKKBB = 'APB') or (StatusKKBB = 'APC') then quMainNote.AsString := 'Pembayaran kepada '+quMainLSalesName.aSString;
+      end;
+  finally
+      Free;
+  end;
+end;
+
+procedure TfmCFTrKKBB.bbTambahClick(Sender: TObject);
+begin
+  inherited;
+  quDetil.Append;
+end;
+
+procedure TfmCFTrKKBB.bbHapusClick(Sender: TObject);
+begin
+  inherited;
+  if (dsdetil <> nil) and (dsDetil.DataSet <> nil) and
+     (MessageDlg('Hapus Nota ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+        dsDetil.DataSet.Delete;
+end;
+
+procedure TfmCFTrKKBB.bbSimpanClick(Sender: TObject);
+begin
+  inherited;
+  if Self.quDetil.State = dsInsert then
+  begin
+   Self.quDetil.Edit;
+   Self.quDetil.Post;
+   Self.quDetil.Requery();
+  end;
+  if Self.quDetil.State = dsEdit then
+  begin
+   quDetil.Post;
+  end;
+end;
+
+procedure TfmCFTrKKBB.bbBatalClick(Sender: TObject);
+begin
+  inherited;
+  quDetil.Cancel;
+end;
+
+procedure TfmCFTrKKBB.quDetilBeforeEdit(DataSet: TDataSet);
+begin
+  inherited;
+  CekBayar;
+  RekSbm := TRIM(quDetilRekeningId.AsString);
+  NoteSbm := TRIM(quDetilNote.AsString);
+  JumSbm := quDetilAmount.AsCurrency;
+  JamInput := FormatDateTime('HH:MM:SS',quDetilUpdDate.AsDateTime);
+end;
+
+procedure TfmCFTrKKBB.quDetilBeforeInsert(DataSet: TDataSet);
+begin
+  inherited;
+  if quMain.IsEmpty then Abort;
+  CekBayar;
+end;
+
+procedure TfmCFTrKKBB.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  CekBalance;
+end;
+
+procedure TfmCFTrKKBB.quMainAfterInsert(DataSet: TDataSet);
+begin
+  inherited;
+  CekBalance;
+end;
+
+procedure TfmCFTrKKBB.quMainBeforeInsert(DataSet: TDataSet);
+begin
+  inherited;
+  CekBalance;
+end;
+
+procedure TfmCFTrKKBB.quDetilAfterDelete(DataSet: TDataSet);
+begin
+  inherited;
+  quTotal.Requery();
+  UpdateTotal;
+  quMain.Requery();
+  quMain.Locate('VoucherID',Nota,[]);
+end;
+
+procedure TfmCFTrKKBB.dbgInvoiceButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(self) do
+    try
+       if (StatusKKBB = 'KM') or (StatusKKBB = 'BM') then
+       begin
+         Title := 'Cari Invoice';
+         SQLString := 'SELECT K.PurchaseID as No_Invoice,CONVERT(VARCHAR(10),K.Transdate,103) as Tgl_FPP,K.Note, '
+                     +'ISNULL(K.TTLPb,0) as Total,ISNULL(K.Bayar,0) as Pembayaran,ISNULL(K.TTLPb-K.Bayar,0) as Sisa FROM ( '
+                     +'SELECT B.KonInvPelID as purchaseId,B.TransDate,B.TTLKJ as TTLPB,B.CustID as SuppID,B.Note, '
+                     +'(SELECT ISNULL(Sum(CASE WHEN A.Jenis=''K'' THEN Amount ELSE Amount*-1 END),0) from CFTrKKBBDt A '
+                     +'INNER JOIN CFTrKKBBHd C ON A.VoucherID=C.VoucherID '
+                     +'WHERE A.Note=B.KonInvPelID AND C.Actor=B.CustID) as bayar '
+                     +'FROM ARtrKonInvPelHD B '
+                     +') as K '
+                     +'WHERE K.SuppID='''+quMainActor.AsString+''' AND '
+                     +'CONVERT(VARCHAR(10),K.Transdate,112) <='''+FormatDateTime('yyyyMMdd',quMainTransDate.AsDateTime)+''' '
+                     +'AND ISNULL(K.TTLPb-K.Bayar,0) <> 0 ';
+       end;
+       if (StatusKKBB = 'KK') or (StatusKKBB = 'BK') then
+       begin
+         Title := 'Cari FPP';
+         SQLString := 'SELECT K.PurchaseID as No_FPP,CONVERT(VARCHAR(10),K.Transdate,103) as Tgl_FPP,K.Note, '
+                     +'ISNULL(K.TTLPb,0) as Total,ISNULL(K.Bayar,0) as Pembayaran,ISNULL(K.TTLPb-K.Bayar,0) as Sisa FROM ( '
+                     +'SELECT B.KonsinyasiInvID as purchaseId,B.TransDate,B.TTLKS as TTLPB,B.SuppID,B.Note, '
+                     +'(SELECT ISNULL(Sum(CASE WHEN A.Jenis=''D'' THEN Amount ELSE Amount*-1 END),0) from CFTrKKBBDt A INNER JOIN CFTrKKBBHd C ON A.VoucherID=C.VoucherID '
+                     +'WHERE A.Note=B.KonsinyasiInvID AND C.Actor=B.SuppID) as bayar '
+                     +'FROM APTrKonsinyasiInvHd B WHERE B.FgOto=''Y'' '
+                     +'UNION ALL '
+                     +'SELECT B.purchaseId,B.TransDate,B.TTLPB,B.SuppID,B.Note, '
+                     +'(SELECT ISNULL(Sum(CASE WHEN A.Jenis=''D'' THEN Amount ELSE Amount*-1 END),0) from CFTrKKBBDt A INNER JOIN CFTrKKBBHd C ON A.VoucherID=C.VoucherID '
+                     +'WHERE A.Note=B.PurchaseID AND C.Actor=B.SuppID) as bayar '
+                     +'FROM APTrPurchaseHd B WHERE B.FgOto=''Y''  '
+                     +') as K '
+                     +'WHERE K.SuppID='''+quMainActor.AsString+''' AND '
+                     +'CONVERT(VARCHAR(10),K.Transdate,112) <='''+FormatDateTime('yyyyMMdd',quMainTransDate.AsDateTime)+''' '
+                     +'AND ISNULL(K.TTLPb-K.Bayar,0) <> 0' ;
+       end;
+       if ShowModal = MrOK then
+       begin
+          if quDetil.State = dsBrowse then quDetil.Edit;
+             quDetilNote.Value := Res[0];
+             quDetilAmount.AsString := Res[5];
+       end;
+    finally
+       Free;
+    end;
+end;
+
+procedure TfmCFTrKKBB.quDetilRekeningIdChange(Sender: TField);
+begin
+  inherited;
+  if (StatusKKBB = 'ARK') or (StatusKKBB = 'ARB') or (StatusKKBB = 'ARC') then
+  begin
+    if quDetilRekeningId.AsString <> sDRPj then
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('SELECT TOP 1 Note FROM CFTrKKBBDt WHERE RekeningID IN ('''+sDRPj+''','''+sDRPb+''') '
+           +'AND VoucherID='''+quMainVoucherId.AsString+''' ORDER BY CONVERT(VARCHAR(8),UpdDate,112) DESC');
+        Open;
+      end;
+      quDetilNote.AsString := quAct.FieldByName('Note').AsString;
+    end;
+  end else
+  if (StatusKKBB = 'APK') or (StatusKKBB = 'APB') or (StatusKKBB = 'APC') then
+  begin
+    if quDetilRekeningId.AsString <> sDRPb then
+    begin
+      with quAct,SQL do
+      begin
+        Close;Clear;
+        Add('SELECT TOP 1 Note FROM CFTrKKBBDt WHERE RekeningID IN ('''+sDRPj+''','''+sDRPb+''') '
+           +'AND VoucherID='''+quMainVoucherId.AsString+''' ORDER BY CONVERT(VARCHAR(8),UpdDate,112) DESC');
+        Open;
+      end;
+      quDetilNote.AsString := quAct.FieldByName('Note').AsString;
+    end;
+  end;
+end;
+
+procedure TfmCFTrKKBB.quMainAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  quDetil.Requery();
+end;
+
+procedure TfmCFTrKKBB.dxButton2Click(Sender: TObject);
+begin
+  inherited;
+  CekStatus;
+  CekBalance;
+
+  With TfmRptVoucher.Create(Self) do
+  Try
+    qrlTitle.Caption:= 'VOUCHER';
+    qrlPeriode.Caption := FormatDateTime('dd MMMM yyyy',quMainTransDate1.AsDateTime);
+    QRLabel23.Caption := 'Keterangan : ' + quMainNote.AsString;
+
+    if UPPERCASE(quMainCurrId.AsString) = 'IDR' then
+    begin
+      qrlabel25.top := 90
+    end else
+    begin
+      qrlabel25.Top := 114;
+      QRLabel6.Caption := quMainCurrId.AsString;
+    end;
+
+    if (StatusKKBB = 'APK') or (StatusKKBB = 'APB') or (StatusKKBB = 'APC') or (StatusKKBB = 'KK') or (StatusKKBB = 'BK') then
+    qlbkas.left := 268 else qlbkas.left := 116;
+    if (StatusKKBB = 'APK') or (StatusKKBB = 'ARK') or (StatusKKBB = 'KK') or (StatusKKBB = 'KM') then
+    begin
+      QRLabel24.Top := 66;
+      QRDBText1.Top := 66;
+    end;
+    if (StatusKKBB = 'APB') or (StatusKKBB = 'ARB') or (StatusKKBB = 'BK') or (StatusKKBB = 'BM') then
+    begin
+      QRLabel24.Top := 90;
+      QRDBText1.Top := 90;
+    end;
+    if (StatusKKBB = 'APC') or (StatusKKBB = 'ARC') then
+    begin
+      QRLabel24.Top := 114;
+    end;
+
+    With qu001,SQL do
+    Begin
+      Close;Clear;
+      add('SELECT VoucherID,CASE WHEN ISNULL(KodeApproval,'''')='''' THEN VoucherID ELSE KodeApproval END as KodeApp,CurrID,NoBGCek,Actor,BankID,CONVERT(VarChar(15),transDate,106) as Jatuh '
+         +'FROM CftrKKBBHD Where VoucherID='''+quMainVoucherId.AsString+''' ');
+      Open;
+    End;
+
+    With qu002,SQL do
+    Begin
+      Close;Clear;
+      add('select A.VoucherID,A.RekeningID,A.Note,B.RekeningName,A.Amount,A.NumAll, '
+         +'ISNULL((Select K.POCust FROM ( '
+         +'select X.POCust From ARTrPurchaseOrderHd X Where X.POID=(Select Y.SOID From ARTrKonInvPelHD Y Where Y.KonInvPelId=A.Note) UNION ALL '
+         +'select M.POID From APTrKonsinyasiInvHD M Where M.KonsinyasiInvID=A.Note ) as K),''-'') as POID  '
+         +'from cftrkkbbdt A inner join CFMsRekening B on A.RekeningID=B.RekeningID '
+         +'where A.VoucherID='''+quMainVoucherId.AsString+''' ');
+      Open;
+    End;
+
+    if sCetak = '0' then
+      MyReport.Previewmodal
+    else
+      MyReport.Print;
+
+  Finally
+    Free;
+  End;
+
+end;
+
+procedure TfmCFTrKKBB.quMainBeforeEdit(DataSet: TDataSet);
+begin
+  inherited;
+  if (qudetil.State = dsInsert) or (qudetil.state = dsEdit) then
+  qudetil.Post;
+end;
+
+procedure TfmCFTrKKBB.quMainMOPChange(Sender: TField);
+begin
+  inherited;
+{  if (quMainMOP.AsString='CEK') or (quMainMOP.AsString='GIRO') then
+  begin
+    label16.Visible := TRUE;
+    dxDBEdit6.Visible := TRUE;
+    label17.Visible := TRUE;
+    dxDBDateEdit2.Visible := TRUE;
+  end else
+  begin
+    label16.Visible := False;
+    dxDBEdit6.Visible := False;
+    label17.Visible := false;
+    dxDBDateEdit2.Visible := false;
+  end; }
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit4ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  if (StatusKKBB='KK') or (StatusKKBB='BK') then
+  begin
+    with TfmSearch.Create(Self) do
+    try
+       Title := 'Cari Supplier';
+       SQLString := 'SELECT SuppName as Nama_Supplier,SuppID as Kode_Supp,Address as Alamat FROM APMsSupplier order by SuppName';
+       if ShowModal = MrOK then
+       begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainActor.AsString := Res[1];
+       end;
+    finally
+       Free;
+    end;
+  end else
+  begin
+    with TfmSearch.Create(Self) do
+    try
+       Title := 'Cari Supplier';
+       SQLString := 'SELECT CustName as Nama_Customer,CustID as Kode_Customer,Address as Alamat FROM ARMsCustomer order by CustName';
+       if ShowModal = MrOK then
+       begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainActor.AsString := Res[1];
+       end;
+    finally
+       Free;
+    end;
+  end;
+end;
+
+procedure TfmCFTrKKBB.quMainCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+
+
+  if (StatusKKBB='KK') or (StatusKKBB='BK') then
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT SuppName FROm APMssupplier where suppid='''+quMainActor.ASString+''' ');
+      Open;
+    end;
+    quMainLSalesName.ASString := quAct.FieldBYName('SuppName').ASString;
+  end else
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT CustName FROm ARMsCustomer where CustId='''+quMainActor.ASString+''' ');
+      Open;
+    end;
+    quMainLSalesName.ASString := quAct.FieldBYName('CustName').ASString;
+  end;
+
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT SiteName From INMsSites where SiteID='''+quMainSiteID.ASString+''' ');
+    Open;
+  end;
+  quMainLSite.ASString := quAct.FieldBYName('SiteName').ASString;
+end;
+
+procedure TfmCFTrKKBB.dxDBDateEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+    if dxDBEdit9.Visible=false then
+      if dxDBButtonEdit4.Visible=false then
+      PostMessage(Self.Handle,WM_NEXTDLGCTL,0,0)
+      else
+      dxDBButtonEdit4.SetFocus
+    else
+      dxDBEdit9.SetFocus;
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+    if dxDBImageEdit5.Visible=false then
+      dxDBEdit2.SetFocus
+    else
+      dxDBImageEdit5.SetFocus;
+end;
+
+procedure TfmCFTrKKBB.dxDBImageEdit5KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+    if dxDBEdit6.Visible=false then
+      dxDBEdit2.SetFocus
+    else
+      dxDBEdit6.SetFocus;
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit4KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+    if dxDBButtonEdit1.Visible=false then
+      dxDBEdit2.SetFocus
+    else
+      dxDBButtonEdit1.SetFocus;
+end;
+
+procedure TfmCFTrKKBB.dxDBEdit9KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key=#13 then
+    if dxDBButtonEdit1.Visible=false then
+      dxDBEdit2.SetFocus
+    else
+      dxDBButtonEdit1.SetFocus;
+end;
+
+procedure TfmCFTrKKBB.dxDBEdit2KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key=#13 then bbs.Focused;
+end;
+
+procedure TfmCFTrKKBB.dxDBButtonEdit5ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Cari Site';
+     SQLString := 'select SiteID,SiteName from INMsSites Order by SiteName ';
+     if ShowModal = MrOK then
+     begin
+         if quMain.State = dsBrowse then quMain.Edit;
+         quMainSiteID.AsString := Res[0];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+procedure TfmCFTrKKBB.dbgColumn9ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Cari Site';
+     SQLString := 'select SiteID,SiteName from INMsSites Order by SiteName ';
+     if ShowModal = MrOK then
+     begin
+         if qudetil.State = dsBrowse then qudetil.Edit;
+         quDetilSiteID.AsString := Res[0];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+procedure TfmCFTrKKBB.dsMainDataChange(Sender: TObject; Field: TField);
+begin
+  inherited;
+  if StatusKKBB<>'JU' then
+  begin
+  if (quMainMOP.AsString='CEK') or (quMainMOP.AsString='GIRO') then
+    begin
+      label16.Visible := TRUE;
+      dxDBEdit6.Visible := TRUE;
+      label17.Visible := TRUE;
+      dxDBDateEdit2.Visible := TRUE;
+    end else
+    begin
+      label16.Visible := False;
+      dxDBEdit6.Visible := False;
+      label17.Visible := false;
+      dxDBDateEdit2.Visible := false;
+    end;
+  end;
+end;
+
+procedure TfmCFTrKKBB.dsMainUpdateData(Sender: TObject);
+begin
+  inherited;
+  if StatusKKBB<>'JU' then
+  begin
+    if (quMainMOP.AsString='CEK') or (quMainMOP.AsString='GIRO') then
+    begin
+      label16.Visible := TRUE;
+      dxDBEdit6.Visible := TRUE;
+      label17.Visible := TRUE;
+      dxDBDateEdit2.Visible := TRUE;
+    end else
+    begin
+      label16.Visible := False;
+      dxDBEdit6.Visible := False;
+      label17.Visible := false;
+      dxDBDateEdit2.Visible := false;
+    end;
+  end;
+end;
+
+end.

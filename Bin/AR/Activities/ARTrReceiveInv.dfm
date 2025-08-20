@@ -1,0 +1,814 @@
+inherited fmARTrReceiveInv: TfmARTrReceiveInv
+  Left = 240
+  Top = 40
+  Caption = 'Receive Invoice Account'
+  ClientHeight = 553
+  ClientWidth = 1004
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 504
+    inherited pa3: TdxContainer
+      Height = 325
+    end
+    inherited paOperation: TdxContainer
+      Top = 8
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+    inherited pa1: TdxContainer
+      Top = 0
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 541
+    Width = 1004
+  end
+  inherited pa2: TdxContainer
+    Height = 504
+  end
+  inherited pcMain: TdxPageControl
+    Width = 811
+    Height = 504
+    inherited ts01: TdxTabSheet
+      inherited dbgList: TdxDBGrid
+        Width = 564
+        Height = 467
+        Filter.Criteria = {00000000}
+      end
+    end
+    inherited ts02: TdxTabSheet
+      object DBText3: TDBText
+        Left = 223
+        Top = 69
+        Width = 54
+        Height = 17
+        AutoSize = True
+        DataField = 'LuNmCustomer'
+        DataSource = dsMain
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label1: TLabel
+        Left = 25
+        Top = 22
+        Width = 88
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Nota Receive :'
+        Color = clRed
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object Label2: TLabel
+        Left = 60
+        Top = 46
+        Width = 53
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Tanggal :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object Label3: TLabel
+        Left = 59
+        Top = 70
+        Width = 54
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Supplier :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object Label4: TLabel
+        Left = 37
+        Top = 94
+        Width = 76
+        Height = 17
+        Alignment = taRightJustify
+        Caption = 'Keterangan :'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+      end
+      object Label6: TLabel
+        Left = 12
+        Top = 144
+        Width = 85
+        Height = 17
+        Caption = 'Detil Invoice'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold, fsUnderline]
+        ParentFont = False
+      end
+      object DBText5: TDBText
+        Left = 993
+        Top = 245
+        Width = 61
+        Height = 19
+        AutoSize = True
+        DataField = 'Status'
+        DataSource = dsMain
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Times New Roman'
+        Font.Style = [fsBold, fsUnderline]
+        ParentFont = False
+        Visible = False
+      end
+      object dxButton2: TdxButton
+        Tag = 4444
+        Left = 1001
+        Top = 316
+        Width = 57
+        Height = 23
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Version = '1.0.2e'
+        OnClick = dxButton2Click
+        Caption = 'PROSES'
+        TabOrder = 13
+        TabStop = False
+      end
+      object txtKonPiutangID: TdxDBEdit
+        Left = 121
+        Top = 16
+        Width = 180
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        DataField = 'RIID'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object dbg: TdxDBGrid
+        Left = 1
+        Top = 163
+        Width = 808
+        Height = 254
+        Bands = <
+          item
+          end>
+        DefaultLayout = False
+        HeaderPanelRowCount = 1
+        KeyField = 'InvoiceID'
+        SummaryGroups = <>
+        SummarySeparator = ', '
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+        OnEnter = dbgEnter
+        BandFont.Charset = ANSI_CHARSET
+        BandFont.Color = clWindowText
+        BandFont.Height = -15
+        BandFont.Name = 'Times New Roman'
+        BandFont.Style = [fsBold]
+        DataSource = dsDetil
+        Filter.Criteria = {00000000}
+        HeaderFont.Charset = ANSI_CHARSET
+        HeaderFont.Color = clWindowText
+        HeaderFont.Height = -16
+        HeaderFont.Name = 'Times New Roman'
+        HeaderFont.Style = [fsBold]
+        HideFocusRect = True
+        HideSelection = True
+        LookAndFeel = lfFlat
+        OptionsDB = [edgoCanAppend, edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+        OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+        PreviewFont.Charset = DEFAULT_CHARSET
+        PreviewFont.Color = clBlue
+        PreviewFont.Height = -11
+        PreviewFont.Name = 'MS Sans Serif'
+        PreviewFont.Style = []
+        object dbgRIID: TdxDBGridMaskColumn
+          Visible = False
+          Width = 95
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'RIID'
+        end
+        object dbgKonInvPelID: TdxDBGridColumn
+          Caption = 'Nomor Invoice'
+          Width = 126
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'KonInvPelID'
+        end
+        object dbgPOID: TdxDBGridColumn
+          Caption = 'Nomor PO'
+          Width = 152
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'NoPO'
+        end
+        object dbgDO: TdxDBGridColumn
+          Caption = 'No BPB'
+          Visible = False
+          Width = 155
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'NoDO'
+        end
+        object dbgTgl: TdxDBGridColumn
+          Caption = 'Tanggal'
+          Width = 128
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'TaxID'
+        end
+        object dbgInvoice: TdxDBGridColumn
+          Caption = 'Surat Jalan'
+          Visible = False
+          Width = 155
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'InvoiceNo'
+        end
+        object dbgFPS: TdxDBGridColumn
+          Caption = 'No FPS'
+          Width = 228
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'FPS'
+        end
+        object dbgAmount: TdxDBGridColumn
+          Caption = 'Total'
+          Width = 142
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'Amount'
+        end
+        object dbgUpdDate: TdxDBGridDateColumn
+          Visible = False
+          Width = 83
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'UpdDate'
+        end
+        object dbgUpdUser: TdxDBGridMaskColumn
+          Visible = False
+          Width = 95
+          BandIndex = 0
+          RowIndex = 0
+          FieldName = 'UpdUser'
+        end
+      end
+      object GroupBox3: TGroupBox
+        Left = 2
+        Top = 417
+        Width = 807
+        Height = 32
+        Ctl3D = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 2
+        object DBText4: TDBText
+          Left = 561
+          Top = 10
+          Width = 209
+          Height = 17
+          Alignment = taRightJustify
+          DataField = 'Total'
+          DataSource = dsTotal
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label5: TLabel
+          Left = 390
+          Top = 11
+          Width = 182
+          Height = 17
+          Caption = 'TOTAL TANDA TERIMA :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+      object bbSave: TdxButton
+        Tag = 3333
+        Left = 574
+        Top = 105
+        Width = 104
+        Height = 31
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Anchors = [akRight, akBottom]
+        Color = 9609897
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        Version = '1.0.2e'
+        Action = ActSave
+        Caption = 'Simpan (F3)'
+        Colors.FocusedFrom = 16750383
+        Colors.FocusedTo = 16763799
+        Colors.HighlightFrom = clWhite
+        Colors.HighlightTo = clWhite
+        HotTrack = True
+        TabOrder = 3
+      end
+      object bbCancel: TdxButton
+        Tag = 4444
+        Left = 679
+        Top = 105
+        Width = 104
+        Height = 31
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Anchors = [akRight, akBottom]
+        Color = 9609897
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        Version = '1.0.2e'
+        Action = ActCancel
+        Caption = 'Batal (Esc)'
+        Colors.FocusedFrom = 16750383
+        Colors.FocusedTo = 16763799
+        Colors.HighlightFrom = clWhite
+        Colors.HighlightTo = clWhite
+        HotTrack = True
+        TabOrder = 4
+      end
+      object TmbBrg: TdxButton
+        Tag = 1111
+        Left = 5
+        Top = 451
+        Width = 91
+        Height = 29
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Version = '1.0.2e'
+        OnClick = TmbBrgClick
+        Caption = '(+) Nota'
+        TabOrder = 5
+        TabStop = False
+      end
+      object KrgBrg: TdxButton
+        Tag = 2222
+        Left = 97
+        Top = 451
+        Width = 92
+        Height = 29
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Version = '1.0.2e'
+        OnClick = KrgBrgClick
+        Caption = '(-) Nota'
+        TabOrder = 6
+        TabStop = False
+      end
+      object bbSimpanDetil: TdxButton
+        Tag = 4444
+        Left = 190
+        Top = 451
+        Width = 92
+        Height = 29
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Version = '1.0.2e'
+        OnClick = bbSimpanDetilClick
+        Caption = 'Simpan'
+        TabOrder = 7
+        TabStop = False
+      end
+      object BtlBrg: TdxButton
+        Tag = 4444
+        Left = 283
+        Top = 451
+        Width = 92
+        Height = 29
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Version = '1.0.2e'
+        OnClick = BtlBrgClick
+        Caption = 'Batal'
+        TabOrder = 8
+        TabStop = False
+      end
+      object dxButton1: TdxButton
+        Tag = 4444
+        Left = 376
+        Top = 451
+        Width = 169
+        Height = 29
+        About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        Version = '1.0.2e'
+        OnClick = dxButton1Click
+        Caption = 'Cetak (F9)'
+        TabOrder = 9
+        TabStop = False
+      end
+      object txtTransDate: TdxDBDateEdit
+        Left = 121
+        Top = 40
+        Width = 128
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 10
+        OnKeyPress = txtTransDateKeyPress
+        DataField = 'TransDate'
+        DataSource = dsMain
+        StyleController = SCEdit
+      end
+      object txtCustID: TdxDBButtonEdit
+        Left = 121
+        Top = 64
+        Width = 96
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 11
+        OnKeyPress = txtTransDateKeyPress
+        DataField = 'CustID'
+        DataSource = dsMain
+        StyleController = SCEdit
+        Buttons = <
+          item
+            Default = True
+          end>
+        ClickKey = 113
+        OnButtonClick = txtCustIDButtonClick
+        ExistButtons = True
+      end
+      object dxDBEdit2: TdxDBEdit
+        Left = 121
+        Top = 88
+        Width = 400
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 12
+        OnKeyPress = txtTransDateKeyPress
+        AutoSize = False
+        DataField = 'Note'
+        DataSource = dsMain
+        StyleController = SCEdit
+        Height = 49
+      end
+      object GroupBox1: TGroupBox
+        Left = 558
+        Top = 4
+        Width = 249
+        Height = 56
+        Ctl3D = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -15
+        Font.Name = 'Times New Roman'
+        Font.Style = []
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 14
+        object Label10: TLabel
+          Left = 24
+          Top = 12
+          Width = 36
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'User :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText1: TDBText
+          Left = 68
+          Top = 13
+          Width = 132
+          Height = 17
+          DataField = 'UpdUser'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label11: TLabel
+          Left = 15
+          Top = 33
+          Width = 45
+          Height = 17
+          Alignment = taRightJustify
+          Caption = 'Waktu :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBText2: TDBText
+          Left = 68
+          Top = 34
+          Width = 174
+          Height = 17
+          DataField = 'UpdDate'
+          DataSource = dsMain
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1004
+    inherited sbLast: TSpeedButton
+      Left = 967
+    end
+    inherited sbNext: TSpeedButton
+      Left = 940
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 913
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 886
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 860
+    end
+    inherited BvlPeriod: TBevel
+      Left = 614
+    end
+    inherited laPeriod: TLabel
+      Left = 618
+    end
+  end
+  inherited quMain: TADOQuery
+    CursorType = ctStatic
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      
+        'SELECT *,CASE WHEN Flag='#39'Y'#39' THEN '#39'Sudah Terima'#39' ELSE '#39'Belum Teri' +
+        'ma'#39' END as Status'
+      'FROM ARTrReceiveInvHD')
+    Left = 224
+    object quMainRIID: TStringField
+      FieldName = 'RIID'
+    end
+    object quMainTransdate: TDateTimeField
+      FieldName = 'Transdate'
+    end
+    object quMainCustID: TStringField
+      FieldName = 'CustID'
+    end
+    object quMainNote: TStringField
+      FieldName = 'Note'
+      Size = 200
+    end
+    object quMainTTLRI: TBCDField
+      FieldName = 'TTLRI'
+      Precision = 18
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quMainLuNmCustomer: TStringField
+      FieldKind = fkLookup
+      FieldName = 'LuNmCustomer'
+      LookupDataSet = quCustomer
+      LookupKeyFields = 'CustID'
+      LookupResultField = 'CustName'
+      KeyFields = 'CustID'
+      LookupCache = True
+      Size = 100
+      Lookup = True
+    end
+    object quMainFlag: TStringField
+      FieldName = 'Flag'
+      Size = 1
+    end
+    object quMainStatus: TStringField
+      FieldName = 'Status'
+      ReadOnly = True
+      Size = 12
+    end
+  end
+  inherited quDetil: TADOQuery
+    CursorType = ctStatic
+    AfterDelete = quDetilAfterDelete
+    OnNewRecord = quDetilNewRecord
+    Parameters = <
+      item
+        Name = 'RIID'
+        DataType = ftString
+        NumericScale = 255
+        Precision = 255
+        Size = 20
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT * FROM ARTrReceiveInvDT'
+      'WHERE RIID=:RIID'
+      '')
+    object quDetilRIID: TStringField
+      FieldName = 'RIID'
+    end
+    object quDetilKonInvPelID: TStringField
+      FieldName = 'KonInvPelID'
+      Size = 50
+    end
+    object quDetilUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quDetilUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quDetilAmount: TBCDField
+      FieldName = 'Amount'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quDetilTaxID: TStringField
+      FieldName = 'TaxID'
+      Size = 30
+    end
+    object quDetilInvoiceNo: TStringField
+      FieldName = 'InvoiceNo'
+      Size = 50
+    end
+    object quDetilFPS: TStringField
+      FieldName = 'FPS'
+      Size = 50
+    end
+    object quDetilNoPO: TStringField
+      FieldName = 'NoPO'
+      Size = 50
+    end
+    object quDetilNoDO: TStringField
+      FieldName = 'NoDO'
+      Size = 50
+    end
+  end
+  inherited dsDetil: TDataSource
+    OnStateChange = dsDetilStateChange
+  end
+  object quCustomer: TADOQuery
+    Connection = dmMain.dbConn
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT SuppID as CustID,SuppName as CustName'
+      'FROM APMsSupplier'
+      'ORDER BY SuppName')
+    Left = 599
+    Top = 284
+  end
+  object quTotal: TADOQuery
+    Connection = dmMain.dbConn
+    DataSource = dsMain
+    Parameters = <
+      item
+        Name = 'RIID'
+        DataType = ftString
+        NumericScale = 255
+        Precision = 255
+        Size = 20
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT ISNULL(SUM(Amount ),0) as Total '
+      'FROM ARTrReceiveInvDT'
+      'WHERE RIID=:RIID'
+      '')
+    Left = 808
+    Top = 432
+    object quTotalTotal: TBCDField
+      FieldName = 'Total'
+      ReadOnly = True
+      DisplayFormat = '#,0.00'
+      Precision = 32
+    end
+  end
+  object dsTotal: TDataSource
+    DataSet = quTotal
+    Left = 832
+    Top = 432
+  end
+  object quInvoice: TADOQuery
+    Connection = dmMain.dbConn
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      
+        'SELECT KonsinyasiInvID as KonInvPelID,Transdate,ISNULL(TTLKS,0) ' +
+        'as TTLKj,BPBID as KonTransBrgID,POID,'
+      'DATEADD(day,JatuhTempo,Transdate) as JatuhTempo'
+      'FROM APTrKonsinyasiInvHd')
+    Left = 572
+    Top = 284
+  end
+end

@@ -1,0 +1,249 @@
+inherited fmARMsSalesKK: TfmARMsSalesKK
+  Left = 699
+  Top = 341
+  Caption = 'Kontrak Kerja'
+  ClientHeight = 213
+  ClientWidth = 576
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label18: TLabel [0]
+    Left = 345
+    Top = 182
+    Width = 52
+    Height = 21
+    Caption = 'Caption'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Comic Sans MS'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object dbgMenu: TdxDBGrid [2]
+    Left = 0
+    Top = 36
+    Width = 576
+    Height = 139
+    Bands = <
+      item
+      end>
+    DefaultLayout = True
+    KeyField = 'ItemID'
+    SummaryGroups = <>
+    SummarySeparator = ', '
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    BandFont.Charset = DEFAULT_CHARSET
+    BandFont.Color = clWindowText
+    BandFont.Height = -11
+    BandFont.Name = 'MS Sans Serif'
+    BandFont.Style = []
+    DataSource = dsMain
+    Filter.Criteria = {00000000}
+    HeaderFont.Charset = ANSI_CHARSET
+    HeaderFont.Color = clWindowText
+    HeaderFont.Height = -13
+    HeaderFont.Name = 'Comic Sans MS'
+    HeaderFont.Style = []
+    HideFocusRect = True
+    HideSelection = True
+    LookAndFeel = lfUltraFlat
+    OptionsDB = [edgoCanAppend, edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoUseBookmarks]
+    OptionsView = [edgoAutoHeaderPanelHeight, edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+    PreviewFont.Charset = DEFAULT_CHARSET
+    PreviewFont.Color = clBlue
+    PreviewFont.Height = -11
+    PreviewFont.Name = 'MS Sans Serif'
+    PreviewFont.Style = []
+    object dbgMenuSalesID: TdxDBGridColumn
+      Visible = False
+      Width = 85
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'SalesID'
+    end
+    object dbgMenuNo: TdxDBGridColumn
+      Caption = 'PKWT No'
+      Width = 69
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'ItemID'
+    end
+    object dbgMenuNoKontrak: TdxDBGridColumn
+      Caption = 'No Kontrak'
+      Width = 225
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'NoKontrak'
+    end
+    object dbgMenuStartDate: TdxDBGridDateColumn
+      Caption = 'Start Date'
+      Width = 125
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'StartDate'
+    end
+    object dbgMenuEndDate: TdxDBGridDateColumn
+      Caption = 'End Date'
+      Width = 125
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'EndDate'
+    end
+    object dbgMenuUpdDate: TdxDBGridDateColumn
+      Visible = False
+      Width = 154
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'UpdDate'
+    end
+    object dbgMenuUpdUser: TdxDBGridMaskColumn
+      Visible = False
+      Width = 837
+      BandIndex = 0
+      RowIndex = 0
+      FieldName = 'UpdUser'
+    end
+  end
+  object TmbBrg: TdxButton [3]
+    Tag = 1111
+    Left = 0
+    Top = 181
+    Width = 82
+    Height = 26
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+    Version = '1.0.2e'
+    OnClick = TmbBrgClick
+    Caption = '(+) DATA'
+    TabOrder = 2
+    TabStop = False
+  end
+  object KrgBrg: TdxButton [4]
+    Tag = 2222
+    Left = 84
+    Top = 181
+    Width = 83
+    Height = 26
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+    Version = '1.0.2e'
+    OnClick = KrgBrgClick
+    Caption = '(-) DATA'
+    TabOrder = 3
+    TabStop = False
+  end
+  object bbSimpanDetil: TdxButton [5]
+    Tag = 4444
+    Left = 169
+    Top = 181
+    Width = 83
+    Height = 26
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+    Version = '1.0.2e'
+    OnClick = bbSimpanDetilClick
+    Caption = 'SAVE'
+    TabOrder = 4
+    TabStop = False
+  end
+  object BtlBrg: TdxButton [6]
+    Tag = 4444
+    Left = 255
+    Top = 181
+    Width = 83
+    Height = 26
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Comic Sans MS'
+    Font.Style = []
+    ParentFont = False
+    Version = '1.0.2e'
+    OnClick = BtlBrgClick
+    Caption = 'DISCARD'
+    TabOrder = 5
+    TabStop = False
+  end
+  inherited paToolBar: TdxContainer
+    Width = 576
+    inherited sbLast: TSpeedButton
+      Left = 539
+    end
+    inherited sbNext: TSpeedButton
+      Left = 512
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 485
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 458
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 432
+    end
+    inherited BvlPeriod: TBevel
+      Left = 186
+    end
+    inherited laPeriod: TLabel
+      Left = 190
+    end
+  end
+  inherited quMain: TADOQuery
+    CursorType = ctStatic
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'Select * From ARMsSalesKK')
+    object quMainSalesID: TStringField
+      FieldName = 'SalesID'
+    end
+    object quMainItemID: TStringField
+      FieldName = 'ItemID'
+      Size = 50
+    end
+    object quMainNoKontrak: TStringField
+      FieldName = 'NoKontrak'
+      Size = 50
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+      DisplayFormat = 'dd/MM/yyyy'
+      EditMask = 'dd/MM/yyyy'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+      Size = 50
+    end
+    object quMainStartDate: TDateTimeField
+      FieldName = 'StartDate'
+      DisplayFormat = 'dd/MM/yyyy'
+      EditMask = 'dd/MM/yyyy'
+    end
+    object quMainEndDate: TDateTimeField
+      FieldName = 'EndDate'
+      DisplayFormat = 'dd/MM/yyyy'
+      EditMask = 'dd/MM/yyyy'
+    end
+  end
+end

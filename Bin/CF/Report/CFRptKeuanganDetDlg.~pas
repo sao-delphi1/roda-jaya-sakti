@@ -1,0 +1,731 @@
+unit CFRptKeuanganDetDlg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, dxCntner, dxEditor, dxExEdtr, dxEdLib, StdCtrls, DB,
+  ADODB, Buttons, ExtCtrls, dxTL, dxDBCtrl, dxDBGrid, dxCore, dxButton;
+
+type
+  TfmCFRptKeuanganDetDlg = class(TfmRptDlg)
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    dbgList: TdxDBGrid;
+    dbgListRekeningId: TdxDBGridMaskColumn;
+    dbgListRekeningName: TdxDBGridMaskColumn;
+    quMain: TADOQuery;
+    dsMain: TDataSource;
+    quMainBankId: TStringField;
+    quMainBankName: TStringField;
+    rbAll: TRadioButton;
+    rbSelect: TRadioButton;
+    bbCancel: TdxButton;
+    quActGroupRekID: TStringField;
+    quActGroupRekName: TStringField;
+    cbxOuts: TCheckBox;
+    Edit1: TEdit;
+    Button1: TButton;
+    CheckBox1: TCheckBox;
+    Edit2: TEdit;
+    procedure bbPreviewClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure rbSelectClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure dt1KeyPress(Sender: TObject; var Key: Char);
+    procedure dt2KeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmCFRptKeuanganDetDlg: TfmCFRptKeuanganDetDlg;
+
+implementation
+
+uses CFQRRptKeuanganDlg, UnitGeneral, StdLv0, CFQRRptKeuanganDet, UnitDate,
+  Search, MyUnit;
+
+{$R *.dfm}
+
+procedure TfmCFRptKeuanganDetDlg.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  if FormatDateTime('yyyyMMdd',dt1.Date) > FormatDateTime('yyyyMMdd',dt2.Date) then
+  begin
+    pesan('Tanggal dari harus lebih kecil dari tanggal sampai');
+    dt1.SetFocus;
+    Abort;
+  end;
+  if FormatDateTime('yyyyMMdd',dt1.Date) <= '20151231' then
+  begin
+    pesan('Tanggal dari harus lebih besar dari 1 January 2016');
+    dt1.SetFocus;
+    Abort;
+  end;
+  with TfmCFQRRptKeuanganDet.Create(Self) do
+     try
+       qrlTitle.Caption := laTitle.Caption;
+       qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt1.date)+' s/d '+FormatDateTime('dd/MM/yyyy',dt2.date);
+       if cbxOuts.Checked then
+       begin
+         QRSubDetail1.Enabled := True;
+         BndDetail.Color := $00C7C7C7;
+       end else
+       begin
+         QRSubDetail1.Enabled := False;
+         BndDetail.Color := clWhite;
+       end;
+
+     with qu001,SQL do
+     Begin
+       Close;Clear;
+       Add('SELECT DISTINCT K.FgTipe,K.GroupRekID,K.GroupRekName,K.BGDebit,K.BGKredit,K.TGDebit,K.TGKredit,K.EGDebit,K.EGKredit FROM ( '
+          +'SELECT DISTINCT ''A'' as FgTipe,C.GroupRekID,D.GroupRekName, '
+          +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+          +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+
+          +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+          +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+          +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          //tabel pembelian
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+          //
+          {+'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLKs,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+
+          +'SELECT RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+          +'SELECT RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+          +'SELECT RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+
+          +'SELECT B.RekeningID,A.Transdate,CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+          +'WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' '
+          +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' WHEN '
+          +'(SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' END, '
+          +'ISNULL(CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK '
+          +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD '
+          +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK END,0),A.CurrId,A.Rate '
+          +'FROM CFTrKKBBHd A INNER JOIN CFMsBank B ON A.BankID=B.BankID WHERE A.FgPayment=''T'' UNION ALL '
+          +'SELECT RekeningKas,A.Transdate,CASE WHEN A.FlagKKBB=''KM'' THEN ''D'' ELSE ''K'' END, '
+          +'ISNULL(CASE WHEN A.FlagKKBB=''KM'' THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''CK'',''PK'') THEN JumlahK END,0),A.CurrId,A.Rate FROM CFTrKKBBHd A '
+          +'WHERE A.FlagKKBB IN (''KM'',''KK'',''CK'',''PK'') AND A.FgPayment=''T'' UNION ALL '
+          +'SELECT '''+sDGRPb+''',B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+          +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null UNION ALL '
+          +'SELECT A.RekeningID,B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''K'' ELSE ''D'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+          +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null '  }
+
+          +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+          +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) < '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND L.GroupRekID=C.GroupRekID AND K.Jenis=''D''),0) as BGDebit, '
+          +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+          +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+          +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+          +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+          +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          //tabel pembelian
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+
+          +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+          +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) < '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND L.GroupRekID=C.GroupRekID AND K.Jenis=''K''),0) as BGKredit, '
+          +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+          +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+          +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+          +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+          +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          //tabel pembelian
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+          +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+          +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' AND L.GroupRekID=C.GroupRekID AND K.Jenis=''D''),0) as TGDebit, '
+          +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+          +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+          +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+          +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+          +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          //tabel pembelian
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+          +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+          +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' AND L.GroupRekID=C.GroupRekID AND K.Jenis=''K''),0) as TGKredit, '
+          +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+          +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteId FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+          +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+          +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+          +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          //tabel pembelian
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+          +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+          +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND L.GroupRekID=C.GroupRekID AND K.Jenis=''D''),0) as EGDebit, '
+          +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+          +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+          +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+          +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+          +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+          +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+          //tabel pembelian
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+          +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+          +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+          +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+          +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND L.GroupRekID=C.GroupRekID AND K.Jenis=''K''),0) as EGKredit '
+          +'FROM CFMsRekening C INNER JOIN CFMsGroupRek D ON C.GroupRekID=D.GroupRekID '
+          +') as K WHERE K.BGDebit+K.BGKredit+K.TGDebit+K.TGKredit+K.EGDebit+K.EGKredit <> 0 ');
+       if rbSelect.Checked then
+          Add(' AND K.GroupRekID IN '+SelGrid(quAct,dbgList,'GroupRekID'));
+       Add(' ORDER BY K.GroupRekID');
+       Open;
+       //showmessage(sql.text);
+     End;
+
+     With qu002,SQL do
+     Begin
+        Close;Clear;
+        Add('SELECT K.* FROM ( '
+           +'SELECT DISTINCT ''A'' as FgTipe,C.RekeningID,C.RekeningName,C.GroupRekID, '
+           +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+           +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+           +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+           +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+           +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           //tabel pembelian
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+
+           {+'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLKs,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+           +'SELECT RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+           +'SELECT RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+           +'SELECT B.RekeningID,A.Transdate,CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+           +'WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' '
+           +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' WHEN '
+           +'(SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' END, '
+           +'ISNULL(CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK '
+           +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD '
+           +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK END,0),A.CurrId,A.Rate '
+           +'FROM CFTrKKBBHd A INNER JOIN CFMsBank B ON A.BankID=B.BankID WHERE A.FgPayment=''T'' UNION ALL '
+           +'SELECT RekeningKas,A.Transdate,CASE WHEN A.FlagKKBB=''KM'' THEN ''D'' ELSE ''K'' END, '
+           +'ISNULL(CASE WHEN A.FlagKKBB=''KM'' THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''CK'',''PK'') THEN JumlahK END,0),A.CurrId,A.Rate FROM CFTrKKBBHd A '
+           +'WHERE A.FlagKKBB IN (''KM'',''KK'',''CK'',''PK'') AND A.FgPayment=''T'' UNION ALL '
+           +'SELECT '''+sdgrpb+''',B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+           +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null UNION ALL '
+           +'SELECT A.RekeningID,B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''K'' ELSE ''D'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+           +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null '   }
+
+           +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+           +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) < '''+FormatDateTime('yyyymmdd',dt1.date)+''' AND L.GroupRekID=C.GroupRekID AND K.RekeningID=C.RekeningID AND K.Jenis=''D''),0) as BDebit, '
+           +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+           +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+           +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+           +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+           +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           //tabel pembelian
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+           +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+           +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) < '''+FormatDateTime('yyyymmdd',dt1.date)+''' AND L.GroupRekID=C.GroupRekID AND K.RekeningID=C.RekeningID AND K.Jenis=''K''),0) as BKredit, '
+           +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+           +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+           +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+           +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+           +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           //tabel pembelian
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+           +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+           +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyymmdd',dt1.date)+''' AND '''+FormatDateTime('yyyymmdd',dt2.date)+''' '
+           +'AND L.GroupRekID=C.GroupRekID AND K.RekeningID=C.RekeningID AND K.Jenis=''D''),0) as TDebit, '
+           +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+           +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteiD FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+           +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+           +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+           +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           //tabel pembelian
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+           +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+           +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyymmdd',dt1.date)+''' AND '''+FormatDateTime('yyyymmdd',dt2.date)+''' '
+           +'AND L.GroupRekID=C.GroupRekID AND K.RekeningID=C.RekeningID AND K.Jenis=''K''),0) as TKredit, '
+           +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+           +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+           +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+           +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+           +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           //tabel pembelian
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+           +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+           +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyymmdd',dt2.date)+''' AND L.GroupRekID=C.GroupRekID AND K.RekeningID=C.RekeningID AND K.Jenis=''D''),0) as EDebit, '
+           +'ISNULL((SELECT SUM(K.Amount) FROM ( '
+           +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrId,B.Rate,A.SiteId FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+           +'SELECT C.RekeningID,B.Transdate,CASE WHEN A.Jenis=''K'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate,A.SiteID FROM CFTrKKBBDt A '
+           +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' '
+           +'AND B.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'',''KK'',''BK'',''APK'',''APB'',''APC'') '
+           +'INNER JOIN CFMsBank C ON B.BankID=C.BankID UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate,SiteID FROM ARTrKonInvPelHd UNION ALL '
+           //tabel pembelian
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+           +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+           +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate,SiteID FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+           +') as K INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID '
+           +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyymmdd',dt2.date)+''' AND L.GroupRekID=C.GroupRekID AND K.RekeningID=C.RekeningID AND K.Jenis=''K''),0) as EKredit '
+           +'FROM CFMsRekening C) as K '
+           +'WHERE K.GroupRekID=:GroupRekID AND K.BDebit+K.BKredit+TDebit+TKredit+EDebit+EKredit <> 0 ORDER BY K.RekeningID ');
+        Parameters.ParamByName('GroupRekID').DataType := ftString;
+        //showmessage(sql.Text);
+        Open;
+     End;
+
+     if Sender=bbPreview then
+          MyReport.Previewmodal
+       else
+          MyReport.Print;
+     finally
+        free;
+     end;
+end;
+
+procedure TfmCFRptKeuanganDetDlg.FormShow(Sender: TObject);
+begin
+  inherited;
+  dt1.Date := EncodeDate(GetYear(Date),GetMonth(Date),1);
+  dt2.Date := date;
+  quAct.Open;
+end;
+
+procedure TfmCFRptKeuanganDetDlg.rbSelectClick(Sender: TObject);
+begin
+  inherited;
+    if Sender=rbAll then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+
+end;
+
+procedure TfmCFRptKeuanganDetDlg.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Group Rekening';
+       SQLString := 'SELECT GroupRekName as Group_Rekening,GroupRekID as Kode_Group FROM CFMsGroupRek ORDER BY GroupRekID';
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('GroupRekID',Res[1],[]);
+       end;
+  finally
+    free;
+  end;
+end;
+
+procedure TfmCFRptKeuanganDetDlg.dt1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then dt2.SetFocus;
+end;
+
+procedure TfmCFRptKeuanganDetDlg.dt2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then bbPreview.SetFocus;
+end;
+
+procedure TfmCFRptKeuanganDetDlg.Button1Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Cari Site';
+     SQLString := 'select * from ( '
+                 //+'select '''' as SiteID,''ALL'' as SiteName UNION ALL '
+                 +'select SiteID,SiteName from INMsSites ) as K order by K.SiteID ';
+     if ShowModal = MrOK then
+     begin
+         Edit1.Text := Res[0];
+         Edit2.Text := Res[1];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+end.

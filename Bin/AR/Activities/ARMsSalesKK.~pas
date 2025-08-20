@@ -1,0 +1,148 @@
+unit ARMsSalesKK;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv2, dxExEdtr, dxDBCtrl, dxDBGrid, dxDBTLCl, dxGrClms, dxTL,
+  dxCntner, ActnList, DB, ADODB, StdCtrls, ExtCtrls, Buttons, dxCore,
+  dxContainer, dxButton;
+
+type
+  TfmARMsSalesKK = class(TfmStdLv2)
+    dbgMenu: TdxDBGrid;
+    dbgMenuSalesID: TdxDBGridColumn;
+    dbgMenuNo: TdxDBGridColumn;
+    dbgMenuNoKontrak: TdxDBGridColumn;
+    dbgMenuUpdDate: TdxDBGridDateColumn;
+    dbgMenuUpdUser: TdxDBGridMaskColumn;
+    dbgMenuStartDate: TdxDBGridDateColumn;
+    dbgMenuEndDate: TdxDBGridDateColumn;
+    TmbBrg: TdxButton;
+    KrgBrg: TdxButton;
+    bbSimpanDetil: TdxButton;
+    BtlBrg: TdxButton;
+    quMainSalesID: TStringField;
+    quMainItemID: TStringField;
+    quMainNoKontrak: TStringField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainStartDate: TDateTimeField;
+    quMainEndDate: TDateTimeField;
+    Label18: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure TmbBrgClick(Sender: TObject);
+    procedure KrgBrgClick(Sender: TObject);
+    procedure bbSimpanDetilClick(Sender: TObject);
+    procedure BtlBrgClick(Sender: TObject);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    SalesID : String;
+  end;
+
+var
+  fmARMsSalesKK: TfmARMsSalesKK;
+
+implementation
+
+uses StdLv1, UnitGeneral, MyUnit, StrUtils, UnitDate, ConMain;
+
+{$R *.dfm}
+
+procedure TfmARMsSalesKK.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := False;
+end;
+
+procedure TfmARMsSalesKK.TmbBrgClick(Sender: TObject);
+begin
+  inherited;
+  quMain.Append;
+end;
+
+procedure TfmARMsSalesKK.KrgBrgClick(Sender: TObject);
+begin
+  inherited;
+  if quMain.IsEmpty then Abort;
+  if (dsMain <> nil) and (dsMain.DataSet <> nil) and
+     (MessageDlg('Hapus Barang ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+        dsMain.DataSet.Delete;
+end;
+
+procedure TfmARMsSalesKK.bbSimpanDetilClick(Sender: TObject);
+begin
+  inherited;
+  if Self.quMain.State = dsInsert then
+  begin
+   Self.quMain.Edit;
+   Self.quMain.Post;
+   Self.quMain.Requery();
+  end;
+  if Self.quMain.State = dsEdit then
+  begin
+   quMain.Post;
+  end;
+end;
+
+procedure TfmARMsSalesKK.BtlBrgClick(Sender: TObject);
+begin
+  inherited;
+  quMain.Cancel;
+end;
+
+procedure TfmARMsSalesKK.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dbgMenuNo,TRUE);
+end;
+
+procedure TfmARMsSalesKK.quMainNewRecord(DataSet: TDataSet);
+Var Result : String;
+begin
+  inherited;
+  with quAct, sql do
+  begin
+    Close;Clear;
+    Add('SELECT ItemID FROM ARMsSalesKK WHERE SalesID='''+SalesID+''' ORDER BY ItemID DESC');
+    Open;
+    if IsEmpty then
+       Result := '01'
+    else
+       Result := FormatFloat('00',StrToInt(RightStr(Fields[0].AsString,2))+1);
+  end;
+  quMainItemID.AsString:=Result;
+
+  quMainStartDate.AsDateTime := Date;
+  quMainEndDate.AsDateTime := EncodeDate(GetYear(Date)+3,GetMonth(Date),1);
+end;
+
+procedure TfmARMsSalesKK.quMainBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+  quMainSalesID.AsString := SalesID;
+  quMainUpdDate.AsDateTime := GetServerDateTime;
+  quMainUpdUser.AsString := dmMain.UserId;
+end;
+
+procedure TfmARMsSalesKK.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+  with quMain,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT * FROM ARMsSalesKK WHERE SalesID='''+SalesID+''' ');
+    Open;
+  end;
+  Label18.Caption := SalesID;
+
+end;
+
+end.

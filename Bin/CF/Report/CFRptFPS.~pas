@@ -1,0 +1,165 @@
+unit CFRptFPS;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxPageControl, dxEdLib, dxButton, dxCore, dxContainer, Buttons,
+  dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmCFRptFPS = class(TfmStdLv31)
+    quMainTransdate: TDateTimeField;
+    quMainKonsinyasiInvID: TStringField;
+    quMainSuppName: TStringField;
+    quMainSubTotal: TBCDField;
+    quMainDisc: TBCDField;
+    quMainPPN: TBCDField;
+    quMainTTLKS: TBCDField;
+    quMainFPS: TStringField;
+    dxDBGrid1: TdxDBGrid;
+    dxDBGrid1Column1: TdxDBGridColumn;
+    dxDBGrid1Column2: TdxDBGridColumn;
+    dxDBGrid1Column3: TdxDBGridColumn;
+    dxDBGrid1Column4: TdxDBGridColumn;
+    dxDBGrid1Column5: TdxDBGridColumn;
+    dxDBGrid1Column6: TdxDBGridColumn;
+    dxDBGrid1Column7: TdxDBGridColumn;
+    dxDBGrid1Column8: TdxDBGridColumn;
+    RadioGroup1: TRadioGroup;
+    Button1: TButton;
+    RadioGroup2: TRadioGroup;
+    quMainPOID: TStringField;
+    dxDBGrid1Column9: TdxDBGridColumn;
+    quMaintglFPS: TDateTimeField;
+    dxDBGrid1Column10: TdxDBGridColumn;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure dxDBGrid1DblClick(Sender: TObject);
+    procedure bbFindClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmCFRptFPS: TfmCFRptFPS;
+
+implementation
+
+uses Search, MyUnit, UnitGeneral, InputNo;
+{$R *.dfm}
+
+procedure TfmCFRptFPS.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := False;
+end;
+
+procedure TfmCFRptFPS.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+  RadioGroup1.Top := 8;
+  RadioGroup2.Top := 104;
+  Button1Click(Button1);
+end;
+
+procedure TfmCFRptFPS.Button1Click(Sender: TObject);
+begin
+  inherited;
+  with quMain,SQL do
+  begin
+    Close;Clear;
+    Add(' select * from ( '
+       +' select A.Transdate,A.KonsinyasiInvID,C.POID,B.SuppName,C.SubTotalM+C.SubTotalU as Subtotal,C.DiscAmount as Disc,C.PPN,C.TTLKJ as TTLKS, '
+       +' ISNULL(C.FPS,'''') as FPS,C.tglFPS from APTrKonsinyasiInvSub C '
+       +' inner join APTrKonsinyasiInvHd A on A.KonsinyasiInvID=C.KonsinyasiInvID '
+       +' inner join APMsSupplier B on A.SuppID=B.SuppID '
+       +' WHere A.PPN<>0 AND A.FgOto<>''X'' '
+       +' UNION ALL '
+       +' select A.TransDate,A.PurchaseID,'''',B.SuppName,A.StPb,A.DiscAmount,A.PPN,A.TTLPb,ISNULL(A.POID,''''),A.tglFPS from APTrPurchaseHd A '
+       +' inner join APMsSupplier B on A.SuppID=B.SuppID '
+       +' where A.PPN<>0 AND A.FgPajak=''Y'' AND A.FgOto<>''X'' '
+       +' ) as K ');
+    if RadioGroup1.ItemIndex=0 then
+    Add(' WHERE ISNULL(K.FPS,'''')='''' or ISNULL(K.tglFPS,'''')='''' ');
+    if RadioGroup1.ItemIndex=1 then
+    Add(' WHERE ISNULL(K.FPS,'''')<>'''' AND ISNULL(K.tglFPS,'''')<>'''' ');
+    if RadioGroup2.ItemIndex=0 then
+    Add(' ORDER BY K.TransDate ')
+    else
+    Add(' ORDER BY K.TransDate DESC ');
+    Open;
+  end;
+end;
+
+procedure TfmCFRptFPS.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dxDBGrid1Column1,TRUE);
+  SetReadOnly(dxDBGrid1Column2,TRUE);
+  SetReadOnly(dxDBGrid1Column3,TRUE);
+  SetReadOnly(dxDBGrid1Column4,TRUE);
+  SetReadOnly(dxDBGrid1Column5,TRUE);
+  SetReadOnly(dxDBGrid1Column6,TRUE);
+  SetReadOnly(dxDBGrid1Column7,TRUE);
+  SetReadOnly(dxDBGrid1Column8,TRUE);
+  SetReadOnly(dxDBGrid1Column9,TRUE);
+  SetReadOnly(dxDBGrid1Column10,TRUE);
+end;
+
+procedure TfmCFRptFPS.dxDBGrid1DblClick(Sender: TObject);
+begin
+  inherited;
+  with TfmInputNo.Create (Application) do
+  try
+    tgldari := quMainTransdate.ASdatetime;
+    Label1.Caption:=quMainKonsinyasiInvID.AsString;
+    Label2.Caption:=quMainPOID.AsString;
+    ShowModal;
+  finally
+    Free;
+  end;
+  Button1Click(Button1);
+end;
+
+procedure TfmCFRptFPS.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'CARI NOMOR FPP';
+     SQLString := ' select K.KonsinyasiInvID as FPP,K.POID as Nomor_PO,CONVERT(VARCHAR(10),K.Transdate,103) as Tanggal,K.SuppName as Supplier,ISNULL(K.FPS,''Belum Ada Nomor Faktur'') as Faktur from ( '
+                 +' select A.KonsinyasiInvID,A.Transdate,B.SuppName,C.FPS,C.POID,C.tglFPS from APTrKonsinyasiInvSub C '
+                 +' inner join aptrkonsinyasiinvhd A on A.KonsinyasiInvId=C.KonsinyasiInvId '
+                 +' inner join APMsSupplier B on A.SuppID=B.SuppID '
+                 +' WHere A.PPN<>0 AND A.FgOto<>''X'' '
+                 +' UNION ALL '
+                 +' select A.PurchaseID,A.Transdate,B.SuppName,A.POID,'''',A.tglFPS from APTrPurchaseHd A '
+                 +' inner join APMsSupplier B on A.SuppID=B.SuppID '
+                 +' where A.PPN<>0 AND A.FgPajak=''Y'' AND A.FGOto<>''X'' '
+                 +' ) as K ';
+     if RadioGroup1.ItemIndex=0 then
+     SQLString := SQLString + ' WHERE ISNULL(K.FPS,'''')='''' or ISNULL(K.tglFPS,'''')='''' ';
+     if RadioGroup1.ItemIndex=1 then
+     SQLString := SQLString + ' WHERE ISNULL(K.FPS,'''')<>'''' AND ISNULL(K.tglFPS,'''')<>'''' ';
+     if RadioGroup2.ItemIndex=0 then
+     SQLString := SQLString + ' ORDER BY K.TransDate '
+     else
+     SQLString := SQLString + ' ORDER BY K.TransDate DESC ';
+
+     if ShowModal = MrOK then
+     begin
+       quMain.Locate('KonsinyasiInvId',Res[0],[]);
+     end;
+  finally
+     free;
+  end;
+end;
+
+end.

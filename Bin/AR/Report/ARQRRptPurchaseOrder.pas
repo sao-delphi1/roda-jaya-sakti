@@ -1,0 +1,378 @@
+unit ARQRRptPurchaseOrder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv0, DB, ADODB, StdCtrls, QRCtrls, QuickRpt, ExtCtrls, jpeg;
+
+type
+  TfmARQRRptPurchaseOrder = class(TfmRptLv0)
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    qu002: TADOQuery;
+    QRDBText6: TQRDBText;
+    QRSubDetail1: TQRSubDetail;
+    QRBand1: TQRBand;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRShape2: TQRShape;
+    qlbNote: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel13: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel16: TQRLabel;
+    quStock: TADOQuery;
+    QRExpr1: TQRExpr;
+    quCalc: TADOQuery;
+    QRLabel40: TQRLabel;
+    QRDBText19: TQRDBText;
+    QRLabel41: TQRLabel;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRLabel46: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRLabel47: TQRLabel;
+    QRLabel48: TQRLabel;
+    QRLabel49: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel11: TQRLabel;
+    qlbTerbilang: TQRLabel;
+    qlbline1: TQRLabel;
+    qlbline2: TQRLabel;
+    qlbline3: TQRLabel;
+    qlbline4: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel35: TQRLabel;
+    QRLabel37: TQRLabel;
+    qlb6: TQRLabel;
+    qlb4: TQRLabel;
+    qlb3: TQRLabel;
+    qlb2: TQRLabel;
+    qlb1: TQRLabel;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    quAct: TADOQuery;
+    QRLabel26: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel50: TQRLabel;
+    QRLabel51: TQRLabel;
+    QRLabel53: TQRLabel;
+    QRLabel54: TQRLabel;
+    QRLabel55: TQRLabel;
+    QRLabel56: TQRLabel;
+    QRLabel57: TQRLabel;
+    QRLabel58: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel61: TQRLabel;
+    QRLabel62: TQRLabel;
+    QRLabel63: TQRLabel;
+    QRLabel64: TQRLabel;
+    QRLabel65: TQRLabel;
+    QRLabel66: TQRLabel;
+    QRLabel67: TQRLabel;
+    QRLabel68: TQRLabel;
+    QRLabel69: TQRLabel;
+    QRLabel59: TQRLabel;
+    QRLabel70: TQRLabel;
+    QRLabel71: TQRLabel;
+    QRLabel72: TQRLabel;
+    QRLabel73: TQRLabel;
+    QRLabel74: TQRLabel;
+    QRLabel75: TQRLabel;
+    QRLabel79: TQRLabel;
+    QRLabel77: TQRLabel;
+    QRLabel78: TQRLabel;
+    QRLabel80: TQRLabel;
+    QRLabel81: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRDBText16: TQRDBText;
+    ds002: TDataSource;
+    qu003: TADOQuery;
+    QRSubDetail2: TQRSubDetail;
+    QRDBText17: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRLabel18: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRDBText24: TQRDBText;
+    QRDBText26: TQRDBText;
+    QRDBText27: TQRDBText;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    ChildBand2: TQRChildBand;
+    QRDBText3: TQRDBText;
+    QRLabel14: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRLabel10: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRLabel43: TQRLabel;
+    QRLabel52: TQRLabel;
+    QRLabel60: TQRLabel;
+    QRLabel76: TQRLabel;
+    QRLabel82: TQRLabel;
+    QRLabel83: TQRLabel;
+    QRLabel84: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBImage1: TQRDBImage;
+    procedure QRDBText10Print(sender: TObject; var Value: String);
+    procedure QRLabel5Print(sender: TObject; var Value: String);
+    procedure QRLabel8Print(sender: TObject; var Value: String);
+    procedure QRLabel11Print(sender: TObject; var Value: String);
+    procedure BndDetailBeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel62Print(sender: TObject; var Value: String);
+    procedure QRLabel10Print(sender: TObject; var Value: String);
+    procedure QRLabel12Print(sender: TObject; var Value: String);
+    procedure QRBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel75Print(sender: TObject; var Value: String);
+    procedure QRLabel81Print(sender: TObject; var Value: String);
+    procedure QRLabel49Print(sender: TObject; var Value: String);
+    procedure QRLabel77Print(sender: TObject; var Value: String);
+    procedure QRLabel71Print(sender: TObject; var Value: String);
+    procedure QRLabel78Print(sender: TObject; var Value: String);
+    procedure QRLabel73Print(sender: TObject; var Value: String);
+    procedure QRLabel80Print(sender: TObject; var Value: String);
+    procedure QRLabel24Print(sender: TObject; var Value: String);
+    procedure QRSubDetail2AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRLabel18Print(sender: TObject; var Value: String);
+    procedure QRDBText30Print(sender: TObject; var Value: String);
+    procedure QRDBText29Print(sender: TObject; var Value: String);
+    procedure QRLabel51Print(sender: TObject; var Value: String);
+    procedure QRExpr1Print(sender: TObject; var Value: String);
+    procedure ChildBand2BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    FormatAngka,Status : Boolean;
+    Urut : integer;
+  end;
+
+var
+  fmARQRRptPurchaseOrder: TfmARQRRptPurchaseOrder;
+
+implementation
+
+uses MyUnit;
+
+{$R *.dfm}
+
+procedure TfmARQRRptPurchaseOrder.QRDBText10Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptqtykurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel5Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel8Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel11Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.BndDetailBeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+  inherited;
+  Urut := 1;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel62Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel10Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := qu001.FieldByname('WareHouseName').AsString;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel12Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := qu001.FieldByname('AlamatPT').AsString;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  inherited;
+ { if qu001.FieldByname('FgOtoJkt').AsString = 'T' then
+  begin
+    QRLabel77.Enabled := False;
+    QRLabel78.Enabled := False;
+  end else
+  begin
+    QRLabel77.Enabled := True;
+    QRLabel78.Enabled := True;
+  end;  }
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel75Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := po4;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel81Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := jabpo4;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel49Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := po1;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel77Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := jabpo1;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel71Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+//  Value := po2;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel78Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  //Value := jabpo2;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel73Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := po3;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel80Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := jabpo3;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel24Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptQtyKurung2(qu003.FieldByname('Jumlah').AsString);
+  if qu003.FieldByname('DiscItem').AsCurrency <> 0 then
+  Value := Value + '(+' + FormatRptKurung(qu003.FieldByname('DiscItem').AsString) + ')';
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRSubDetail2AfterPrint(
+  Sender: TQRCustomBand; BandPrinted: Boolean);
+begin
+  inherited;
+  Urut := Urut + 1;
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel18Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptUrut(IntToStr(Urut));
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRDBText30Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  if FormatAngka then
+    Value := FormatRptqtykurung(Value)
+  else
+    Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRDBText29Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  if FormatAngka then
+    Value := FormatRptqtykurung(Value)
+  else
+    Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRLabel51Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.QRExpr1Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptPurchaseOrder.ChildBand2BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+  inherited;
+  if (TRIM(qu003.FieldByName('Keterangan').ASString)='') then
+  PrintBand := False;
+end;
+
+end.

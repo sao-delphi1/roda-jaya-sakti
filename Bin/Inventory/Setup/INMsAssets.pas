@@ -1,0 +1,349 @@
+unit INMsAssets;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxPageControl, dxEdLib, dxButton, dxCore, dxContainer, Buttons,
+  dxEditor, dxDBELib, DBCtrls, dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmINMsAssets = class(TfmStdLv31)
+    quMainAssetsID: TStringField;
+    quMainAssetsName: TStringField;
+    quMaintglbeli: TDateTimeField;
+    quMaintgljual: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainUpdDate: TDateTimeField;
+    quMainAssetsType: TStringField;
+    quMainFgSusut: TStringField;
+    quMainAssetsValue: TBCDField;
+    quMainFgAssets: TStringField;
+    quMainNote: TStringField;
+    quMainRekeningD: TStringField;
+    quMainRekeningK: TStringField;
+    pcMain: TdxPageControl;
+    dxTabSheet1: TdxTabSheet;
+    dbgList: TdxDBGrid;
+    ts02: TdxTabSheet;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label9: TLabel;
+    Label23: TLabel;
+    Label31: TLabel;
+    Label35: TLabel;
+    dxDBImageEdit2: TdxDBImageEdit;
+    GroupBox2: TGroupBox;
+    Label21: TLabel;
+    DBText8: TDBText;
+    Label22: TLabel;
+    DBText9: TDBText;
+    dxDBEdit1: TdxDBEdit;
+    dxDBEdit9: TdxDBEdit;
+    dxDBEdit7: TdxDBEdit;
+    dxDBEdit10: TdxDBEdit;
+    dxDBDateEdit1: TdxDBDateEdit;
+    dxDBDateEdit2: TdxDBDateEdit;
+    Label3: TLabel;
+    Label5: TLabel;
+    quMainFgActive: TStringField;
+    quMainTerm: TIntegerField;
+    dxDBImageEdit3: TdxDBImageEdit;
+    dxDBImageEdit4: TdxDBImageEdit;
+    dxDBImageEdit5: TdxDBImageEdit;
+    dxDBButtonEdit1: TdxDBButtonEdit;
+    dxDBButtonEdit2: TdxDBButtonEdit;
+    Label6: TLabel;
+    Label4: TLabel;
+    Label10: TLabel;
+    DBText5: TDBText;
+    DBText1: TDBText;
+    quMainLType: TStringField;
+    quMainLDebit: TStringField;
+    quMainLKredit: TStringField;
+    dbgListColumn1: TdxDBGridColumn;
+    dbgListColumn2: TdxDBGridColumn;
+    dbgListColumn3: TdxDBGridColumn;
+    dbgListColumn4: TdxDBGridColumn;
+    dbgListColumn5: TdxDBGridColumn;
+    Label11: TLabel;
+    dxDBButtonEdit3: TdxDBButtonEdit;
+    Button1: TButton;
+    quAct1: TADOQuery;
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure quMainCalcFields(DataSet: TDataSet);
+    procedure dxDBButtonEdit2ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBButtonEdit1ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBButtonEdit3ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxButton4Click(Sender: TObject);
+    procedure bbFindClick(Sender: TObject);
+    procedure quMainBeforeDelete(DataSet: TDataSet);
+    procedure dxDBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmINMsAssets: TfmINMsAssets;
+
+implementation
+
+uses StdLv2, ConMain, MyUnit,Search,UnitGeneral,UnitDate, StdLv0;
+
+{$R *.dfm}
+
+procedure TfmINMsAssets.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+end;
+
+procedure TfmINMsAssets.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := False;
+end;
+
+procedure TfmINMsAssets.quMainBeforePost(DataSet: TDataSet);
+var ST : string;
+begin
+  inherited;
+  If Trim(quMainAssetsName.Value)='' then
+  begin
+    MsgInfo('Nama Assets tidak boleh kosong');
+    quMainAssetsName.FocusControl;
+    Abort;
+  end;
+
+  If Trim(quMaintglbeli.AsString)='' then
+  begin
+    MsgInfo('Tanggal Beli tidak boleh kosong');
+    quMaintglbeli.FocusControl;
+    Abort;
+  end;
+
+  if quMain.State=dsInsert then
+  Begin
+    ST := PT + '/' + quMainAssetsType.AsString + '-';
+    quMainAssetsID.AsString  := ST + FormatFloat('000', RunNumberGL(quAct, 'INMsAssets', 'AssetsID', ST, '0') + 1);
+  End;
+
+  quMainUpdDate.AsDateTime := GetServerDateTime;
+  quMainUpdUser.AsString := dmMain.UserId;
+end;
+
+procedure TfmINMsAssets.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dxDBEdit1, TRUE);
+  SetReadOnly(dxDBEdit7, quMain.State<>dsInsert);
+  SetReadOnly(dxDBButtonEdit2, quMain.State<>dsInsert);
+  SetReadOnly(dxDBButtonEdit3, quMain.State<>dsInsert);
+  SetReadOnly(dxDBButtonEdit1, quMain.State<>dsInsert);
+end;
+
+procedure TfmINMsAssets.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMaintglbeli.AsDateTime := Date;
+  quMainFgActive.AsString := 'Y';
+  quMainAssetsType.AsString := '1';
+  quMainAssetsValue.AsCurrency := 0;
+  quMainFgSusut.ASString := 'Y';
+  quMainTerm.AsInteger := 4;
+  quMainAssetsName.FocusControl;
+end;
+
+procedure TfmINMsAssets.quMainCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+  if (quMainFgActive.AsString = 'T') or (quMainFgActive.AsString = 'S') then
+  begin
+    Label11.Visible := TRUE;
+    dxDBDateEdit2.Visible := TRUE;
+    with quAct1,Sql do
+    begin
+      Close;Clear;
+      Add('Select VoucherNo From CFTrKKBBHD Where VoucherNo='''+quMainAssetsID.AsString+''' ');
+      Open;
+    End;
+    if (quAct1.RecordCount > 0) Then
+    Button1.Visible := TRUE
+    else
+    Button1.Visible := False;
+  end else
+  begin
+    Label11.Visible := FALSE;
+    dxDBDateEdit2.Visible := FALSE;
+    Button1.Visible := False;
+  End;
+
+  with quAct,Sql do
+  begin
+    Close;Clear;
+    Add('Select RekeningName From CFMsRekening Where RekeningID='''+quMainRekeningD.AsString+''' ');
+    Open;
+  End;
+  quMainLDebit.AsString := quAct.FieldByname('RekeningName').AsString;
+
+  with quAct,Sql do
+  begin
+    Close;Clear;
+    Add('Select RekeningName From CFMsRekening Where RekeningID='''+quMainRekeningK.AsString+''' ');
+    Open;
+  End;
+  quMainLKredit.AsString := quAct.FieldByname('RekeningName').AsString;
+
+
+
+end;
+
+procedure TfmINMsAssets.dxDBButtonEdit2ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Depreciation Method';
+       SQLString := 'SELECT K.Golongan,K.Metode,K.Jangka_Waktu FROM ( '
+                   +'SELECT 1 as Golongan,''GARIS LURUS'' as metode,4 as Jangka_Waktu UNION ALL '
+                   +'SELECT 2 as Golongan,''GARIS LURUS'' as metode,8 as Jangka_Waktu UNION ALL '
+                   +'SELECT 3 as Golongan,''GARIS LURUS'' as metode,16 as Jangka_Waktu UNION ALL '
+                   +'SELECT 4 as Golongan,''GARIS LURUS'' as metode,20 as Jangka_Waktu ) as K '
+                   +'ORDER BY K.Golongan ';
+       if ShowModal = MrOK then
+       begin
+           if quMain.State = dsBrowse then quMain.Edit;
+            quMainTerm.Value := StrToInt(Res[2]);
+       end;
+    finally
+       Free;
+    end;
+end;
+
+procedure TfmINMsAssets.dxDBButtonEdit1ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Master Rekening';
+     SQLString := 'SELECT RekeningName,RekeningID FROM CFMsRekening Where FgActive=''Y'' Order By RekeningName ';
+     if ShowModal = MrOK then
+     begin
+         if quMain.State = dsBrowse then quMain.Edit;
+          quMainRekeningK.Value := Res[1];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+procedure TfmINMsAssets.dxDBButtonEdit3ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Master Rekening';
+     SQLString := 'SELECT RekeningName,RekeningID FROM CFMsRekening Where FgActive=''Y'' Order By RekeningName ';
+     if ShowModal = MrOK then
+     begin
+         if quMain.State = dsBrowse then quMain.Edit;
+          quMainRekeningD.Value := Res[1];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+procedure TfmINMsAssets.dxButton4Click(Sender: TObject);
+var urut,total: currency;
+begin
+  inherited;
+  total := quMainTerm.AsCurrency*12;
+  urut := 1;
+  While not (quDetil.Eof) or (urut<=total) do
+  Begin
+    with quAct, SQL do
+    begin
+      Close;Clear;
+      Add('Insert into InMsAssets (AssetsId,ItemID,Amount,Total,Sisa) values '
+         +'('''+quMainAssetsID.AsString+''','''+CurrtoStr(urut)+''','+CurrtoStr(quMainAssetsValue.AsCurrency/Total)+','+CurrtoStr(quMainAssetsValue.AsCurrency/Total*urut)+','+currtostr(quMainAssetsValue.AsCurrency)+'-('+currtostr(quMainAssetsValue.AsCurrency/Total*urut)+'))');
+      ExecSQL;
+    End;
+  End;
+end;
+
+procedure TfmINMsAssets.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Master Assets';
+       SQLString := 'SELECT AssetsName,AssetsID,CONVERT(varchar(10),tglBeli,103) as Tgl_Beli,AssetsValue,RekeningD,RekeningK '
+                   +'FROM INMsAssets ';
+       if ShowModal = MrOK then
+       begin
+         quMain.Locate('AssetsID',Res[1],[]);
+       end;
+    finally
+       Free;
+    end;
+end;
+
+procedure TfmINMsAssets.quMainBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+  Close;Clear;
+    Add('select top 1 assetsid from intrassets where assetsid='''+quMainAssetsID.AsString+''' ');
+  Open;
+  end;
+  if quact.RecordCount <> 0 then
+  begin
+    MsgInfo('Sudah Ada Transaksi Penyusutan, hapus terlebih dahulu');
+    Abort;
+  end;
+end;
+
+procedure TfmINMsAssets.dxDBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key=#13 then PostMessage(Self.Handle,WM_NEXTDLGCTL,0,0)
+end;
+
+procedure TfmINMsAssets.Button1Click(Sender: TObject);
+begin
+  inherited;
+  if (MessageDlg('Hapus Jurnal diatas tanggal disposal/sold ? transaksi tidak bisa dibatalkan ', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+  begin
+    with quAct, SQL do
+    begin
+      Close;Clear;
+      Add('delete from CFTRKKBBHD Where VoucherNo='''+quMainAssetsID.AsString+''' '
+         +'AND CONVERT(Varchar(8),Transdate,112) >= '''+FormatDatetime('yyyymmdd',quMaintgljual.AsDateTime)+''' ');
+      ExecSQL;
+    End;
+    ShowMessage('Jurnal Sudah Dihapus');
+  end;
+end;
+
+end.
+

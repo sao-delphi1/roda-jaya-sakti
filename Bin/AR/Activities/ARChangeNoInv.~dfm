@@ -1,0 +1,5 @@
+inherited fmStdLv5: TfmStdLv5
+  Caption = 'fmStdLv5'
+  PixelsPerInch = 96
+  TextHeight = 13
+end

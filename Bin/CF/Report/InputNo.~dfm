@@ -1,0 +1,70 @@
+object fmInputNo: TfmInputNo
+  Left = 773
+  Top = 403
+  Width = 297
+  Height = 113
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
+  Caption = 'Masukkan No Faktur'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 400
+    Top = 32
+    Width = 32
+    Height = 13
+    Caption = 'Label1'
+  end
+  object Label2: TLabel
+    Left = 400
+    Top = 64
+    Width = 32
+    Height = 13
+    Caption = 'Label1'
+  end
+  object Edit1: TEdit
+    Left = 0
+    Top = 0
+    Width = 281
+    Height = 26
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 0
+    Top = 24
+    Width = 281
+    Height = 25
+    Caption = 'OK'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 0
+    Top = 48
+    Width = 281
+    Height = 25
+    Caption = 'BATAL'
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+  object quAct: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 312
+    Top = 4
+  end
+end

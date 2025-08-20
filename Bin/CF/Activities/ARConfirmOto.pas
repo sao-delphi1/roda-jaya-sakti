@@ -1,0 +1,89 @@
+unit ARConfirmOto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv0, dxExEdtr, dxCntner, DB, ADODB, StdCtrls, dxCore,
+  dxButton;
+
+type
+  TfmARConfirmOto = class(TfmStdLv0)
+    dxButton4: TdxButton;
+    dxButton3: TdxButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    dxButton1: TdxButton;
+    Label3: TLabel;
+    procedure dxButton3Click(Sender: TObject);
+    procedure dxButton4Click(Sender: TObject);
+    procedure dxButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    FgPending : string;
+    { Public declarations }
+  end;
+
+var
+  fmARConfirmOto: TfmARConfirmOto;
+
+implementation
+
+{$R *.dfm}
+uses MyUnit;
+
+procedure TfmARConfirmOto.dxButton3Click(Sender: TObject);
+begin
+  inherited;
+  Self.Close;
+end;
+
+procedure TfmARConfirmOto.dxButton4Click(Sender: TObject);
+var ST,Approval : string;
+begin
+  inherited;
+  with quAct, SQL do
+  Begin
+    Close;Clear;
+    Add('Select ISNULL(Kode,''00'') as Kode FROM CfMsBank Where BankID='''+Label3.Caption+''' ');
+    Open;
+  End;
+  ST := 'APR-'+quAct.FieldByName('Kode').AsString+FormatDateTime('-YYMM', Date);
+  Approval  := ST + FormatFloat('0000', RunNumberGL(quAct,'CFTrKKBBHd', 'KodeApproval', ST, '0') + 1);
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE ARTrPurchaseOrderHd SET FgCetak=''Y'' WHERE POID='''+Label2.Caption+''' ');
+    Add('UPDATE CFTrKKBBHd SET FgPayment=''T'',TransDate=GETDATE() WHERE VoucherID='''+Label2.Caption+''' ');
+    Add('UPDATE CFTrKKBBHd SET KodeApproval='''+Approval+''' WHERE VoucherID='''+Label2.Caption+''' ');
+    ExecSQL;
+  end;
+  ModalResult := MrOK;
+end;
+
+procedure TfmARConfirmOto.dxButton1Click(Sender: TObject);
+begin
+  inherited;
+  If FgPending = 'Y' then
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('UPDATE ARTrPurchaseOrderHd SET FgCetak=''B'' WHERE POID='''+Label2.Caption+''' ');
+      ExecSQL;
+    end;
+    ModalResult := MrOK;
+  end else
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('UPDATE ARTrPurchaseOrderHd SET FgCetak=''X'' WHERE POID='''+Label2.Caption+''' ');
+      ExecSQL;
+    end;
+    ModalResult := MrOK;
+  end;
+end;
+
+end.

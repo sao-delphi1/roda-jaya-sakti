@@ -1,0 +1,486 @@
+inherited fmINRptStockMinimum: TfmINRptStockMinimum
+  Left = 280
+  Top = 140
+  Caption = 'Minimal Stock'
+  ClientWidth = 952
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 952
+    Height = 43
+    inherited laTitle: TLabel
+      Visible = False
+    end
+    object Label4: TLabel
+      Left = 8
+      Top = 10
+      Width = 75
+      Height = 20
+      Caption = 'Gudang :'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object KodeDari: TdxButtonEdit
+      Left = 84
+      Top = 9
+      Width = 69
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+      CharCase = ecUpperCase
+      StyleController = SCEdit
+      Buttons = <
+        item
+          Default = True
+        end>
+      ClickKey = 113
+      OnButtonClick = KodeDariButtonClick
+      ExistButtons = True
+    end
+    object bbCancel: TdxButton
+      Left = 155
+      Top = 10
+      Width = 78
+      Height = 21
+      About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+      Version = '1.0.2e'
+      OnClick = bbCancelClick
+      Caption = 'REFRESH'
+      TabOrder = 1
+    end
+    object cek1: TCheckBox
+      Left = 250
+      Top = 4
+      Width = 145
+      Height = 17
+      Caption = 'ATK'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 2
+    end
+    object cek2: TCheckBox
+      Left = 250
+      Top = 20
+      Width = 97
+      Height = 17
+      Caption = 'Inventaris'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 3
+    end
+    object cek3: TCheckBox
+      Left = 390
+      Top = 20
+      Width = 97
+      Height = 17
+      Caption = 'Solar'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 4
+    end
+    object cek4: TCheckBox
+      Left = 390
+      Top = 4
+      Width = 97
+      Height = 17
+      Caption = 'Ban'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 5
+    end
+    object cek6: TCheckBox
+      Left = 550
+      Top = 20
+      Width = 97
+      Height = 17
+      Caption = 'Oli'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 6
+    end
+    object cek7: TCheckBox
+      Left = 453
+      Top = 4
+      Width = 97
+      Height = 17
+      Caption = 'Sparepart'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 7
+    end
+    object cek8: TCheckBox
+      Left = 453
+      Top = 20
+      Width = 97
+      Height = 17
+      Caption = 'Safety'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 8
+    end
+    object CheckBox1: TCheckBox
+      Left = 551
+      Top = 4
+      Width = 231
+      Height = 17
+      Caption = 'A. Penunjang Maintenance'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 9
+    end
+    object cek5: TCheckBox
+      Left = 246
+      Top = 76
+      Width = 97
+      Height = 17
+      Caption = 'Jasa'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 10
+    end
+  end
+  inherited paCenter: TPanel
+    Top = 43
+    Width = 952
+    Height = 451
+    object dgrReport: TdxDBGrid
+      Left = 1
+      Top = 1
+      Width = 950
+      Height = 449
+      Bands = <
+        item
+          Width = 1263
+        end>
+      DefaultLayout = False
+      HeaderPanelRowCount = 1
+      KeyField = 'ItemID'
+      ShowGroupPanel = True
+      ShowSummaryFooter = True
+      SummaryGroups = <
+        item
+          DefaultGroup = True
+          SummaryItems = <
+            item
+              SummaryField = 'total'
+              SummaryFormat = '#,0'
+              SummaryType = cstSum
+            end>
+          Name = 'dgrReportSummaryGroup2'
+        end>
+      SummarySeparator = ', '
+      Align = alClient
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      BandColor = clMoneyGreen
+      BandFont.Charset = DEFAULT_CHARSET
+      BandFont.Color = clWindowText
+      BandFont.Height = -11
+      BandFont.Name = 'MS Sans Serif'
+      BandFont.Style = [fsBold]
+      DataSource = dsAct
+      Filter.Active = True
+      Filter.Criteria = {00000000}
+      HeaderColor = clSilver
+      HeaderFont.Charset = DEFAULT_CHARSET
+      HeaderFont.Color = clWindowText
+      HeaderFont.Height = -13
+      HeaderFont.Name = 'MS Sans Serif'
+      HeaderFont.Style = [fsBold]
+      HideFocusRect = True
+      HideSelection = True
+      HighlightTextColor = clRed
+      LookAndFeel = lfUltraFlat
+      OptionsBehavior = [edgoAutoCopySelectedToClipboard, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
+      OptionsDB = [edgoCancelOnExit, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoUseBookmarks]
+      OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+      PreviewFont.Charset = DEFAULT_CHARSET
+      PreviewFont.Color = clBlue
+      PreviewFont.Height = -11
+      PreviewFont.Name = 'MS Sans Serif'
+      PreviewFont.Style = []
+      ShowBands = True
+      ShowRowFooter = True
+      object dgrReportColumn1: TdxDBGridColumn
+        Caption = 'Part Number'
+        Width = 120
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'ItemID'
+      end
+      object dgrReportColumn2: TdxDBGridColumn
+        Caption = 'Nama Barang'
+        Sorted = csUp
+        Width = 200
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'ItemName'
+      end
+      object dgrReportColumn3: TdxDBGridColumn
+        Caption = 'Type Unit'
+        Width = 150
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'typeunit'
+      end
+      object dgrReportColumn4: TdxDBGridColumn
+        Caption = 'Merk'
+        Width = 150
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'merk'
+      end
+      object dgrReportColumn5: TdxDBGridColumn
+        Caption = 'Minimal'
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'MinimumStok'
+      end
+      object dgrReportColumn6: TdxDBGridColumn
+        Width = 75
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Stock'
+      end
+      object dgrReportColumn7: TdxDBGridImageColumn
+        Alignment = taLeftJustify
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Jenis'
+        Descriptions.Strings = (
+          'ATK'
+          'BAN'
+          'SAFETY'
+          'INVENTARIS'
+          'SOLAR'
+          'OLI'
+          'SPAREPART'
+          'JASA')
+        ImageIndexes.Strings = (
+          '0'
+          '1'
+          '2'
+          '3'
+          '4'
+          '5'
+          '6'
+          '7')
+        ShowDescription = True
+        Values.Strings = (
+          'A'
+          'B'
+          'H'
+          'I'
+          'L'
+          'O'
+          'S'
+          'J')
+      end
+    end
+  end
+  inherited paBottom: TPanel
+    Width = 952
+    inherited bbPreview: TBitBtn
+      Left = 106
+      Visible = False
+    end
+    inherited bbPrint: TBitBtn
+      Left = 200
+      Visible = False
+    end
+    inherited bbExit: TBitBtn
+      Left = 274
+      Visible = False
+    end
+    object bbExcel: TBitBtn
+      Left = 808
+      Top = 6
+      Width = 115
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Export Excel'
+      TabOrder = 3
+      OnClick = bbExcelClick
+      Glyph.Data = {
+        26040000424D2604000000000000360000002800000012000000120000000100
+        180000000000F003000000000000000000000000000000000000808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        8080808080808080808080808080808000008080800080000080000080000080
+        0000800000800000800000800000800000800000800000800000800000800000
+        8000008000808080000080808000800000800000800000800000800000800000
+        8000008000008000008000008000008000008000008000008000008000808080
+        0000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080000080
+        000080000080000080000080008080800000808080008000008000FFFFFF0080
+        00008000008000008000008000008000008000FFFFFF00800000800000800000
+        80000080008080800000808080008000008000FFFFFF00800000800000800000
+        8000008000008000FFFFFF008000008000008000FFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000008000008000008000008000FFFFFF
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFF008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFFFFFF
+        FFFFFFFF008000FFFFFF008000008000008000008000FFFFFFFFFFFFFFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFF008000FFFFFF00
+        8000008000008000008000008000008000FFFFFFFFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000FFFFFF008000008000008000008000
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFF008000008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFF0080
+        00008000008000FFFFFFFFFFFFFFFFFF008000008000008000008000FFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF008000008000808080
+        0000808080008000008000008000008000008000008000008000008000008000
+        0080000080000080000080000080000080000080008080800000808080008000
+        0080000080000080000080000080000080000080000080000080000080000080
+        0000800000800000800000800080808000008080808080808080808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        80808080808080800000}
+    end
+    object RadioGroup1: TRadioGroup
+      Left = 8
+      Top = 2
+      Width = 305
+      Height = 34
+      Columns = 2
+      ItemIndex = 0
+      Items.Strings = (
+        'CEK STOK MINIMUM'
+        'SIMPLE STOK AKHIR')
+      TabOrder = 4
+    end
+    object CheckBox2: TCheckBox
+      Left = 320
+      Top = 13
+      Width = 97
+      Height = 17
+      Caption = 'Hanya Item Aktif'
+      Checked = True
+      State = cbChecked
+      TabOrder = 5
+    end
+  end
+  inherited quAct: TADOQuery
+    SQL.Strings = (
+      'SELECT K.* FROM ('
+      
+        'select ItemID,ItemName,typeunit,merk,MinimumStok,ISNULL((SELECT ' +
+        'SUM(CASE WHEN X.FgTrans<50 THEN X.Qty ELSE X.Qty*-1 END) '
+      
+        'FROM AllItem X WHere X.ItemID=A.ItemID),0) as Stock,A.ItemName a' +
+        's Jenis '
+      'from INMsItem A ) as K WHERE K.Stock<K.MinimumStok')
+    object quActItemID: TStringField
+      FieldName = 'ItemID'
+      Size = 50
+    end
+    object quActItemName: TStringField
+      FieldName = 'ItemName'
+      Size = 150
+    end
+    object quActtypeunit: TStringField
+      FieldName = 'typeunit'
+      Size = 100
+    end
+    object quActmerk: TStringField
+      FieldName = 'merk'
+      Size = 50
+    end
+    object quActMinimumStok: TBCDField
+      FieldName = 'MinimumStok'
+      Precision = 18
+    end
+    object quActStock: TBCDField
+      FieldName = 'Stock'
+      ReadOnly = True
+      Precision = 38
+    end
+    object quActJenis: TStringField
+      FieldName = 'Jenis'
+      Size = 150
+    end
+  end
+  inherited dsAct: TDataSource
+    OnStateChange = dsActStateChange
+  end
+  object saveDlg: TSaveDialog
+    DefaultExt = '*.xls'
+    Filter = 'Microsoft Excel File|*.xls'
+    Left = 1008
+    Top = 72
+  end
+  object dxReport: TdxComponentPrinter
+    Version = 0
+    Left = 1044
+    Top = 72
+  end
+end

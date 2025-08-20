@@ -1,0 +1,25 @@
+unit INQRKartuStok;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, INQRRptHistoryStok, ADODB, DB, QuickRpt, QRCtrls, StdCtrls,
+  ExtCtrls;
+
+type
+  TfmINQRRptHistoryStok1 = class(TfmINQRRptHistoryStok)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmINQRRptHistoryStok1: TfmINQRRptHistoryStok1;
+
+implementation
+
+{$R *.dfm}
+
+end.

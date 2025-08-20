@@ -1,0 +1,25 @@
+unit RptSolarDlg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls;
+
+type
+  TfmRptSolarDlg = class(TfmRptDlg)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmRptSolarDlg: TfmRptSolarDlg;
+
+implementation
+
+{$R *.dfm}
+
+end.

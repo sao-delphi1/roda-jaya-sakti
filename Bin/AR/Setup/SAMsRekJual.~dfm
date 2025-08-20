@@ -1,0 +1,352 @@
+inherited fmSAMsRekJual: TfmSAMsRekJual
+  Caption = 'Rekening Penerimaan'
+  ClientHeight = 434
+  ClientWidth = 1102
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 385
+    inherited pa3: TdxContainer
+      Height = 206
+      object Label1: TLabel
+        Left = 5
+        Top = 168
+        Width = 174
+        Height = 13
+        Caption = 'Disarankan menggunakan 16-bitmap'
+      end
+      object DBImage2: TDBImage
+        Left = 26
+        Top = 4
+        Width = 142
+        Height = 122
+        Cursor = crHandPoint
+        DataField = 'ttd'
+        DataSource = dsMain
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Stretch = True
+        TabOrder = 0
+      end
+      object BitBtn3: TBitBtn
+        Left = 27
+        Top = 128
+        Width = 71
+        Height = 25
+        Cursor = crHandPoint
+        Hint = 'Ubah TTD'
+        Caption = '&Image'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+        OnClick = BitBtn3Click
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333303333
+          333333333337FF3333333333330003333333333333777F333333333333080333
+          3333333F33777FF33F3333B33B000B33B3333373F777773F7333333BBB0B0BBB
+          33333337737F7F77F333333BBB0F0BBB33333337337373F73F3333BBB0F7F0BB
+          B333337F3737F73F7F3333BB0FB7BF0BB3333F737F37F37F73FFBBBB0BF7FB0B
+          BBB3773F7F37337F377333BB0FBFBF0BB333337F73F333737F3333BBB0FBF0BB
+          B3333373F73FF7337333333BBB000BBB33333337FF777337F333333BBBBBBBBB
+          3333333773FF3F773F3333B33BBBBB33B33333733773773373333333333B3333
+          333333333337F33333333333333B333333333333333733333333}
+        NumGlyphs = 2
+      end
+      object BitBtn4: TBitBtn
+        Left = 98
+        Top = 128
+        Width = 71
+        Height = 25
+        Cursor = crHandPoint
+        Hint = 'Hapus TTD'
+        Caption = '&Delete'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 2
+        OnClick = BitBtn4Click
+        Glyph.Data = {
+          9E050000424D9E05000000000000360400002800000012000000120000000100
+          08000000000068010000120B0000120B00000001000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000C0DCC000F0CA
+          A600CCFFFF0099FFFF0066FFFF0033FFFF00FFCCFF00CCCCFF0099CCFF0066CC
+          FF0033CCFF0000CCFF00FF99FF00CC99FF009999FF006699FF003399FF000099
+          FF00FF66FF00CC66FF009966FF006666FF003366FF000066FF00FF33FF00CC33
+          FF009933FF006633FF003333FF000033FF00CC00FF009900FF006600FF003300
+          FF00FFFFCC00CCFFCC0099FFCC0066FFCC0066FFCC0033FFCC0000FFCC00FFCC
+          CC00CCCCCC0099CCCC0066CCCC0033CCCC0000CCCC00FF99CC00CC99CC009999
+          CC006699CC003399CC000099CC00FF66CC00CC66CC009966CC006666CC003366
+          CC000066CC00FF33CC00CC33CC009933CC006633CC003333CC000033CC00FF00
+          CC00CC00CC009900CC006600CC003300CC000000CC00FFFF9900CCFF990099FF
+          990066FF990033FF990000FF9900FFCC9900CCCC990099CC990066CC990033CC
+          990000CC9900FF999900CC99990099999900669999003399990000999900FF66
+          9900CC66990099669900666699003366990000669900FF339900CC3399009933
+          9900663399003333990000339900FF009900CC00990099009900660099003300
+          990000009900FFFF6600CCFF660099FF660066FF660033FF660000FF6600FFCC
+          6600CCCC660099CC660066CC660033CC660000CC6600FF996600CC9966009999
+          6600669966003399660000996600FF666600CC66660099666600666666003366
+          660000666600FF336600CC33660099336600663366003333660000336600FF00
+          6600CC00660099006600660066003300660000006600FFFF3300CCFF330099FF
+          330066FF330033FF330000FF3300FFCC3300CCCC330099CC330066CC330033CC
+          330000CC3300FF993300CC99330099993300669933003399330000993300FF66
+          3300CC66330099663300666633003366330000663300FF333300CC3333009933
+          3300663333003333330000333300FF003300CC00330099003300660033003300
+          330000003300CCFF000099FF000066FF000033FF0000FFCC0000CCCC000099CC
+          000066CC000033CC000000CC0000FF990000CC99000099990000669900003399
+          000000990000FF660000CC66000099660000666600000066000033660000FF33
+          0000CC33000099330000663300003333000000330000CC000000990000006600
+          0000330000000000DD000000BB000000AA000000880000007700000055000000
+          44000000220000DD000000BB000000AA00000088000000770000005500000044
+          000000220000DDDDDD0055555500777777007777770044444400222222001111
+          110077000000550000004400000022000000F0FBFF00A4A0A000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00323232323232
+          32323232323232323232323200003232323232323200DEDEDE00323232323232
+          000032323232323232DEDDDD7272323232323232000032323232323200DDDBDB
+          DB720032323232320000323232323232004EF9F9DB7200323232323200003232
+          3232323232DBF9F94EDE323232323232000032323232323232000000DE003232
+          3232323200003232323232323232DBDE00323232323232320000323232323232
+          3200DBDEDE3232323232323200003232323232323200DBDBDE32323232323232
+          00003232323232323200DBDBDE00323232323232000032323232323232DBDBDB
+          DEDE323232323232000032323232323200DBDBDBDBDE00323232323200003232
+          3232323200DBDBDB1DDE0032323232320000323232323232001DDBDBDBDBDE32
+          323232320000323232323232DBDBDBDBDBDBDB32323232320000323232323232
+          32DBDBDBDB003232323232320000323232323232323200003232323232323232
+          0000}
+      end
+    end
+    inherited paOperation: TdxContainer
+      inherited bbFind: TdxButton
+        OnClick = bbFindClick
+      end
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 422
+    Width = 1102
+  end
+  inherited pa2: TdxContainer
+    Height = 385
+  end
+  inherited dxContainer7: TdxContainer
+    Width = 909
+    Height = 385
+    inherited pcParent: TdxPageControl
+      Width = 909
+      Height = 385
+      inherited ts01: TdxTabSheet
+        object dbgUOM: TdxDBGrid [0]
+          Left = 0
+          Top = 0
+          Width = 909
+          Height = 385
+          Bands = <
+            item
+            end>
+          DefaultLayout = True
+          HeaderPanelRowCount = 1
+          KeyField = 'RekJualID'
+          SummaryGroups = <>
+          SummarySeparator = ', '
+          Align = alClient
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          BandFont.Charset = DEFAULT_CHARSET
+          BandFont.Color = clWindowText
+          BandFont.Height = -11
+          BandFont.Name = 'MS Sans Serif'
+          BandFont.Style = []
+          DataSource = dsMain
+          Filter.Criteria = {00000000}
+          HeaderFont.Charset = ANSI_CHARSET
+          HeaderFont.Color = clWindowText
+          HeaderFont.Height = -13
+          HeaderFont.Name = 'Times New Roman'
+          HeaderFont.Style = []
+          HideFocusRect = True
+          HideSelection = True
+          LookAndFeel = lfFlat
+          OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoTabThrough, edgoVertThrough]
+          OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowAutoHeight, edgoUseBitmap]
+          PreviewFont.Charset = DEFAULT_CHARSET
+          PreviewFont.Color = clBlue
+          PreviewFont.Height = -11
+          PreviewFont.Name = 'MS Sans Serif'
+          PreviewFont.Style = []
+          object dbgUOMColumn3: TdxDBGridColumn
+            Caption = 'ID'
+            Width = 50
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'RekJualID'
+          end
+          object dbgUOMColumn4: TdxDBGridColumn
+            Width = 80
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Bank'
+          end
+          object dbgUOMColumn5: TdxDBGridColumn
+            Width = 150
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Rekening'
+          end
+          object dbgUOMColumn6: TdxDBGridColumn
+            Width = 200
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Nama'
+          end
+          object dbgUOMColumn7: TdxDBGridColumn
+            Width = 150
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'Cabang'
+          end
+          object dbgUOMColumn8: TdxDBGridImageColumn
+            Alignment = taLeftJustify
+            Caption = 'Active'
+            MinWidth = 16
+            Width = 80
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'FgActive'
+            Descriptions.Strings = (
+              'Ya'
+              'Tidak')
+            ImageIndexes.Strings = (
+              '0'
+              '1')
+            ShowDescription = True
+            Values.Strings = (
+              'Y'
+              'T')
+          end
+          object dbgUOMUpdUser: TdxDBGridColumn
+            Caption = 'Updated By'
+            Color = clScrollBar
+            ReadOnly = True
+            TabStop = False
+            Width = 80
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'UpdUser'
+          end
+          object dbgUOMUpdDate: TdxDBGridColumn
+            Caption = 'Last Updated'
+            Color = clScrollBar
+            ReadOnly = True
+            TabStop = False
+            Width = 80
+            BandIndex = 0
+            RowIndex = 0
+            FieldName = 'UpdDate'
+          end
+        end
+        inherited bbSave: TdxButton
+          Left = 10
+          Top = 339
+          Width = 95
+          Height = 38
+        end
+        inherited bbCancel: TdxButton
+          Left = 106
+          Top = 339
+          Width = 103
+          Height = 38
+        end
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1102
+    inherited sbLast: TSpeedButton
+      Left = 1065
+    end
+    inherited sbNext: TSpeedButton
+      Left = 1038
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 1011
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 984
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 958
+    end
+    inherited BvlPeriod: TBevel
+      Left = 712
+    end
+    inherited laPeriod: TLabel
+      Left = 716
+    end
+  end
+  inherited quMain: TADOQuery
+    OnNewRecord = quMainNewRecord
+    SQL.Strings = (
+      'select * from samsrekjual')
+    object quMainRekJualID: TStringField
+      FieldName = 'RekJualID'
+      Size = 50
+    end
+    object quMainBank: TStringField
+      FieldName = 'Bank'
+      Size = 50
+    end
+    object quMainRekening: TStringField
+      FieldName = 'Rekening'
+      Size = 100
+    end
+    object quMainNama: TStringField
+      FieldName = 'Nama'
+      Size = 100
+    end
+    object quMainCabang: TStringField
+      FieldName = 'Cabang'
+      Size = 100
+    end
+    object quMainFgActive: TStringField
+      FieldName = 'FgActive'
+      Size = 50
+    end
+    object quMainUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+    end
+    object quMainUpdUser: TStringField
+      FieldName = 'UpdUser'
+      Size = 50
+    end
+    object quMainttd: TBlobField
+      FieldName = 'ttd'
+    end
+  end
+  object odLogo: TOpenPictureDialog
+    Filter = 'Bitmaps (*.bmp)|*.bmp'
+    Left = 388
+    Top = 4
+  end
+end

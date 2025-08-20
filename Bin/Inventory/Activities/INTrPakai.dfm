@@ -1,0 +1,24 @@
+inherited fmINTrPakai: TfmINTrPakai
+  Left = 599
+  Top = 357
+  Caption = 'Pemakaian Barang'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited quMain: TADOQuery
+    SQL.Strings = (
+      'select * from intradjustmenthd')
+  end
+  inherited quDetil: TADOQuery
+    Parameters = <
+      item
+        Name = 'transid'
+        DataType = ftString
+        NumericScale = 255
+        Precision = 255
+        Size = 20
+        Value = Null
+      end>
+    SQL.Strings = (
+      'select * from intradjustmentdt where transid=:transid')
+  end
+end

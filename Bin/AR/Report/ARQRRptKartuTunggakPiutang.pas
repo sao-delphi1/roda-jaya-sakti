@@ -1,0 +1,260 @@
+unit ARQRRptKartuTunggakPiutang;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv4, DB, ADODB, QuickRpt, StdCtrls, QRCtrls, ExtCtrls, DateUtils;
+
+type
+  TfmARQRRptKartuTunggakPiutang = class(TfmRptLv4)
+    QRDBText1: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRExpr1: TQRExpr;
+    GroupFooterBand1: TQRBand;
+    QRLabel9: TQRLabel;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    SummaryBand1: TQRBand;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel8: TQRLabel;
+    qlbTelat: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRDBText7: TQRDBText;
+    qlbSisa: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    qrlValuta: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText8: TQRDBText;
+    procedure bnd001AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRDBText5Print(sender: TObject; var Value: String);
+    procedure QRDBText6Print(sender: TObject; var Value: String);
+    procedure QRExpr1Print(sender: TObject; var Value: String);
+    procedure QRExpr2Print(sender: TObject; var Value: String);
+    procedure QRExpr3Print(sender: TObject; var Value: String);
+    procedure QRExpr4Print(sender: TObject; var Value: String);
+    procedure MyReportBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure bnd002AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRLabel12Print(sender: TObject; var Value: String);
+    procedure bnd002BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure qlbSisaPrint(sender: TObject; var Value: String);
+    procedure QRLabel19Print(sender: TObject; var Value: String);
+    procedure QRLabel20Print(sender: TObject; var Value: String);
+    procedure QRLabel21Print(sender: TObject; var Value: String);
+    procedure QRLabel22Print(sender: TObject; var Value: String);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    tglDari  : TDateTime;
+    tglsmp   : TDateTime;
+    Total    : Currency;
+    Total0,Total60,Total90,Total120 : Currency;
+    Sisa     : Currency;
+  end;
+
+var
+  fmARQRRptKartuTunggakPiutang: TfmARQRRptKartuTunggakPiutang;
+
+implementation
+
+uses UnitGeneral, MyUnit;
+
+{$R *.dfm}
+
+procedure TfmARQRRptKartuTunggakPiutang.bnd001AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  inherited;
+  With qu003,SQL do
+  Begin
+    Close;Clear;
+    Add('SELECT DATEADD(DAY,ISNULL(K.JatuhTempo,0),K.Transdate) as jth,K.CustID,CONVERT(VARCHAR(10),K.Transdate,103) as Tanggal,K.KonInvPelID as IP,'
+       +'ISNULL(K.TTLKj-K.Retur,0) as Kredit,ISNULL(K.Debit,0) as Debit FROM ('
+       +'SELECT A.CurrID,A.JatuhTempo,A.Transdate,A.CustID,A.KonInvPelID,ISNULL(A.TTLKj,0) as TTLKj,'
+       +'ISNULL((SELECT ISNULL(SUM(X.Qty*Z.Price),0) as Retur FROM ARTrKonReturDt X INNER JOIN ARTrKonReturHd Y ON X.KonReturID=Y.KonReturID '
+       +'INNER JOIN ARTrKonInvPelDt Z ON X.ItemID=Z.ItemID AND X.KonTransBrgID=Z.KonTransBrgID WHERE Z.KonInvPelID=A.KonInvPelID AND X.KonTransBrgID=A.SOID AND Y.CustID=A.CustID),0) as Retur,'
+       +'(SELECT ISNULL(SUM(CASE WHEN L.Jenis=''K'' THEN L.Amount ELSE L.Amount*-1 END),0) FROM CFTrKKBBDt L INNER JOIN CFTrKKBBHd Q ON L.VoucherID=Q.VoucherID '
+       +'WHERE L.Note = A.KonInvPelID AND CONVERT(VARCHAR(8),Q.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',tglDari)+''') as Debit '
+       +'FROM ARTrKonInvPelHd A) as K WHERE ISNULL(K.TTLKj-K.Retur-K.Debit,0) <> 0 '
+       +'AND K.CustID='''+qu001.Fieldbyname('CustId').AsString+''' '
+       +'AND K.CurrID='''+qu002.FieldByname('CurrId').AsString+''' ');
+    Open;
+  End;
+  Total0 := 0;
+  Total60 := 0;
+  Total90 := 0;
+  Total120 := 0;
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRDBText5Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRDBText6Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+   Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRExpr1Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRExpr2Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRExpr3Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRExpr4Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.MyReportBeforePrint(
+  Sender: TCustomQuickRep; var PrintReport: Boolean);
+begin
+  inherited;
+  Total :=0;
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.bnd002AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  inherited;
+  Total := Total + (qu003.FieldByName('Kredit').AsCurrency-qu003.FieldByName('Debit').AsCurrency);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRLabel12Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(CurrtoStr(Total));
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.bnd002BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+var Telat : integer;
+begin
+  inherited;
+  Sisa:=(qu003.FieldByName('Kredit').AsCurrency-qu003.FieldByName('Debit').AsCurrency);
+  qlbSisa.Caption := Currtostr(Sisa);
+  if FormatDateTime('yyyy/MM/dd', qu003.FieldByName('jth').AsDateTime) >=
+    FormatDateTime('yyyy/MM/dd', tglDari) then
+  Begin
+    qlbTelat.Caption := '';
+    Total0 := Total0 + Sisa;
+    qlbSisa.Left :=636;
+  End
+  else
+  Begin
+    if qu003.FieldByName('jth').AsString <> '' then
+    qlbTelat.Caption := inttostr(DaysBetween(qu003.FieldByName('jth').AsDateTime, tglDari))+' Hari'
+    else
+    qlbTelat.Caption := '-';
+    Telat := DaysBetween(qu003.FieldByName('jth').AsDateTime, tglDari);
+
+    If (telat >=0) AND (Telat <=30) then
+    Begin
+       total0 := Total0 + Sisa;
+       qlbSisa.Left :=758;
+    End;
+    If (telat >= 31) AND (Telat <=60) then
+    Begin
+       Total60 := Total60 + Sisa;
+       qlbSisa.Left :=870;
+    End;
+    If (telat >= 61) AND (Telat <= 120) then
+    Begin
+       Total90 := Total90 + Sisa;
+       qlbSisa.Left :=982;
+    End;
+    If (telat > 120)  then
+    Begin
+       Total120 := Total120 + Sisa;
+       qlbSisa.Left :=1094;
+    End;
+
+  End;
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.qlbSisaPrint(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(Value);
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRLabel19Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(currtoStr(Total0));
+  Total0:=0;
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRLabel20Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(currtoStr(Total60));
+  Total60:=0;
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRLabel21Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(currtoStr(Total90));
+  Total90:=0;
+end;
+
+procedure TfmARQRRptKartuTunggakPiutang.QRLabel22Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value:=FormatRptkurung(currtoStr(Total120));
+  Total120:=0;
+end;
+
+end.

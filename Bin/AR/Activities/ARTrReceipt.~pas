@@ -1,0 +1,366 @@
+unit ARTrReceipt;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, DBCtrls, StdCtrls, dxExEdtr, dxEdLib, dxDBELib,
+  dxEditor, DB, ActnList, dxCntner, ADODB, dxPageControl, dxButton,
+  ExtCtrls, Buttons, dxCore, dxContainer, dxDBCtrl, dxDBGrid, dxDBTLCl,
+  dxGrClms, dxTL;
+
+type
+  TfmARTrReceipt = class(TfmStdLv31)
+    quMainRIID: TStringField;
+    quMainTransdate: TDateTimeField;
+    quMainCustID: TStringField;
+    quMainNote: TStringField;
+    quMainTTLRI: TBCDField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainFlag: TStringField;
+    quDetilRIID: TStringField;
+    quDetilKonInvPelID: TStringField;
+    quDetilUpdDate: TDateTimeField;
+    quDetilUpdUser: TStringField;
+    quDetilAmount: TBCDField;
+    txtKonInvPelID: TdxDBEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    txtTransDate: TdxDBDateEdit;
+    Label3: TLabel;
+    txtPelangganID: TdxDBButtonEdit;
+    Label5: TLabel;
+    dxDBEdit2: TdxDBEdit;
+    GroupBox2: TGroupBox;
+    Label14: TLabel;
+    DBText3: TDBText;
+    Label15: TLabel;
+    DBText6: TDBText;
+    dxDBGrid1: TdxDBGrid;
+    dxDBGrid1ItemID: TdxDBGridButtonColumn;
+    dxDBGrid1Value: TdxDBGridColumn;
+    dxDBGrid1UpdDate: TdxDBGridDateColumn;
+    dxDBGrid1UpdUser: TdxDBGridMaskColumn;
+    dxDBGrid1ItemName: TdxDBGridButtonColumn;
+    Label20: TLabel;
+    DBText8: TDBText;
+    DBText4: TDBText;
+    quMainCustName: TStringField;
+    TmbBrg: TdxButton;
+    KrgBrg: TdxButton;
+    bbSimpanDetil: TdxButton;
+    BtlBrg: TdxButton;
+    Shape4: TShape;
+    quTotal: TADOQuery;
+    dsTotal: TDataSource;
+    quTotalTotal: TBCDField;
+    dxButton1: TdxButton;
+    dxDBGrid1Column6: TdxDBGridColumn;
+    quDetilFPS: TStringField;
+    dxDBGrid1Column7: TdxDBGridColumn;
+    quDetilNoPO: TStringField;
+    quDetilNoDO: TStringField;
+    dxDBGrid1Column8: TdxDBGridColumn;
+    ActPrint: TAction;
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure txtPelangganIDButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBGrid1ItemNameButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quMainCalcFields(DataSet: TDataSet);
+    procedure dsDetilStateChange(Sender: TObject);
+    procedure BtlBrgClick(Sender: TObject);
+    procedure bbSimpanDetilClick(Sender: TObject);
+    procedure KrgBrgClick(Sender: TObject);
+    procedure TmbBrgClick(Sender: TObject);
+    procedure TTLRI;
+    procedure quDetilAfterPost(DataSet: TDataSet);
+    procedure quDetilAfterEdit(DataSet: TDataSet);
+    procedure quDetilBeforeDelete(DataSet: TDataSet);
+    procedure quDetilAfterDelete(DataSet: TDataSet);
+    procedure quDetilBeforePost(DataSet: TDataSet);
+    procedure dxButton1Click(Sender: TObject);
+    procedure bbFindClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Flag : string;
+  end;
+
+var
+  fmARTrReceipt: TfmARTrReceipt;
+
+implementation
+
+uses Search, MyUnit, UnitGeneral, UnitDate, Dateutils, ConMain, ARQRRptReceipt,
+  RptLv0;
+{$R *.dfm}
+
+
+procedure TfmARtrReceipt.TTLRI;
+Begin
+  qutotal.Requery();
+
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Update ArtrReceiptHD SET TTLRI='''+Formatcurr('0.00',quTotalTotal.AsCurrency)+''' '
+       +' WHERE RIID='''+quMainRIID.AsString+'''');
+    ExecSQL;
+  End;
+End;
+
+procedure TfmARTrReceipt.quMainBeforePost(DataSet: TDataSet);
+var ST : string;
+begin
+  inherited;
+  if Trim(quMainTransDate.AsString)='' then
+  begin
+    MsgInfo('Tanggal transaksi tidak boleh kosong');
+    quMainTransDate.FocusControl;
+    Abort;
+  End;
+
+  if Trim(quMainCustID.AsString)='' then
+  begin
+    MsgInfo('Kode Customer tidak boleh kosong');
+    quMainCustID.FocusControl;
+    Abort;
+  End;
+
+  if qumain.State = dsinsert then
+  begin
+    ST := 'RI-'+PT+ FormatDateTime('/YY/MM/', quMainTransDate.AsDateTime);
+    quMainRIID.Value  := ST + FormatFloat('0000', RunNumberGL(quAct, 'ARTrReceiptHD', 'RIID', ST, '0') + 1);
+  end;
+
+  quMainUpdDate.AsDateTime := GetServerDateTime;
+  quMainUpdUser.AsString := dmMain.UserId;
+end;
+
+procedure TfmARTrReceipt.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetBtnOperationVisible(bbSave,bbCancel,FActDS);
+  SetReadOnly(txtKonInvPelID,TRUE);
+end;
+
+procedure TfmARTrReceipt.FormShow(Sender: TObject);
+begin
+  FFieldOrder := 'CONVERT(VARCHAR(8),TransDate,112), RIID';
+  FFieldTgl   := 'TransDate';
+  SettingDxGrid(dxDBGrid1);
+  inherited;
+  quMain.Active     := TRUE;
+  quDetil.Active    := TRUE;
+  quTotal.Active    := TRUE;
+end;
+
+procedure TfmARTrReceipt.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainTransdate.AsDateTime := Date;
+  quMainTTLRI.AsCurrency := 0;
+  quMainFlag.AsString := Flag;
+end;
+
+procedure TfmARTrReceipt.txtPelangganIDButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Pelanggan';
+     SQLString := 'SELECT CustName as Nama_Pelanggan,City as Kota,CustId as Kode_Pelanggan '
+                 +' FROM ARMsCustomer ORDER BY CustName ';
+     if ShowModal = MrOK then
+     begin
+       if quMain.State = dsBrowse then quMain.Edit;
+       quMainCustId.Value := Res[2];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+procedure TfmARTrReceipt.dxDBGrid1ItemNameButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Invoice';
+     SQLString :=  'select CONVERT(varchar(10),A.Transdate,103) as Tgl,A.KonInvPelID,A.TTLKJ as Total,A.SOID,C.POCust from artrkoninvpelhd A '
+                  +'inner join Artrpurchaseorderhd C on A.SOID=C.POID '
+                  +'Where A.CustId='''+quMainCustID.AsString+''' And A.KonInvPelID Not In (select B.koninvpelid from Artrreceiptdt B) ';
+     if ShowModal = MrOK then
+     begin
+       if quDetil.State = dsBrowse then quDetil.Edit;
+       quDetilKonInvPelID.Value := Res[1];
+       quDetilAmount.Value := strtocurr(Res[2]);
+       quDetilNoPO.Value := Res[3];
+       quDetilNoDO.Value := Res[4];
+     end;
+  finally
+     Free;
+  end;
+end;
+
+procedure TfmARTrReceipt.quMainCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('Select CustName From ArMsCustomer Where CustId='''+qumaincustId.AsString+''' ');
+    Open;
+  end;
+  quMainCustName.AsString := quAct.FieldByName('CustName').AsString;
+end;
+
+procedure TfmARTrReceipt.dsDetilStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dxDBGrid1Value,TRUE);
+  SetReadOnly(dxDBGrid1ItemName,qudetil.State<>dsInsert);
+end;
+
+procedure TfmARTrReceipt.BtlBrgClick(Sender: TObject);
+begin
+  inherited;
+  quDetil.Cancel;
+end;
+
+procedure TfmARTrReceipt.bbSimpanDetilClick(Sender: TObject);
+begin
+  inherited;
+  if Self.quDetil.State = dsInsert then
+  begin
+   Self.quDetil.Edit;
+   Self.quDetil.Post;
+   Self.quDetil.Requery();
+  end;
+  if Self.quDetil.State = dsEdit then
+  begin
+   quDetil.Post;
+  end;
+end;
+
+procedure TfmARTrReceipt.KrgBrgClick(Sender: TObject);
+begin
+  inherited;
+  if quDetil.IsEmpty then Abort;
+  if (dsdetil <> nil) and (dsDetil.DataSet <> nil) and
+     (MessageDlg('Hapus Nota ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+        dsDetil.DataSet.Delete;
+end;
+
+procedure TfmARTrReceipt.TmbBrgClick(Sender: TObject);
+begin
+  inherited;
+  quDetil.Append;
+end;
+
+procedure TfmARTrReceipt.quDetilAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  TTLRI;
+end;
+
+procedure TfmARTrReceipt.quDetilAfterEdit(DataSet: TDataSet);
+begin
+  inherited;
+  TTLRI;
+end;
+
+procedure TfmARTrReceipt.quDetilBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  TTLRI;
+end;
+
+procedure TfmARTrReceipt.quDetilAfterDelete(DataSet: TDataSet);
+begin
+  inherited;
+  TTLRI;
+end;
+
+procedure TfmARTrReceipt.quDetilBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+
+  with quAct, SQL do
+  begin
+    Close; Clear;
+    Add(' SELECT Top 1 KoninvPelid FROM ARTrKonInvPelHD WHERE KonInvPelID='''+quDetilKonInvPelID.Value+''' ');
+    Open;
+  end;
+
+  if quAct.RecordCount < 1 then
+  begin
+     MsgInfo('Data Invoice Tidak Ditemukan');
+     quDetilKonInvPelID.FocusControl;
+     Abort;
+  end;
+
+  quDetilUpdDate.AsDateTime := GetServerDateTime;
+  quDetilUpdUser.AsString := dmmain.UserId;
+end;
+
+procedure TfmARTrReceipt.dxButton1Click(Sender: TObject);
+begin
+  inherited;
+  TTLRI;
+
+  with TfmARQRRptReceipt.Create(Self) do
+  try
+    qlbTerbilang.Caption :=  'Terbilang:'+char(13)+ convert(FormatFloat(sEditFormat, quTotalTotal.AsCurrency))+'Rupiah #';
+    laGT.Caption := quTotalTotal.AsString; qrlPeriode.Caption := 'Serpong, '+FormatDateTime('d MMMM yyyy',quMainTransdate.AsDateTime);
+    qrlTitle.Caption := 'TANDA TERIMA';
+
+    with qu001,SQL do
+    Begin
+      Close;Clear;
+      add('Select A.RIID,A.CustId,B.CustName,B.Address FROM ARTrReceiptHD A Inner Join ArMsCustomer B on A.CustID=B.CustID '
+         +'Where A.RIID='''+quMainRIID.AsString+''' ');
+      Open;
+    End;
+
+    With qu002,SQL do
+    Begin
+      Close;Clear;
+      add('Select A.KoninvpelID as ItemName,A.FPS,A.noDo,A.noPO,A.Amount as Total FROm ArtrReceiptDt A Where A.RIID='''+quMainRIID.AsString+''' ');
+      Open;
+    End;
+
+    MyReport.PreviewModal;
+
+  finally
+    free;
+  end;
+end;
+
+procedure TfmARTrReceipt.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Transaksi Penerimaan Barang';
+       SQLString := 'select B.CustName ,A.RIID as Nota,CONVERT(VARCHAR(10),A.TransDate,103) as Tgl from artrreceipthd A inner join ARMsCustomer B on A.CustId=B.CustId '
+                   +'WHERE '+FSQLWhere
+                   +' ORDER BY A.RIID';
+       if ShowModal = MrOK then
+       begin
+         quMain.Locate('RIID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+end;
+
+end.

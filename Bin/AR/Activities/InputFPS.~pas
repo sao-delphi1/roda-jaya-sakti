@@ -1,0 +1,25 @@
+unit InputFPS;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv2, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxCore, dxContainer, Buttons;
+
+type
+  TfmInputFPS = class(TfmStdLv2)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmInputFPS: TfmInputFPS;
+
+implementation
+
+{$R *.dfm}
+
+end.

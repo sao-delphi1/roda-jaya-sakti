@@ -1,0 +1,117 @@
+inherited fmCFRptAdjustmentKurs: TfmCFRptAdjustmentKurs
+  Left = 717
+  Top = 280
+  Caption = 'Adjustment Kurs'
+  ClientHeight = 273
+  ClientWidth = 312
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 312
+    inherited laTitle: TLabel
+      Width = 162
+      Caption = 'Adjustment Kurs'
+    end
+  end
+  inherited paCenter: TPanel
+    Width = 312
+    Height = 191
+    object Label1: TLabel
+      Left = 16
+      Top = 80
+      Width = 157
+      Height = 13
+      Caption = 'Masukkan Kurs Sesuai Tanggal :'
+    end
+    object Label2: TLabel
+      Left = 16
+      Top = 128
+      Width = 118
+      Height = 13
+      Caption = 'Rekening Selisih KURS :'
+    end
+    object GroupBox1: TGroupBox
+      Left = 13
+      Top = 7
+      Width = 188
+      Height = 66
+      Caption = '[ Pilih Tanggal ]'
+      Ctl3D = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 0
+      object dt1: TdxDateEdit
+        Left = 41
+        Top = 23
+        Width = 110
+        TabOrder = 0
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+    end
+    object Edit1: TEdit
+      Left = 16
+      Top = 96
+      Width = 121
+      Height = 21
+      TabOrder = 1
+      Text = '0'
+      OnKeyPress = Edit1KeyPress
+    end
+    object Edit2: TEdit
+      Left = 16
+      Top = 144
+      Width = 121
+      Height = 21
+      TabOrder = 2
+    end
+    object Button1: TButton
+      Left = 141
+      Top = 144
+      Width = 72
+      Height = 23
+      Caption = 'CARI'
+      TabOrder = 3
+      OnClick = Button1Click
+    end
+  end
+  inherited paBottom: TPanel
+    Top = 232
+    Width = 312
+    inherited bbPreview: TBitBtn
+      Left = 66
+      OnClick = bbPreviewClick
+    end
+    inherited bbPrint: TBitBtn
+      Left = 160
+    end
+    inherited bbExit: TBitBtn
+      Left = 234
+    end
+  end
+  object quAwal: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 176
+    Top = 4
+  end
+  object quHeader: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 208
+    Top = 4
+  end
+  object quDetail: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 240
+    Top = 4
+  end
+end

@@ -1,0 +1,391 @@
+inherited fmCFGenerate: TfmCFGenerate
+  Left = 408
+  Top = 275
+  Caption = 'Generator'
+  ClientWidth = 1027
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 1027
+    Height = 89
+    inherited laTitle: TLabel
+      Width = 212
+      Caption = 'Generate Laporan Kas'
+    end
+    object Edit1: TEdit
+      Left = 8
+      Top = 56
+      Width = 121
+      Height = 21
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 132
+      Top = 55
+      Width = 75
+      Height = 25
+      Caption = 'CARI'
+      TabOrder = 1
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 212
+      Top = 55
+      Width = 75
+      Height = 25
+      Caption = 'REFRESH'
+      TabOrder = 2
+      OnClick = Button2Click
+    end
+  end
+  inherited paCenter: TPanel
+    Top = 89
+    Width = 1027
+    Height = 441
+    object dgrReport: TdxDBGrid
+      Left = 1
+      Top = 1
+      Width = 1025
+      Height = 439
+      Bands = <
+        item
+          Width = 1263
+        end>
+      DefaultLayout = False
+      HeaderPanelRowCount = 1
+      KeyField = 'VoucherID'
+      SummaryGroups = <
+        item
+          DefaultGroup = True
+          SummaryItems = <
+            item
+              SummaryField = 'total'
+              SummaryFormat = '#,0'
+              SummaryType = cstSum
+            end>
+          Name = 'dgrReportSummaryGroup2'
+        end>
+      SummarySeparator = ', '
+      Align = alClient
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      BandColor = clMoneyGreen
+      BandFont.Charset = DEFAULT_CHARSET
+      BandFont.Color = clWindowText
+      BandFont.Height = -11
+      BandFont.Name = 'MS Sans Serif'
+      BandFont.Style = [fsBold]
+      DataSource = dsAct
+      Filter.Active = True
+      Filter.Criteria = {00000000}
+      HeaderColor = clSilver
+      HeaderFont.Charset = DEFAULT_CHARSET
+      HeaderFont.Color = clWindowText
+      HeaderFont.Height = -13
+      HeaderFont.Name = 'MS Sans Serif'
+      HeaderFont.Style = [fsBold]
+      HideFocusRect = True
+      HideSelection = True
+      HighlightTextColor = clRed
+      LookAndFeel = lfUltraFlat
+      OptionsBehavior = [edgoAutoCopySelectedToClipboard, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
+      OptionsDB = [edgoCancelOnExit, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoUseBookmarks]
+      OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+      PreviewFont.Charset = DEFAULT_CHARSET
+      PreviewFont.Color = clBlue
+      PreviewFont.Height = -11
+      PreviewFont.Name = 'MS Sans Serif'
+      PreviewFont.Style = []
+      object dgrReportColumn1: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'VoucherID'
+      end
+      object dgrReportColumn2: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'RekeningID'
+      end
+      object dgrReportColumn3: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Note'
+      end
+      object dgrReportColumn4: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Amount'
+      end
+      object dgrReportColumn5: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'UpdDate'
+      end
+      object dgrReportColumn6: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'UpdUser'
+      end
+      object dgrReportColumn7: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Jenis'
+      end
+      object dgrReportColumn8: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'TransDate'
+      end
+      object dgrReportColumn9: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Actor'
+      end
+      object dgrReportColumn10: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BankID'
+      end
+      object dgrReportColumn11: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Note_1'
+      end
+      object dgrReportColumn12: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'FlagKKBB'
+      end
+      object dgrReportColumn13: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'UpdUser_1'
+      end
+      object dgrReportColumn14: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'UpdDate_1'
+      end
+      object dgrReportColumn15: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'JumlahD'
+      end
+      object dgrReportColumn16: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'JumlahK'
+      end
+      object dgrReportColumn17: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'MOP'
+      end
+      object dgrReportColumn18: TdxDBGridColumn
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'kdcab'
+      end
+    end
+  end
+  inherited paBottom: TPanel
+    Width = 1027
+    inherited bbPreview: TBitBtn
+      Left = 21
+      Visible = False
+    end
+    inherited bbPrint: TBitBtn
+      Left = 115
+      Visible = False
+    end
+    inherited bbExit: TBitBtn
+      Left = 189
+      Visible = False
+    end
+    object bbExcel: TBitBtn
+      Left = 800
+      Top = 6
+      Width = 115
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Export Excel'
+      TabOrder = 3
+      OnClick = bbExcelClick
+      Glyph.Data = {
+        26040000424D2604000000000000360000002800000012000000120000000100
+        180000000000F003000000000000000000000000000000000000808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        8080808080808080808080808080808000008080800080000080000080000080
+        0000800000800000800000800000800000800000800000800000800000800000
+        8000008000808080000080808000800000800000800000800000800000800000
+        8000008000008000008000008000008000008000008000008000008000808080
+        0000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080000080
+        000080000080000080000080008080800000808080008000008000FFFFFF0080
+        00008000008000008000008000008000008000FFFFFF00800000800000800000
+        80000080008080800000808080008000008000FFFFFF00800000800000800000
+        8000008000008000FFFFFF008000008000008000FFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000008000008000008000008000FFFFFF
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFF008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFFFFFF
+        FFFFFFFF008000FFFFFF008000008000008000008000FFFFFFFFFFFFFFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFF008000FFFFFF00
+        8000008000008000008000008000008000FFFFFFFFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000FFFFFF008000008000008000008000
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFF008000008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFF0080
+        00008000008000FFFFFFFFFFFFFFFFFF008000008000008000008000FFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF008000008000808080
+        0000808080008000008000008000008000008000008000008000008000008000
+        0080000080000080000080000080000080000080008080800000808080008000
+        0080000080000080000080000080000080000080000080000080000080000080
+        0000800000800000800000800080808000008080808080808080808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        80808080808080800000}
+    end
+    object bbCancel: TBitBtn
+      Left = 915
+      Top = 6
+      Width = 92
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Batal'
+      TabOrder = 4
+      OnClick = bbCancelClick
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333FFFFF3333333333999993333333333F77777FFF333333999999999
+        3333333777333777FF33339993707399933333773337F3777FF3399933000339
+        9933377333777F3377F3399333707333993337733337333337FF993333333333
+        399377F33333F333377F993333303333399377F33337FF333373993333707333
+        333377F333777F333333993333101333333377F333777F3FFFFF993333000399
+        999377FF33777F77777F3993330003399993373FF3777F37777F399933000333
+        99933773FF777F3F777F339993707399999333773F373F77777F333999999999
+        3393333777333777337333333999993333333333377777333333}
+      NumGlyphs = 2
+    end
+  end
+  inherited quAct: TADOQuery
+    SQL.Strings = (
+      
+        'select A.VoucherID,A.RekeningID,A.Note,Amount,A.UpdDate,A.UpdUse' +
+        'r,Jenis,TransDate,Actor,BankID,B.Note,FlagKKBB,B.UpdUser,B.UpdDa' +
+        'te,B.JumlahD,B.JumlahK,MOP,kdcab '
+      
+        'from CFTrKKBBDt A inner join CFtrkkbbhd B on A.voucherid=B.vouch' +
+        'erid')
+    object quActVoucherID: TStringField
+      FieldName = 'VoucherID'
+      Size = 50
+    end
+    object quActRekeningID: TStringField
+      FieldName = 'RekeningID'
+      Size = 30
+    end
+    object quActNote: TStringField
+      FieldName = 'Note'
+      Size = 100
+    end
+    object quActAmount: TBCDField
+      FieldName = 'Amount'
+      Precision = 18
+    end
+    object quActUpdDate: TDateTimeField
+      FieldName = 'UpdDate'
+      DisplayFormat = 'yyyy-mm-dd hh:mm:ss'
+    end
+    object quActUpdUser: TStringField
+      FieldName = 'UpdUser'
+    end
+    object quActJenis: TStringField
+      FieldName = 'Jenis'
+      Size = 1
+    end
+    object quActTransDate: TDateTimeField
+      FieldName = 'TransDate'
+      DisplayFormat = 'yyyy-mm-dd hh:mm:ss'
+    end
+    object quActActor: TStringField
+      FieldName = 'Actor'
+      Size = 50
+    end
+    object quActBankID: TStringField
+      FieldName = 'BankID'
+      Size = 30
+    end
+    object quActNote_1: TStringField
+      FieldName = 'Note_1'
+      Size = 500
+    end
+    object quActFlagKKBB: TStringField
+      FieldName = 'FlagKKBB'
+    end
+    object quActUpdUser_1: TStringField
+      FieldName = 'UpdUser_1'
+    end
+    object quActUpdDate_1: TDateTimeField
+      FieldName = 'UpdDate_1'
+      DisplayFormat = 'yyyy-mm-dd hh:mm:ss'
+    end
+    object quActJumlahD: TBCDField
+      FieldName = 'JumlahD'
+      Precision = 18
+    end
+    object quActJumlahK: TBCDField
+      FieldName = 'JumlahK'
+      Precision = 18
+    end
+    object quActMOP: TStringField
+      FieldName = 'MOP'
+      Size = 10
+    end
+    object quActkdcab: TStringField
+      FieldName = 'kdcab'
+      Size = 10
+    end
+  end
+  object saveDlg: TSaveDialog
+    DefaultExt = '*.xls'
+    Filter = 'Microsoft Excel File|*.xls'
+    Left = 856
+    Top = 64
+  end
+  object dxReport: TdxComponentPrinter
+    Version = 0
+    Left = 892
+    Top = 64
+  end
+end

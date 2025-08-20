@@ -1,0 +1,233 @@
+unit APRptLaporanPO;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxTL, dxDBCtrl, dxDBGrid, ComCtrls, dxPSGlbl, dxPSUtl,
+  dxPSEngn, dxPrnPg, dxBkgnd, dxWrap, dxPrnDev, dxPSCore;
+
+type
+  TfmAPRptLaporanPO = class(TfmRptDlg)
+    dgrReport: TdxDBGrid;
+    quReport: TADOQuery;
+    dsReport: TDataSource;
+    grbKartu: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    bbRefresh: TBitBtn;
+    dtpSmp: TDateTimePicker;
+    dtpDari: TDateTimePicker;
+    quReportPOID: TStringField;
+    quReportItemName: TStringField;
+    quReportItemID: TStringField;
+    quReportPrid: TStringField;
+    quReportJumlah: TBCDField;
+    quReportJumTerima: TBCDField;
+    quReportUOMID: TStringField;
+    quReportPrice: TBCDField;
+    quReportDisc: TBCDField;
+    quReportTotal: TBCDField;
+    quReportSiteID: TStringField;
+    quReportTgl: TStringField;
+    quReportSuppName: TStringField;
+    quReportTypeUnit: TStringField;
+    dgrReportColumn1: TdxDBGridColumn;
+    dgrReportColumn2: TdxDBGridColumn;
+    dgrReportColumn3: TdxDBGridColumn;
+    dgrReportColumn4: TdxDBGridColumn;
+    dgrReportColumn5: TdxDBGridColumn;
+    dgrReportColumn6: TdxDBGridColumn;
+    dgrReportColumn7: TdxDBGridColumn;
+    dgrReportColumn8: TdxDBGridColumn;
+    dgrReportColumn9: TdxDBGridColumn;
+    dgrReportColumn10: TdxDBGridColumn;
+    dgrReportColumn11: TdxDBGridColumn;
+    dgrReportColumn12: TdxDBGridColumn;
+    dgrReportColumn13: TdxDBGridColumn;
+    dgrReportColumn14: TdxDBGridColumn;
+    bbExp: TBitBtn;
+    bbColp: TBitBtn;
+    bbExcel: TBitBtn;
+    bbCancel: TBitBtn;
+    saveDlg: TSaveDialog;
+    dxReport: TdxComponentPrinter;
+    quReportOto: TStringField;
+    dgrReportColumn15: TdxDBGridColumn;
+    Button1: TButton;
+    dgrReportColumn16: TdxDBGridColumn;
+    quReportWarehouseID: TStringField;
+    dgrReportColumn17: TdxDBGridColumn;
+    quReportUsername: TStringField;
+    cek1: TCheckBox;
+    cek2: TCheckBox;
+    cek3: TCheckBox;
+    cek4: TCheckBox;
+    Label1: TLabel;
+    quReportbnote: TStringField;
+    dgrReportColumn18: TdxDBGridColumn;
+    cek6: TCheckBox;
+    cek7: TCheckBox;
+    cek5: TCheckBox;
+    cek8: TCheckBox;
+    CheckBox1: TCheckBox;
+    dgrReportColumn19: TdxDBGridColumn;
+    quReportNoUnit: TStringField;
+    cek9: TCheckBox;
+    CheckBox2: TCheckBox;
+    dgrReportColumn20: TdxDBGridColumn;
+    dgrReportColumn21: TdxDBGridColumn;
+    quReportPPN: TBCDField;
+    quReportGrandtotal: TBCDField;
+    procedure bbExcelClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure bbRefreshClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+    sQuery : string ;
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAPRptLaporanPO: TfmAPRptLaporanPO;
+
+implementation
+
+{$R *.dfm}
+uses MyUnit, UnitGeneral, ConMain, Unitdate, Search;
+
+procedure TfmAPRptLaporanPO.bbExcelClick(Sender: TObject);
+begin
+  inherited;
+  if saveDlg.Execute then
+    begin
+      if Pos('.XLS', uppercase(saveDlg.FileName)) > 0 then
+        dgrReport.SaveToXLS(saveDlg.FileName, true)
+      else
+        dgrReport.SaveToXLS(saveDlg.FileName + '.xls', true);
+    end;
+end;
+
+procedure TfmAPRptLaporanPO.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+procedure TfmAPRptLaporanPO.bbRefreshClick(Sender: TObject);
+var jenis : string;
+begin
+  inherited;
+  jenis := '''XXX''';
+  if cek1.Checked then
+  jenis := jenis + ',''A''';
+  if cek2.Checked then
+  jenis := jenis + ',''I''';
+  if cek3.Checked then
+  jenis := jenis + ',''L''';
+  if cek4.Checked then
+  jenis := jenis + ',''B''';
+  if cek5.Checked then
+  jenis := jenis + ',''J''';
+  if cek6.Checked then
+  jenis := jenis + ',''O''';
+  if cek7.Checked then
+  jenis := jenis + ',''S''';
+  if cek8.Checked then
+  jenis := jenis + ',''H''';
+  if CheckBox1.Checked then
+  jenis := jenis + ',''M''';
+  if CheckBox2.Checked then
+  jenis := jenis + ',''E''';
+  if cek9.Checked then
+  jenis := jenis + ',''U''';
+
+
+  sQuery := 'SELECT B.WarehouseID,A.POID,C.ItemName,A.ItemID2 as ItemID,A.Prid,A.Jumlah,A.NoUnit, '
+           +'ISNULL((Select SUM(X.Jumlah) FROM APTrKonsinyasiDt X '
+           +'Where X.Note=A.PRID AND X.ItemID=A.ItemID2 AND X.FgNum=A.NumAll),0) as JumTerima, '
+           +'A.UOMID,A.Price*(1-B.Disc*0.01) as Price,A.Disc,A.Jumlah*A.Price*(1-B.Disc*0.01) as Total,B.SiteID, '
+           +'CONVERT(VARCHAR(12),B.Transdate,111) as Tgl,D.SuppName,C.TypeUnit, '
+           +'CASE WHEN A.FgOto=''Y'' THEN ''YA'' ELSE ''TIDAK'' END as Oto,A.UpdUser as username,B.Note as bnote, '
+           +'CASE WHEN B.FgTax=''Y'' THEN A.Jumlah*A.Price*(1-B.Disc*0.01)*(B.NilaiTax*0.01) ELSE 0 END as PPN, '
+           +' CASE WHEN B.FgTax=''Y'' THEN A.Jumlah*A.Price*(1-B.Disc*0.01)*(1+B.NilaiTax*0.01) ELSE A.Jumlah*A.Price*(1-B.Disc*0.01) END as Grandtotal '
+           +'FROM APTrPurchaseOrderDt A '
+           +'inner join APTrPurchaseOrderHd B on A.POID=B.POID '
+           +'inner join INMsItem C on A.ItemID2=C.ItemID AND C.Jenis IN ('+jenis+') '
+           +'inner join APMsSupplier D on D.SuppID=B.SuppID '
+           +'WHERE CONVERT(VARCHAR(8),B.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dtpDari.Date)+''' '
+           +'AND '''+FormatDateTime('yyyyMMdd',dtpSmp.Date)+''' '
+           +'ORDER BY B.TransDate';
+
+  with quReport do
+  begin
+    if active then close;
+    SQL.Text := sQuery;
+    Open;
+  end;
+end;
+
+procedure TfmAPRptLaporanPO.FormShow(Sender: TObject);
+begin
+  inherited;
+  dtpDari.Date := EncodeDate(getyear(date),getmonth(date),1);
+  dtpSmp.Date := date;
+  dtpDari.SetFocus;
+  bbRefreshClick(bbRefresh);
+end;
+
+procedure TfmAPRptLaporanPO.Button1Click(Sender: TObject);
+var Jenis : string;
+begin
+  inherited;
+  jenis := '''XXX''';
+  if cek1.Checked then
+  jenis := jenis + ',''A''';
+  if cek2.Checked then
+  jenis := jenis + ',''I''';
+  if cek3.Checked then
+  jenis := jenis + ',''L''';
+  if cek4.Checked then
+  jenis := jenis + ',''B''';
+  if cek5.Checked then
+  jenis := jenis + ',''J''';
+  if cek6.Checked then
+  jenis := jenis + ',''O''';
+  if cek7.Checked then
+  jenis := jenis + ',''S''';
+  if cek8.Checked then
+  jenis := jenis + ',''H''';
+  if CheckBox1.Checked then
+  jenis := jenis + ',''M''';
+  if CheckBox2.Checked then
+  jenis := jenis + ',''E''';
+  if cek9.Checked then
+  jenis := jenis + ',''U''';
+  
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Cari Purchase Order';
+     SQLString := 'SELECT A.POID,C.ItemName as Nama_Barang,A.ItemID2 as Part_Number,A.Prid as Nomor_PR,A.Jumlah,A.NoUnit,'
+                 +'A.UOMID,B.SiteID,CONVERT(VARCHAR(12),B.Transdate,111) as Tgl,D.SuppName,C.TypeUnit '
+                 +'FROM APTrPurchaseOrderDt A '
+                 +'inner join APTrPurchaseOrderHd B on A.POID=B.POID '
+                 +'inner join INMsItem C on A.ItemID2=C.ItemID AND C.Jenis IN ('+jenis+') '
+                 +'inner join APMsSupplier D on D.SuppID=B.SuppID '
+                 +'WHERE CONVERT(VARCHAR(8),B.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dtpDari.Date)+''' '
+                 +'AND '''+FormatDateTime('yyyyMMdd',dtpSmp.Date)+''' '
+                 +'ORDER BY B.TransDate';
+
+     if ShowModal = MrOK then
+     begin
+       quReport.Locate('POID',Res[0],[]);
+     end;
+  finally
+     free;
+  end;
+end;
+
+end.

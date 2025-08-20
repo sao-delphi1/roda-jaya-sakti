@@ -1,0 +1,162 @@
+unit CFTrOtorisasi;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, StdCtrls,
+  ExtCtrls, dxPageControl, dxEdLib, dxButton, dxCore, dxContainer, Buttons,
+  dxTL, dxDBCtrl, dxDBGrid, dxDBTLCl, dxGrClms;
+
+type
+  TfmCFTrOtorisasi = class(TfmStdLv31)
+    dxDBGrid1: TdxDBGrid;
+    dxDBGrid1VoucherID: TdxDBGridColumn;
+    dxDBGrid1Transdate: TdxDBGridColumn;
+    dxDBGrid1Actor: TdxDBGridColumn;
+    dxDBGrid1CurrID: TdxDBGridColumn;
+    dxDBGrid1JumlahD: TdxDBGridColumn;
+    dxDBGrid1Column6: TdxDBGridColumn;
+    quMainVoucherID: TStringField;
+    quMainTransdate: TDateTimeField;
+    quMainJumlahD: TBCDField;
+    quMainCurrID: TStringField;
+    quMainActor: TStringField;
+    quMainFlag: TStringField;
+    dxDBGrid1Column7: TdxDBGridButtonColumn;
+    dxDBGrid1Column8: TdxDBGridColumn;
+    quMainTransDate1: TDateTimeField;
+    quMainBankID: TStringField;
+    CheckBox1: TCheckBox;
+    quMainKodeApproval: TStringField;
+    dxDBGrid1Column9: TdxDBGridColumn;
+    Button1: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure dxDBGrid1Column7ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBGrid1DblClick(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmCFTrOtorisasi: TfmCFTrOtorisasi;
+
+implementation
+
+uses ARConfirmOto,Search;
+{$R *.dfm}
+
+procedure TfmCFTrOtorisasi.FormCreate(Sender: TObject);
+begin
+  inherited;
+  UsePeriod := False;
+end;
+
+procedure TfmCFTrOtorisasi.FormShow(Sender: TObject);
+begin
+  inherited;
+  quMain.Active := TRUE;
+end;
+
+procedure TfmCFTrOtorisasi.dxDBGrid1Column7ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Bank';
+       SQLString := 'SELECT BankId as Kode_Bank, BankName as Nama_Bank'
+                   +' FROM CFMsBank WHERE FgActive=''Y'' AND FgBank=''T'' ORDER BY BankId';
+       if ShowModal = MrOK then
+       begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainBankId.Value := Res[0];
+       end;
+    finally
+       Free;
+    end;
+end;
+
+procedure TfmCFTrOtorisasi.dxDBGrid1DblClick(Sender: TObject);
+begin
+  inherited;
+
+  with TfmARConfirmOto.Create (Application) do
+   try
+     Label2.Caption:=Self.quMainVoucherID.AsString;
+     Label3.Caption:=Self.quMainBankID.AsString;
+     dxButton1.Visible := False;
+     ShowModal;
+     quMain.Requery();
+   finally
+    Free;
+   end;
+end;
+
+procedure TfmCFTrOtorisasi.CheckBox1Click(Sender: TObject);
+begin
+  inherited;
+  if CheckBox1.Checked then
+  begin
+    dxDBGrid1Column9.Visible := True;
+    with quMain,Sql do
+    begin
+    Close;Clear;
+    Add('SELECT VoucherID,Transdate,TransDate1,JumlahD,CurrID,BankID,KodeApproval, '
+       +'isnull((SELECT K.SuppName FROM (SELECT SuppID,SuppName From APMsSupplier ) as K '
+       +'WHERE K.SuppID=Actor),Actor) as Actor, '
+       +'CASE WHEN FlagKKBB IN (''APK'',''APB'',''APC'') THEN ''Payable'' ELSE ''Pengeluaran/Biaya'' END as Flag FROM CFTrKKBBHd '
+       +'WHERE FlagKKBB IN (''APK'',''APB'',''APC'',''KK'',''BK'') AND FgPayment=''T'' AND KodeApproval<>'''' '
+       +'ORDER BY VoucherID ');
+       //showmessage(sql.text);
+    Open;
+    End;
+  end Else
+  begin
+    dxDBGrid1Column9.Visible := False;
+    with quMain,Sql do
+    begin
+    Close;Clear;
+    Add('SELECT VoucherID,Transdate,TransDate1,JumlahD,CurrID,BankID,KodeApproval, '
+       +'isnull((SELECT K.SuppName FROM (SELECT SuppID,SuppName From APMsSupplier ) as K '
+       +'WHERE K.SuppID=Actor),Actor) as Actor, '
+       +'CASE WHEN FlagKKBB IN (''APK'',''APB'',''APC'') THEN ''Payable'' ELSE ''Pengeluaran/Biaya'' END as Flag FROM CFTrKKBBHd '
+       +'WHERE FlagKKBB IN (''APK'',''APB'',''APC'',''KK'',''BK'') AND FgPayment=''F'' '
+       +'ORDER BY VoucherID ');
+       //showmessage(sql.text);
+    Open;
+    End;
+  End;
+end;
+
+procedure TfmCFTrOtorisasi.Button1Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'CARI NOMOR VOUCHER';
+     SQLString := 'SELECT VoucherID,Transdate,TransDate1,JumlahD,CurrID,BankID,KodeApproval, '
+                 +' isnull((SELECT K.SuppName FROM (SELECT SuppID,SuppName From APMsSupplier) as K WHERE K.SuppID=Actor),Actor) as Actor, '
+                 +' CASE WHEN FlagKKBB IN (''APK'',''APB'',''APC'') THEN ''Payable'' ELSE ''Pengeluaran/Biaya'' END as Flag FROM CFTrKKBBHd  '
+                 +' WHERE FlagKKBB IN (''APK'',''APB'',''APC'',''KK'',''BK'') AND FgPayment=''F'' '
+                 +' ORDER BY VoucherID' ;
+
+     if ShowModal = MrOK then
+     begin
+       quMain.Locate('KonInvPelID',Res[0],[]);
+     end;
+  finally
+     free;
+  end;
+
+
+
+end;
+
+end.

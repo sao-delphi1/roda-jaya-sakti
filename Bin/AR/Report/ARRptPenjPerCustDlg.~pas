@@ -1,0 +1,758 @@
+unit ARRptPenjPerCustDlg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxEditor, dxEdLib, dxTL, dxDBCtrl, dxDBGrid, dxCore, dxButton,
+  ActnList, dxDBELib, StrUtils;
+
+type
+  TfmARRptPenjPerCustDlg = class(TfmRptDlg)
+    quActCustID: TStringField;
+    quActCustName: TStringField;
+    ActionList: TActionList;
+    ActPrint: TAction;
+    Label1: TLabel;
+    gbTanggal: TGroupBox;
+    Label2: TLabel;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    RbJenis: TRadioGroup;
+    rbAll: TRadioButton;
+    rbSelect: TRadioButton;
+    bbCancel: TdxButton;
+    dxJenisBrg: TdxImageEdit;
+    dbgList: TdxDBGrid;
+    dbgListCustID: TdxDBGridMaskColumn;
+    dbgListCustName: TdxDBGridMaskColumn;
+    ActCari: TAction;
+    RgPeriode: TRadioGroup;
+    gbTahun: TGroupBox;
+    dxTahun: TdxSpinEdit;
+    cbAll: TCheckBox;
+    cbPelanggan: TCheckBox;
+    dxJumlah: TdxSpinEdit;
+    KodeDari: TdxButtonEdit;
+    rcNota: TCheckBox;
+    rcRekapitulasi: TCheckBox;
+    gbBulan: TGroupBox;
+    dxThn: TdxSpinEdit;
+    dxBulan: TdxImageEdit;
+    dbgSuppID: TdxDBGridColumn;
+    procedure bbPreviewClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure rbSelectClick(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure dt1KeyPress(Sender: TObject; var Key: Char);
+    procedure RgPeriodeClick(Sender: TObject);
+    procedure cbAllClick(Sender: TObject);
+    procedure cbPelangganClick(Sender: TObject);
+    procedure rcRekapitulasiClick(Sender: TObject);
+    procedure KodeDariButtonClick(Sender: TObject; AbsoluteIndex: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    StLap,Dari,Sampai : string;
+  end;
+
+var
+  fmARRptPenjPerCustDlg: TfmARRptPenjPerCustDlg;
+
+implementation
+
+uses INQRRptAdjusment, UnitGeneral, ARQRRptTrService,
+  StdLv0, APQRRptPembPerBrg, APQRRptPembPerSupp, ARQRRptPenjPerCust, Search,
+  UnitDate, RptLv2, ARQrRptPenjPerCustTahun, RptLv3, ARQRRptRekapPenjualan,
+  RptLv0;
+
+{$R *.dfm}
+
+procedure TfmARRptPenjPerCustDlg.bbPreviewClick(Sender: TObject);
+var Jenis : string;
+begin
+  inherited;
+  if (dxBulan.Text = '01') or (dxBulan.Text = 'January') then
+  begin
+    Dari := dxThn.Text+'0101';
+    Sampai := dxThn.Text+'0131';
+  end else
+  if (dxBulan.Text = '02') or (dxBulan.Text = 'Febuary') then
+  begin
+    Dari := dxThn.Text+'0201';
+    Sampai := dxThn.Text+'0231';
+  end else
+  if (dxBulan.Text = '03') or (dxBulan.Text = 'Maret') then
+  begin
+    Dari := dxThn.Text+'0301';
+    Sampai := dxThn.Text+'0331';
+  end else
+  if (dxBulan.Text = '04') or (dxBulan.Text = 'April') then
+  begin
+    Dari := dxThn.Text+'0401';
+    Sampai := dxThn.Text+'0431';
+  end else
+  if (dxBulan.Text = '05') or (dxBulan.Text = 'Mei') then
+  begin
+    Dari := dxThn.Text+'0501';
+    Sampai := dxThn.Text+'0531'
+  end else
+  if (dxBulan.Text = '06') or (dxBulan.Text = 'Juni') then
+  begin
+    Dari := dxThn.Text+'0601';
+    Sampai := dxThn.Text+'0631'
+  end else
+  if (dxBulan.Text = '07') or (dxBulan.Text = 'Juli') then
+  begin
+    Dari := dxThn.Text+'0701';
+    Sampai := dxThn.Text+'0731'
+  end else
+  if (dxBulan.Text = '08') or (dxBulan.Text = 'Agustus') then
+  begin
+    Dari := dxThn.Text+'0801';
+    Sampai := dxThn.Text+'0831'
+  end else
+  if (dxBulan.Text = '09') or (dxBulan.Text = 'September') then
+  begin
+    Dari := dxThn.Text+'0901';
+    Sampai := dxThn.Text+'0931'
+  end else
+  if (dxBulan.Text = '10') or (dxBulan.Text = 'Oktober') then
+  begin
+    Dari := dxThn.Text+'1001';
+    Sampai := dxThn.Text+'1031'
+  end else
+  if (dxBulan.Text = '11') or (dxBulan.Text = 'November') then
+  begin
+    Dari := dxThn.Text+'1101';
+    Sampai := dxThn.Text+'1131'
+  end else
+  begin
+    Dari := dxThn.Text+'1201';
+    Sampai := dxThn.Text+'1231'
+  end;
+
+  if RgPeriode.ItemIndex = 0 then
+  begin
+    if rcRekapitulasi.Checked then
+    begin
+     with TfmARQRRptRekapPenjualan.Create(Self) do
+     try
+       qrlTitle.Caption := 'REKAPITULASI PENJUALAN';
+       Tahun := RightStr(dxTahun.Text,2);
+       if (dxBulan.Text = '01') or (dxBulan.Text = 'January') then
+       begin
+         qrlPeriode.Caption := 'January '+dxThn.Text;
+         NBulan := 'JAN';
+       end else
+       if (dxBulan.Text = '02') or (dxBulan.Text = 'Febuary') then
+       begin
+         qrlPeriode.Caption := 'Febuary '+dxThn.Text;
+         NBulan := 'FEB';
+       end else
+       if (dxBulan.Text = '03') or (dxBulan.Text = 'Maret') then
+       begin
+         qrlPeriode.Caption := 'Maret '+dxThn.Text;
+         NBulan := 'MAR';
+       end else
+       if (dxBulan.Text = '04') or (dxBulan.Text = 'April') then
+       begin
+         qrlPeriode.Caption := 'April '+dxThn.Text;
+         NBulan := 'APR';
+       end else
+       if (dxBulan.Text = '05') or (dxBulan.Text = 'Mei') then
+       begin
+         qrlPeriode.Caption := 'Mei '+dxThn.Text;
+         NBulan := 'MEI';
+       end else
+       if (dxBulan.Text = '06') or (dxBulan.Text = 'Juni') then
+       begin
+         qrlPeriode.Caption := 'Juni '+dxThn.Text;
+         NBulan := 'JUN';
+       end else
+       if (dxBulan.Text = '07') or (dxBulan.Text = 'Juli') then
+       begin
+         qrlPeriode.Caption := 'Juli '+dxThn.Text;
+         NBulan := 'JUL';
+       end else
+       if (dxBulan.Text = '08') or (dxBulan.Text = 'Agustus') then
+       begin
+         qrlPeriode.Caption := 'Agustus '+dxThn.Text;
+         NBulan := 'AUGT';
+       end else
+       if (dxBulan.Text = '09') or (dxBulan.Text = 'September') then
+       begin
+         qrlPeriode.Caption := 'September '+dxThn.Text;
+         NBulan := 'SEPT';
+       end else
+       if (dxBulan.Text = '10') or (dxBulan.Text = 'Oktober') then
+       begin
+         qrlPeriode.Caption := 'Oktober '+dxThn.Text;
+         NBulan := 'OKT';
+       end else
+       if (dxBulan.Text = '11') or (dxBulan.Text = 'November') then
+       begin
+         qrlPeriode.Caption := 'November '+dxThn.Text;
+         NBulan := 'NOV';
+       end else
+       begin
+         qrlPeriode.Caption := 'Desember '+dxThn.Text;
+         NBulan := 'DES';
+       end;
+
+       with qu001,SQL do
+       Begin
+         Close;Clear;
+         add('SELECT DISTINCT A.CustID,B.CustName as CustName,B.City as Address,CASE WHEN A.CurrID=''IDR'' THEN ''IDR - Rupiah'' ELSE ''USD - DOLLAR'' END as CurrID,A.CurrID as Valuta '
+            +'FROM ARTrKonInvPelHd A INNER JOIN ARMsCustomer B ON A.CustID=B.CustID '
+            +'INNER JOIN ARTrPurchaseOrderHD C ON A.SOID=C.POID AND A.CustID=C.CustID '
+            +'WHERE CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+Dari+''' AND '''+Sampai+''' ');
+         if rbJenis.ItemIndex = 0 then
+            Add('AND A.CurrID=''IDR'' ')
+         else
+            Add('AND A.CurrID=''USD'' ');
+         if rbSelect.Checked then
+            Add(' AND A.CustID IN '+SelGrid(quAct,dbgList,'CustID'));
+         Open;
+         if IsEmpty then
+         begin
+           ShowMessage('Tidak ada Data');
+           Abort;
+         end;
+       End;
+
+       With qu002,SQL do
+       Begin
+         Close;Clear;
+         add('SELECT DISTINCT CONVERT(VARCHAR(10),A.Transdate,103) as Tanggal,A.KonInvPelID,A.Note,ISNULL(A.TTLKj,0) as Debet,A.CustID,'
+            +'ISNULL((SELECT SUM(Y.Amount) FROM CFTrkkBBHD X INNER JOIN CFTrkkBBdt Y ON X.VoucherID=Y.VoucherID '
+            +'WHERE X.Actor=A.CustID AND Y.VoucherID=A.KonInvPelID),0) as Kredit,CONVERT(VARCHAR(10),DATEADD(DAY,A.JatuhTempo,A.Transdate),103) as JthTempo '
+            +'FROM ARTrKonInvPelHd A INNER JOIN ARMsCustomer B ON A.CustID=B.CustID INNER JOIN ARTrPurchaseOrderHD C ON A.SOID=C.POID AND A.CustID=C.CustID '
+            +'INNER JOIN ARTrKonInvPelDt D ON A.KonInvPelID=D.KonInvPelID WHERE A.CustID=:CustID '
+            +'AND CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+Dari+''' AND '''+Sampai+''' ');
+         if rbJenis.ItemIndex = 0 then
+            Add('AND A.CurrID=''IDR'' ')
+         else
+            Add('AND A.CurrID=''USD'' ');
+         Add('ORDER BY A.KonInvPelID');
+         Parameters.ParamByName('CustID').DataType := ftString;
+         Open;
+       End;
+
+         if Sender=bbPrint then
+            MyReport.Print
+         else
+            MyReport.PreviewModal;
+
+     finally
+        free;
+     end;
+    end else
+    begin
+      with TfmARQRRptPenjPerCust.Create(Self) do
+       try
+         qrlTitle.Caption := laTitle.Caption;
+         qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt1.date)+' s/d '+FormatDateTime('dd/MM/yyyy',dt2.date);
+         LapSt := StLap;
+
+         if dxJenisBrg.Text = 'M' then Jenis := 'MESIN' else
+           if dxJenisBrg.Text = 'S' then Jenis := 'SPARE PART' else  Jenis := 'MESIN DAN SPARE PART';
+
+         if RbJenis.ItemIndex = 0 then
+           qrlValuta.Caption := 'VALUTA : RUPIAH '//- JENIS : '+Jenis
+         else
+           qrlValuta.Caption := 'VALUTA : US DOLLAR ';//- JENIS : '+Jenis;
+
+         if rcNota.Checked then
+         begin
+           bnd002.Enabled := True;
+         end else
+         begin
+           bnd002.Enabled := False; QRLabel6.Enabled := False; QRLabel7.Enabled := False; QRLabel10.Enabled := False;
+           QRLabel9.Top := 4; QRShape1.Height := 22; bndCH.Height := 25;
+         end;
+
+         if StLap = 'Jual' then
+         begin
+           with qu001,SQL do
+           begin
+             Close;Clear;
+             add('SELECT DISTINCT A.CustID,B.CustName as Cust,B.City,ISNULL(SUM(A.TTLKj),0) as Total FROM ARTrKonInvPelHd A '
+                +'INNER JOIN ARMsCustomer B ON A.CustID=B.CustID INNER JOIN ARTRPurchaseOrderHD C ON A.CustID=C.CustID AND A.SOID=C.POID '
+                +'WHERE CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' ');
+             if rbJenis.ItemIndex = 0 then
+                Add('AND A.CurrID=''IDR'' ')
+             else
+                Add('AND A.CurrID=''USD'' ');
+             if rbSelect.Checked then
+                Add(' AND A.CustID IN '+SelGrid(quAct,dbgList,'CustID'));
+             Add('GROUP BY A.CustID,B.CustName,B.City ORDER BY A.CustID');
+             Open;
+             if IsEmpty then
+             begin
+               MsgInfo('No Data !');
+               Abort;
+             end;
+           end;
+
+           with qu002,SQL do
+           begin
+             Close;Clear;
+             add('SELECT DISTINCT CONVERT(VARCHAR(8),A.Transdate,112),A.KonInvPelID as SaleID,ISNULL(A.TTLKj,0) as Total,'
+                +'CONVERT(VARCHAR(10),A.Transdate,103) as Tgl,C.CustName,C.City '
+                +'FROM ARTrKonInvPelHd A INNER JOIN ARTrPurchaseOrderHD B ON A.SOID=B.POID AND A.CustID=B.CustID '
+                +'INNER JOIN ARMsCustomer C ON A.CustID=C.CustID AND B.CustID=C.CustID WHERE A.CustID=:CustID AND '
+                +'CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' ');
+             if rbJenis.ItemIndex = 0 then
+                Add('AND A.CurrID=''IDR'' ')
+             else
+                Add('AND A.CurrID=''USD'' ');
+             Add('ORDER BY CONVERT(VARCHAR(8),A.Transdate,112),A.KonInvPelID');
+             Parameters.ParamByName('CustId').DataType := ftString;
+             Open;
+           end;
+
+
+           with qu003,SQL do
+           begin
+              Close;Clear;
+              add('SELECT DISTINCT A.KonInvPelId,A.ItemID,B.ItemName as NamaBarang,ISNULL(A.Qty,0) as Qty,ISNULL(A.Price,0) as Price,'
+                 +'ISNULL(A.Qty*A.Price,0) as Total,B.UOMID2 FROM ARTrKonInvPelDt A INNER JOIN INMsItem B ON A.ItemID=B.ItemID '
+                 +'WHERE A.KonInvPelID=:SaleID ORDER BY A.ItemID');
+              Parameters.ParamByName('SaleId').DataType := ftString;
+              Open;
+           end;
+         end else
+         begin
+           QRLabel3.Caption := 'Supplier'; QRLabel2.Enabled := False;
+           with qu001,SQL do
+           begin
+             Close;Clear;
+             add('SELECT DISTINCT A.SuppID as CustID,B.SuppName as Cust,'''' as City,ISNULL(SUM(A.TTLPO),0) as Total FROM APTrPurchaseOrderHd A '
+                +'INNER JOIN APMsSupplier B ON A.SuppID=B.SuppID '
+                +'WHERE CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' ');
+             {if rbJenis.ItemIndex = 0 then
+                Add('AND A.CurrID=''IDR'' ')
+             else
+                Add('AND A.CurrID=''USD'' ');
+             if dxJenisBrg.Text <> 'A' then
+                Add('AND C.Jenis='''+dxJenisBrg.Text+''' ');  }
+             if rbSelect.Checked then
+                Add(' AND A.SuppID IN '+SelGrid(quAct,dbgList,'CustID'));
+             Add('GROUP BY A.SuppID,B.SuppName ORDER BY B.SuppName');
+             Open;
+             if IsEmpty then
+             begin
+               MsgInfo('No Data !');
+               Abort;
+             end;
+           end;
+
+           with qu002,SQL do
+           begin
+             Close;Clear;
+             add('SELECT DISTINCT CONVERT(VARCHAR(8),A.Transdate,112),A.POID as SaleID,ISNULL(A.TTLPO,0) as Total,'
+                +'CONVERT(VARCHAR(10),A.Transdate,103) as Tgl,C.SuppName as CustName,C.City '
+                +'FROM APTrPurchaseOrderHd A '
+                +'INNER JOIN APMsSupplier C ON A.SuppID=C.SuppID WHERE A.SuppID=:CustID AND '
+                +'CONVERT(VARCHAR(8),A.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',dt1.Date)+''' AND '''+FormatDateTime('yyyyMMdd',dt2.Date)+''' ');
+          {   if rbJenis.ItemIndex = 0 then
+                Add('AND A.CurrID=''IDR'' ')
+             else
+                Add('AND A.CurrID=''USD'' ');
+             if dxJenisBrg.Text <> 'A' then
+                Add('AND B.Jenis='''+dxJenisBrg.Text+''' '); }
+             Add('ORDER BY CONVERT(VARCHAR(8),A.Transdate,112),A.POID');
+             Parameters.ParamByName('CustId').DataType := ftString;
+             Open;
+           end;
+
+
+           with qu003,SQL do
+           begin
+              Close;Clear;
+              add('SELECT DISTINCT A.POID as KonInvPelId,A.ItemID,B.ItemName as NamaBarang,ISNULL(A.Qty-A.DiscItem,0) as Qty,ISNULL(A.Price,0) as Price,'
+                 +'ISNULL((A.Qty-A.DiscItem)*A.Price,0) as Total,B.UOMID2 FROM APTRPurchaseOrderDt A INNER JOIN INMsItem B ON A.ItemID=B.ItemID '
+                 +'WHERE A.POID=:SaleID ORDER BY A.ItemID');
+              Parameters.ParamByName('SaleId').DataType := ftString;
+              Open;
+           end;
+         end;
+
+         if Sender=bbPrint then
+            MyReport.Print
+         else
+            MyReport.PreviewModal;
+
+
+      finally
+          free;
+      end;
+    end;
+  end else
+  begin
+    with TfmARQRRptPenjPerCustTahun.Create(Self) do
+     try
+       qrlTitle.Caption := laTitle.Caption;
+       if dxJenisBrg.Text = 'M' then Jenis := 'MESIN' else
+         if dxJenisBrg.Text = 'S' then Jenis := 'SPARE PART' else  Jenis := 'MESIN DAN SPARE PART';
+
+       if rbJenis.ItemIndex = 0 then
+         qrlPeriode.Caption := 'Periode : '+dxTahun.Text+' VALUTA : RUPIAH'// - JENIS : '+Jenis
+       else
+         qrlPeriode.Caption := 'Periode : '+dxTahun.Text+' VALUTA : US DOLLAR';// - JENIS : '+Jenis;
+
+       if dxJenisBrg.Text <> 'A' then
+       begin
+         with qu001,SQL do
+         begin
+           Close;Clear;
+           Add('SELECT DISTINCT ');
+           if dxJumlah.IntValue <> 0 then
+              Add('TOP '+dxJumlah.Text+' ');
+           Add('L.CustName,K.CustID,K.Jenis,K.January,K.Febuary,K.Maret,K.April,K.Mei,K.Juni,K.Juli,K.Agustus,K.September,K.Oktober,K.November,K.Desember,'
+              +'ISNULL(K.January+K.Febuary+K.Maret+K.April+K.Mei+K.Juni+K.Juli+K.Agustus+K.September+K.Oktober+K.November+K.Desember,0) as Total FROM ('
+              +'SELECT A.CustID,A.Transdate,A.CurrID,B.Jenis,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0101 AND '+dxTahun.Text+'0131 AND X.CustID=A.CustID ),0) as January,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0201 AND '+dxTahun.Text+'0231 AND X.CustID=A.CustID ),0) as Febuary,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0301 AND '+dxTahun.Text+'0331 AND X.CustID=A.CustID ),0) as Maret,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0401 AND '+dxTahun.Text+'0431 AND X.CustID=A.CustID ),0) as April,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0501 AND '+dxTahun.Text+'0531 AND X.CustID=A.CustID ),0) as Mei,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0601 AND '+dxTahun.Text+'0631 AND X.CustID=A.CustID ),0) as Juni,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0701 AND '+dxTahun.Text+'0731 AND X.CustID=A.CustID ),0) as Juli,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0801 AND '+dxTahun.Text+'0831 AND X.CustID=A.CustID ),0) as Agustus,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0901 AND '+dxTahun.Text+'0931 AND X.CustID=A.CustID ),0) as September,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'1001 AND '+dxTahun.Text+'1031 AND X.CustID=A.CustID ),0) as Oktober,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'1101 AND '+dxTahun.Text+'1131 AND X.CustID=A.CustID ),0) as November,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'1201 AND '+dxTahun.Text+'1231 AND X.CustID=A.CustID ),0) as Desember '
+              +'FROM ARTrKonInvPelHd A INNER JOIN ARTrPurchaseOrderHD B ON A.SOID=B.POID) as K INNER JOIN ARMsCustomer L ON K.CustID=L.CustID '
+              +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '+dxTahun.Text+'0101 AND '+dxTahun.Text+'1231 AND K.Jenis='''+dxJenisBrg.Text+''' ');
+           if rbJenis.ItemIndex = 0 then
+              Add(' AND K.CurrID=''IDR'' ');
+           if rbJenis.ItemIndex = 1 then
+              Add(' AND K.CurrID=''USD'' ');
+           if rbSelect.Checked then
+              Add(' AND K.CustId IN '+SelGrid(quAct,dbgList,'CustID'));
+           Add('ORDER BY ISNULL(K.January+K.Febuary+K.Maret+K.April+K.Mei+K.Juni+K.Juli+K.Agustus+K.September+K.Oktober+K.November+K.Desember,0) DESC,L.CustName');
+           Open;
+           if IsEmpty then
+           begin
+             MsgInfo('No Data !');
+             Abort;
+           end;
+         end;
+       end else
+       begin
+         with qu001,SQL do
+         begin
+           Close;Clear;
+           Add('SELECT DISTINCT ');
+           if dxJumlah.IntValue <> 0 then
+              Add('TOP '+dxJumlah.Text+' ');
+           Add('L.CustName,K.CustID,K.January,K.Febuary,K.Maret,K.April,K.Mei,K.Juni,K.Juli,K.Agustus,K.September,K.Oktober,K.November,K.Desember,'
+              +'ISNULL(K.January+K.Febuary+K.Maret+K.April+K.Mei+K.Juni+K.Juli+K.Agustus+K.September+K.Oktober+K.November+K.Desember,0) as Total FROM ('
+              +'SELECT A.CustID,A.Transdate,A.CurrID,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0101 AND '+dxTahun.Text+'0131 AND X.CustID=A.CustID ),0) as January,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0201 AND '+dxTahun.Text+'0231 AND X.CustID=A.CustID ),0) as Febuary,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0301 AND '+dxTahun.Text+'0331 AND X.CustID=A.CustID ),0) as Maret,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0401 AND '+dxTahun.Text+'0431 AND X.CustID=A.CustID ),0) as April,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0501 AND '+dxTahun.Text+'0531 AND X.CustID=A.CustID ),0) as Mei,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0601 AND '+dxTahun.Text+'0631 AND X.CustID=A.CustID ),0) as Juni,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0701 AND '+dxTahun.Text+'0731 AND X.CustID=A.CustID ),0) as Juli,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0801 AND '+dxTahun.Text+'0831 AND X.CustID=A.CustID ),0) as Agustus,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'0901 AND '+dxTahun.Text+'0931 AND X.CustID=A.CustID ),0) as September,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'1001 AND '+dxTahun.Text+'1031 AND X.CustID=A.CustID ),0) as Oktober,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'1101 AND '+dxTahun.Text+'1131 AND X.CustID=A.CustID ),0) as November,'
+              +'ISNULL((SELECT SUM(X.TTLKj) FROM ARTrKonInvPelHd X INNER JOIN ARTrPurchaseOrderHD Y ON X.SOID=Y.POID AND X.CustID=Y.CustID '
+              +'WHERE CONVERT(VARCHAR(8),X.Transdate,112) BETWEEN '+dxTahun.Text+'1201 AND '+dxTahun.Text+'1231 AND X.CustID=A.CustID ),0) as Desember '
+              +'FROM ARTrKonInvPelHd A INNER JOIN ARTrPurchaseOrderHD B ON A.SOID=B.POID) as K INNER JOIN ARMsCustomer L ON K.CustID=L.CustID '
+              +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '+dxTahun.Text+'0101 AND '+dxTahun.Text+'1231 ');
+           if rbJenis.ItemIndex = 0 then
+              Add(' AND K.CurrID=''IDR'' ');
+           if rbJenis.ItemIndex = 1 then
+              Add(' AND K.CurrID=''USD'' ');
+           if rbSelect.Checked then
+              Add(' AND K.CustId IN '+SelGrid(quAct,dbgList,'CustID'));
+           Add('ORDER BY ISNULL(K.January+K.Febuary+K.Maret+K.April+K.Mei+K.Juni+K.Juli+K.Agustus+K.September+K.Oktober+K.November+K.Desember,0) DESC,L.CustName');
+           Open;
+           if IsEmpty then
+           begin
+             MsgInfo('No Data !');
+             Abort;
+           end;
+         end;
+       end;
+       if Sender=bbPrint then
+          MyReport.Print
+       else
+          MyReport.PreviewModal;
+     finally
+        free;
+     end;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.FormShow(Sender: TObject);
+var Bulan : string;
+begin
+  inherited;
+  if rgPeriode.ItemIndex = 0 then
+  begin
+    gbTahun.Visible := False;
+    gbTanggal.Visible := True;
+  end else
+  begin
+    gbTahun.Visible := True;
+    gbTanggal.Visible := False;
+  end;
+
+  dxJenisBrg.Text := 'A';
+  quAct.Open;
+
+  if StLap = 'Jual' then
+  begin
+
+  end else
+  with quAct, SQL do
+  begin
+  Close;Clear;
+     Add('Select * From APMsSupplier');
+  ExecSQL;
+  end;
+
+  dt1.Date:=EncodeDate(GetYear(Date),GetMonth(Date),1);
+  dt2.date := date;
+  dxTahun.Text := FormatDateTime('YYYY',Date);
+  dxThn.Text := FormatDateTime('YYYY',Date);
+  Bulan := FormatDateTime('MM',Date);
+  if Bulan = '01' then dxBulan.Text := 'January' else
+  if Bulan = '02' then dxBulan.Text := 'Febuary' else
+  if Bulan = '03' then dxBulan.Text := 'Maret' else
+  if Bulan = '04' then dxBulan.Text := 'April' else
+  if Bulan = '05' then dxBulan.Text := 'Mei' else
+  if Bulan = '06' then dxBulan.Text := 'Juni' else
+  if Bulan = '07' then dxBulan.Text := 'Juli' else
+  if Bulan = '08' then dxBulan.Text := 'Agustus' else
+  if Bulan = '09' then dxBulan.Text := 'September' else
+  if Bulan = '10' then dxBulan.Text := 'Oktober' else
+  if Bulan = '11' then dxBulan.Text := 'November' else
+    dxBulan.Text := 'Desember';
+
+  if StLap = 'Jual' then
+  begin
+    laTitle.Caption := 'Laporan Penjualan Per Pelanggan';
+    rcNota.Caption := 'Detail per Pelanggan';
+    with quAct, SQL do
+      begin
+      Close;Clear;
+      Add('Select CustID, CustName From ARMsCustomer');
+      Open;
+      end;
+  end else
+  begin
+    laTitle.Caption := 'Laporan PO Per Supplier';
+    rcNota.Caption := 'Detail per Supplier';
+    RgPeriode.Visible := False;
+    rcRekapitulasi.Visible := False;
+    rcNota.Top := 12;
+    with quAct, SQL do
+      begin
+      Close;Clear;
+      Add('Select SuppID as CustID,SuppName as CustName From APMsSupplier');
+      Open;
+      end;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.rbSelectClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  if StLap = 'Jual' then
+  begin
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Pelanggan';
+       SQLString := ' SELECT CustName as Nama_Pelanggan ,CustId as Kode_Pelanggan'
+                   +' FROM ARMsCustomer A '
+                   +' ORDER BY CustID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('CustID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+    end else
+    begin
+    with TfmSearch.Create(Self) do
+    try
+       Title := 'Supplier';
+       SQLString := ' SELECT SuppName as Nama_Supplier ,SuppId as Kode_Supplier'
+                   +' FROM APMsSupplier A '
+                   +' ORDER BY SuppID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('SuppID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+    end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.dt1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then PostMessage(Self.Handle,WM_NEXTDLGCTL,0,0)
+end;
+
+procedure TfmARRptPenjPerCustDlg.RgPeriodeClick(Sender: TObject);
+begin
+  inherited;
+  if rgPeriode.ItemIndex = 0 then
+  begin
+    gbTahun.Visible := False;
+    gbTanggal.Visible := True;
+    rcNota.Visible := True;
+    rcRekapitulasi.Visible := True;
+  end else
+  begin
+    gbTahun.Visible := True;
+    gbTanggal.Visible := False;
+    rcNota.Visible := False;
+    rcRekapitulasi.Visible := False;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.cbAllClick(Sender: TObject);
+begin
+  inherited;
+  if cbAll.Checked = True then
+  begin
+    cbAll.Checked := True;
+    cbPelanggan.Checked := False;
+    dxJumlah.Visible := False;
+    dxJumlah.IntValue := 0;
+  end else
+  begin
+    cbAll.Checked := False;
+    cbPelanggan.Checked := True;
+    dxJumlah.Visible := True;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.cbPelangganClick(Sender: TObject);
+begin
+  inherited;
+  if cbPelanggan.Checked = True then
+  begin
+    cbAll.Checked := False;
+    cbPelanggan.Checked := True;
+    dxJumlah.Visible := True;
+  end else
+  begin
+    cbAll.Checked := True;
+    cbPelanggan.Checked := False;
+    dxJumlah.Visible := False;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.rcRekapitulasiClick(Sender: TObject);
+begin
+  inherited;
+  if rcRekapitulasi.Checked = True then
+  begin
+    RgPeriode.Visible := False;
+    gbTanggal.Visible := False; gbTahun.Visible := False;
+    gbBulan.Visible := True; rcNota.Visible := False;
+  end else
+  begin
+    RgPeriode.Visible := True;
+    gbTanggal.Visible := True; gbTahun.Visible := False;
+    gbBulan.Visible := False; rcNota.Visible := True;
+  end;
+end;
+
+procedure TfmARRptPenjPerCustDlg.KodeDariButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  if StLap = 'Jual' then
+  begin
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Pelanggan';
+       SQLString := ' SELECT CustName as Nama_Pelanggan ,CustId as Kode_Pelanggan'
+                   +' FROM ARMsCustomer A '
+                   +' ORDER BY CustID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('CustID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+    end else
+    begin
+    with TfmSearch.Create(Self) do
+    try
+       Title := 'Supplier';
+       SQLString := ' SELECT SuppName as Nama_Pelanggan ,SuppId as Kode_Pelanggan'
+                   +' FROM APMsSupplier A '
+                   +' ORDER BY SuppID';
+       KeyValue := KodeDari.Text;
+       if ShowModal = MrOK then
+       begin
+         Self.quAct.Locate('SuppID',Res[1],[]);
+       end;
+    finally
+       free;
+    end;
+    end;
+end;
+
+end.

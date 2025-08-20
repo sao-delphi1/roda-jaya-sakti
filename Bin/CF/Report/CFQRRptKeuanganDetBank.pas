@@ -1,0 +1,433 @@
+unit CFQRRptKeuanganDetBank;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptLv1, QuickRpt, DB, ADODB, StdCtrls, QRCtrls, ExtCtrls;
+
+type
+  TfmCFQRRptKeuanganDetBank = class(TfmRptLv1)
+    ChildBand1: TQRChildBand;
+    QRShape1: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRLabel4: TQRLabel;
+    SummaryBand1: TQRBand;
+    QRSubDetail1: TQRSubDetail;
+    ds002: TDataSource;
+    QRDBText6: TQRDBText;
+    GroupFooterBand1: TQRBand;
+    QRLabel8: TQRLabel;
+    QRSubDetail2: TQRSubDetail;
+    qu002: TADOQuery;
+    qu003: TADOQuery;
+    GroupFooterBand2: TQRBand;
+    QRDBText3: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRShape2: TQRShape;
+    QRDBText7: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    quAwal: TADOQuery;
+    QRLabel7: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    qlbNote: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    procedure QRDBText2Print(sender: TObject; var Value: String);
+    procedure MyReportBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QRSubDetail1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel7Print(sender: TObject; var Value: String);
+    procedure QRSubDetail1AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure QRSubDetail2BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel10Print(sender: TObject; var Value: String);
+    procedure QRLabel12Print(sender: TObject; var Value: String);
+    procedure QRLabel11Print(sender: TObject; var Value: String);
+    procedure QRLabel13Print(sender: TObject; var Value: String);
+    procedure QRLabel15Print(sender: TObject; var Value: String);
+    procedure QRLabel16Print(sender: TObject; var Value: String);
+    procedure QRLabel17Print(sender: TObject; var Value: String);
+    procedure GroupFooterBand2BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRLabel18Print(sender: TObject; var Value: String);
+    procedure QRLabel26Print(sender: TObject; var Value: String);
+    procedure QRLabel22Print(sender: TObject; var Value: String);
+    procedure QRLabel21Print(sender: TObject; var Value: String);
+    procedure QRLabel23Print(sender: TObject; var Value: String);
+    procedure QRLabel24Print(sender: TObject; var Value: String);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    TanggalDari,TanggalSampai : TDateTime;
+    Awal,Akhir,TotalD,TotalK,GTD,GTK : currency;
+    AwalA,AkhirA,TotalDA,TotalKA,TotalGTDA,TotalGTKA : currency;
+    Laporan : string;
+  end;
+
+var
+  fmCFQRRptKeuanganDetBank: TfmCFQRRptKeuanganDetBank;
+
+implementation
+
+uses UnitGeneral, MyUnit, RptLv0;
+
+{$R *.dfm}
+
+procedure TfmCFQRRptKeuanganDetBank.QRDBText2Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  value := FormatRptkurung(Value)
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.MyReportBeforePrint(
+  Sender: TCustomQuickRep; var PrintReport: Boolean);
+begin
+  inherited;
+  GTD := 0;
+  GTK := 0;
+  Awal :=0;
+  Akhir := 0;
+  TotalGTDA := 0;
+  TotalGTKA := 0;
+  AwalA :=0;
+  AkhirA := 0;
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRSubDetail1BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+  inherited;
+  {if qu002.FieldByName('CurrID').ASString='USD' then
+  begin
+    QRLabel21.Enabled := True;
+    QRLabel22.Enabled := True;
+    QRLabel26.Enabled := True;
+    QRLabel27.Enabled := True;
+    QRLabel28.Enabled := True;
+    QRDBText1.Enabled := True;
+  end else
+  begin
+    QRLabel21.Enabled := False;
+    QRLabel22.Enabled := False;
+    QRLabel26.Enabled := False;
+    QRLabel27.Enabled := False;
+    QRLabel28.Enabled := False;
+    QRDBText1.Enabled := False;
+  end;  }
+
+  TotalD := 0;
+  TotalK := 0;
+  TotalDA := 0;
+  TotalKA := 0;
+  with quAwal,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT DISTINCT ISNULL(SUM(CASE WHEN K.Jenis=''D'' THEN K.Amount ELSE K.Amount*-1 END),0) as Awal,'
+       +'ISNULL(SUM(CASE WHEN K.Jenis=''D'' THEN (CASE WHEN K.CurrID<>''IDR'' THEN K.Amount ELSE 0 END) '
+       +'ELSE (CASE WHEN K.CurrID<>''IDR'' THEN K.Amount ELSE 0 END)*-1 END),0) as AwalA FROM ('
+       +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate FROM CFTrKKBBDt A '
+       +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+       +'SELECT B.RekeningID,A.Transdate,CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+       +'WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' END,'
+       +'ISNULL(CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK END,0),A.CurrID,A.Rate FROM CFTrKKBBHd A '
+       +'INNER JOIN CFMsBank B ON A.BankID=B.BankID WHERE A.FgPayment=''T'' UNION ALL '
+
+       //tabel penjualan
+       +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningP,Transdate,''K'',ISNULL(PPN,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       //tabel pembelian
+       +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningD,Transdate,''K'',ISNULL(Disc,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+       +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrkonsinyasiInvhD Where Fgoto=''Y'' UNION ALL '
+
+       +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLPb,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrPurchaseHD where FgPajak=''Y'' AND FgOto=''Y'' '
+
+       +') as K '
+       +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) < '''+FormatDateTime('yyyyMMdd',TanggalDari)+''' '
+       +'AND K.RekeningID='''+qu002.FieldByName('RekeningID').AsString+''' ');
+    //showmessage(sql.Text);
+    Open;
+  end;
+  Awal := quAwal.FieldByName('Awal').AsCurrency;
+  AwalA := quAwal.FieldByName('AwalA').AsCurrency;
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel7Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  if (qu002.FieldByName('Tipe').AsString = '1') or (qu002.FieldByName('Tipe').AsString = '5') then
+    Value :=FormatRptkurung(CurrToStr(Awal))
+  else
+     Value :=FormatRptkurung(CurrToStr(Awal*-1));
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRSubDetail1AfterPrint(
+  Sender: TQRCustomBand; BandPrinted: Boolean);
+begin
+  inherited;
+  with qu003,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT CONVERT(VARCHAR(8),K.Transdate,112),CONVERT(VARCHAR(10),K.Transdate,103) as Tanggal,K.VoucherID as VoucherNo,'
+       +'K.Note,K.Amount,K.Amount as AmountA,K.Jenis,K.Kode,K.BNote FROM ( '
+
+       //tabel cftrkkbbdt
+       +'SELECT ''D'' as Kode,A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,A.Note+ISNULL('' - ''+B.Note,'''') as Note,A.VoucherID as VoucherID, '
+       +'B.FgPayment,B.VoucherID as BNote,B.CurrID,B.Rate '
+       +'FROM CFTrKKBBDt A INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID WHERE FgPayment=''T'' UNION ALL '
+
+       //tabel bank
+       +'SELECT ''H'',B.RekeningID,A.Transdate,CASE WHEN A.FlagKKBB IN (''BM'',''KM'',''ARB'',''ARC'') THEN ''D'' ELSE ''K'' END,'
+       +'ISNULL(CASE WHEN A.FlagKKBB IN (''BM'',''KM'',''ARB'',''ARC'') THEN A.JumlahD WHEN A.FlagKKBB IN (''BK'',''KK'',''APB'',''APC'') THEN A.JumlahK END,0),'
+       +'A.Note,A.VoucherNo,A.FgPayment,A.VoucherID,A.CurrID,A.Rate '
+       +'FROM CFTrKKBBHd A INNER JOIN CFMsBank B ON A.BankID=B.BankID Where A.FgPayment=''T'' UNION ALL '
+
+       //tabel penjualan
+       +'SELECT ''D'',RekeningU,Transdate,''D'',ISNULL(TTLKj,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningK,Transdate,''K'',ISNULL(STKJ,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningD,Transdate,''D'',ISNULL(STKJ*Discount*0.01,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningO,Transdate,''K'',ISNULL(Ongkir,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningA,Transdate,''K'',ISNULL(Administrasi,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningR,Transdate,''K'',ISNULL(Repack,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningP,Transdate,''K'',ISNULL(PPN,0),A.KonInvPelID+ '
+       +'(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningPsd,transdate,''K'',ISNULL(Modal,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+       +'SELECT ''D'',RekeningHpp,transdate,''D'',ISNULL(Modal,0),A.KonInvPelID+(select '' - ''+O.CustName FROM ARMsCustomer O Where O.CustId=A.CustId),A.KonInvPelID,''T'',A.KonInvPelID,A.CurrID,A.Rate FROM ARTrKonInvPelHd A UNION ALL '
+
+       //tabel pembelian
+       +'SELECT ''P'',RekeningU,Transdate,''K'',ISNULL(TTLks,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningK,Transdate,''D'',ISNULL(SubTotal-SubTotalJ,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid ,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningP,Transdate,''D'',ISNULL(PPN,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningA,Transdate,''D'',ISNULL(Administrasi,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningD,Transdate,''K'',ISNULL(Disc,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningJ,Transdate,''D'',ISNULL(SubTotalJ,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningO,Transdate,''D'',ISNULL(Ongkir,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekPBBKB,Transdate,''D'',ISNULL(PBBKB,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningR,Transdate,''D'',ISNULL(Repack,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+       +'SELECT ''P'',RekeningDP,Transdate,''K'',ISNULL(DP,0),A.konsinyasiinvid+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),A.konsinyasiinvid,''T'',A.konsinyasiinvid,A.CurrID,A.Rate '
+       +'FROM ApTrkonsinyasiInvhD A Where A.FgOto=''Y'' UNION ALL '
+
+       +'SELECT ''I'',RekeningU,Transdate,''K'',ISNULL(TTLPb,0),PurchaseID+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),PurchaseID,''T'',PurchaseID,CurrID,Rate '
+       +'FROM ApTrPurchaseHD A where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT ''I'',RekeningK,Transdate,''D'',ISNULL(Stpb-SubTotalU,0),PurchaseID+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),PurchaseID,''T'',PurchaseID,CurrID,Rate '
+       +'FROM ApTrPurchaseHD A where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT ''I'',RekeningD,Transdate,''K'',ISNULL(DiscAmount,0),PurchaseID+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),PurchaseID,''T'',PurchaseID,CurrID,Rate '
+       +'FROM ApTrPurchaseHD A where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT ''I'',RekeningJ,Transdate,''D'',ISNULL(SubTotalU,0),PurchaseID+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),PurchaseID,''T'',PurchaseID,CurrID,Rate '
+       +'FROM ApTrPurchaseHD A where FgPajak=''Y'' AND FgOto=''Y'' UNION ALL '
+       +'SELECT ''I'',RekeningP,Transdate,''D'',ISNULL(PPN,0),PurchaseID+(select '' - ''+O.SuppName FROM ApMsSupplier O Where O.Suppid=A.Suppid),PurchaseID,''T'',PurchaseID,CurrID,Rate '
+       +'FROM ApTrPurchaseHD A where FgPajak=''Y'' AND FgOto=''Y'' '
+
+       +') as K '
+       +'WHERE K.Amount <> 0 AND CONVERT(VARCHAR(8),K.Transdate,112) BETWEEN '''+FormatDateTime('yyyyMMdd',TanggalDari)+''' AND '''+FormatDateTime('yyyyMMdd',TanggalSampai)+''' '
+       +'AND K.RekeningID='''+qu002.FieldByName('RekeningID').AsString+''' AND K.FgPayment=''T'' ORDER BY CONVERT(VARCHAR(8),K.Transdate,112),K.Jenis,K.VoucherID');
+    //showmessage(sql.text);
+    Open;
+  end;
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRSubDetail2BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+var Note : string;
+begin
+  inherited;
+  qlbNote.Caption := qu003.FieldByName('Note').AsString;
+  if qu003.FieldByName('Jenis').AsString = 'K' then
+  Begin
+    QRDBText2.Left := 799;
+    Awal := Awal - qu003.fieldbyname('Amount').AsCurrency;
+    TotalK := TotalK + qu003.fieldbyname('Amount').AsCurrency;
+    GTK := GTK + qu003.fieldbyname('Amount').AsCurrency;
+    QRDBText1.Left := 526;
+    AwalA := AwalA - qu003.fieldbyname('AmountA').AsCurrency;
+    TotalKA := TotalKA + qu003.fieldbyname('AmountA').AsCurrency;
+    TotalGTKA := TotalGTKA + qu003.fieldbyname('AmountA').AsCurrency;
+  End else
+  if qu003.FieldByName('Jenis').AsString = 'D' then
+  Begin
+    QRDBText2.Left := 698;
+    Awal := Awal + qu003.fieldbyname('Amount').AsCurrency;
+    TotalD := TotalD + qu003.fieldbyname('Amount').AsCurrency;
+    GTD := GTD + qu003.fieldbyname('Amount').AsCurrency;
+    QRDBText1.Left := 445;
+    AwalA := AwalA + qu003.fieldbyname('AmountA').AsCurrency;
+    TotalDA := TotalDA + qu003.fieldbyname('AmountA').AsCurrency;
+    TotalGTDA := TotalGTDA + qu003.fieldbyname('AmountA').AsCurrency;
+  End
+  Else
+    PrintBand := False;
+
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel10Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  if (qu002.FieldByName('Tipe').AsString = '1') or (qu002.FieldByName('Tipe').AsString = '5') then
+    Value :=FormatRptkurung(CurrToStr(Awal))
+  else
+    Value :=FormatRptkurung(CurrToStr(Awal*-1));
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel12Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(TotalD))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel11Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(TotalK))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel13Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := 'Subtotal Per Rekening '+qu002.FieldByName('RekeningName').AsString+' : '
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel15Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(GTD))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel16Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(GTK))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel17Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(Awal))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.GroupFooterBand2BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+  inherited;
+  Akhir := Akhir + Awal;
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel18Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(Akhir))
+{  if qu002.FieldByName('FgTipe').AsString = 'A' then
+    Value := FormatRptkurung(CurrToStr(Akhir))
+  else
+    Value := FormatRptkurung(CurrToStr(Akhir*-1))}
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel26Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  if (qu002.FieldByName('Tipe').AsString = '1') or (qu002.FieldByName('Tipe').AsString = '5') then
+    Value :=FormatRptkurung(CurrToStr(AwalA))
+  else
+     Value :=FormatRptkurung(CurrToStr(AwalA*-1));
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel22Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(TotalKA))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel21Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(TotalDA))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel23Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(TotalGTKA))
+end;
+
+procedure TfmCFQRRptKeuanganDetBank.QRLabel24Print(sender: TObject;
+  var Value: String);
+begin
+  inherited;
+  Value := FormatRptkurung(CurrToStr(TotalGTDA))
+end;
+
+end.
+
+

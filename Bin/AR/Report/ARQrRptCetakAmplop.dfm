@@ -1,0 +1,155 @@
+inherited fmARQrRptAmplop: TfmARQrRptAmplop
+  Width = 1080
+  Height = 682
+  Caption = 'fmARQrRptAmplop'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited MyReport: TQuickRep
+    Height = 528
+    Functions.DATA = (
+      '0'
+      '0'
+      #39#39)
+    Page.PaperSize = Custom
+    Page.Values = (
+      50.8
+      1397
+      50.8
+      2159
+      50.8
+      50.8
+      0)
+    Units = Inches
+    inherited BndDetail: TQRBand
+      Top = 457
+      Height = 0
+      Size.Values = (
+        0
+        2058.45833333333)
+    end
+    inherited BndTitle: TQRBand
+      Height = 438
+      Size.Values = (
+        1158.875
+        2058.45833333333)
+      inherited qrlCompName: TQRLabel
+        Enabled = False
+        Size.Values = (
+          66.1458333333333
+          10.5833333333333
+          7.9375
+          394.229166666667)
+        FontSize = 15
+      end
+      inherited qrlTitle: TQRLabel
+        Enabled = False
+        Size.Values = (
+          87.3125
+          960.4375
+          50.2708333333333
+          134.9375)
+        FontSize = 18
+      end
+      inherited qrlPeriode: TQRLabel
+        Left = 270
+        Top = 159
+        Width = 84
+        Height = 24
+        Size.Values = (
+          63.5
+          714.375
+          420.6875
+          222.25)
+        AlignToBand = False
+        Caption = 'Kepada Yth'
+        Font.Charset = ANSI_CHARSET
+        Font.Height = -16
+        Font.Name = 'Comic Sans MS'
+        FontSize = 12
+      end
+      inherited qrlCompAddres: TQRMemo
+        Top = 29
+        Height = 55
+        Enabled = False
+        Size.Values = (
+          145.520833333333
+          10.5833333333333
+          76.7291666666667
+          605.895833333333)
+        FontSize = 10
+      end
+      inherited ImgCompany: TQRImage
+        Enabled = False
+        Size.Values = (
+          277.8125
+          1778
+          0
+          277.8125)
+      end
+      object QRDBText3: TQRDBText
+        Left = 270
+        Top = 209
+        Width = 350
+        Height = 110
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          291.041666666667
+          714.375
+          552.979166666667
+          926.041666666667)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        AutoStretch = False
+        Color = clWhite
+        DataSet = qu001
+        DataField = 'Address'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Comic Sans MS'
+        Font.Style = []
+        ParentFont = False
+        Transparent = True
+        WordWrap = True
+        FontSize = 12
+      end
+      object QRDBText13: TQRDBText
+        Left = 270
+        Top = 184
+        Width = 350
+        Height = 24
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          63.5
+          714.375
+          486.833333333333
+          926.041666666667)
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        AutoStretch = False
+        Color = clWhite
+        DataSet = qu001
+        DataField = 'CustName'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -16
+        Font.Name = 'Comic Sans MS'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 12
+      end
+    end
+  end
+end

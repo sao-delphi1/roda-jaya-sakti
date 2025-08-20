@@ -1,0 +1,308 @@
+unit CFTrTB;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxEdLib, dxEditor;
+
+type
+  TfmCfTrTB = class(TfmRptDlg)
+    Button1: TButton;
+    quSelisih: TADOQuery;
+    GroupBox2: TGroupBox;
+    dxDateEdit1: TdxDateEdit;
+    dxTahun: TdxSpinEdit;
+    dxBulan: TdxImageEdit;
+    Edit2: TEdit;
+    Label1: TLabel;
+    Button3: TButton;
+    quHeader: TADOQuery;
+    quDetail: TADOQuery;
+    Label2: TLabel;
+    Label4: TLabel;
+    GroupBox1: TGroupBox;
+    Edit1: TEdit;
+    Button2: TButton;
+    Label3: TLabel;
+    sbClose: TSpeedButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure sbCloseClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmCfTrTB: TfmCfTrTB;
+
+implementation
+
+uses conMain, UnitGeneral, MyUnit, Search;
+
+{$R *.dfm}
+
+procedure TfmCfTrTB.Button1Click(Sender: TObject);
+var Periode,PeriodeData,PerJurnalBalik,PeriodeBalik : string;
+    Jumlah : currency;
+begin
+  inherited;
+  if Trim(Edit1.Text)='' then
+  begin
+    MsgInfo('Rekening Laba Bulan Berjalan Tidak Boleh Kosong!');
+    Edit1.SetFocus;
+    Abort;
+  End;
+
+  if dxBulan.Text = '01' then begin Periode := dxTahun.Text+'0131'; PeriodeData := dxTahun.Text+'-01-31';
+  PeriodeBalik := dxTahun.Text+'0201'; PerJurnalBalik := dxTahun.Text+'-02-01';
+  end;
+  if dxBulan.Text = '02' then begin Periode := dxTahun.Text+'0229'; PeriodeData := dxTahun.Text+'-02-29';
+  PeriodeBalik := dxTahun.Text+'0301'; PerJurnalBalik := dxTahun.Text+'-03-01';
+  end;
+  if dxBulan.Text = '03' then begin Periode := dxTahun.Text+'0331'; PeriodeData := dxTahun.Text+'-03-31';
+  PeriodeBalik := dxTahun.Text+'0401'; PerJurnalBalik := dxTahun.Text+'-04-01';
+  end;
+  if dxBulan.Text = '04' then begin Periode := dxTahun.Text+'0430'; PeriodeData := dxTahun.Text+'-04-30';
+  PeriodeBalik := dxTahun.Text+'0501'; PerJurnalBalik := dxTahun.Text+'-05-01';
+  end;
+  if dxBulan.Text = '05' then begin Periode := dxTahun.Text+'0531'; PeriodeData := dxTahun.Text+'-05-31';
+  PeriodeBalik := dxTahun.Text+'0601'; PerJurnalBalik := dxTahun.Text+'-06-01';
+  end;
+  if dxBulan.Text = '06' then begin Periode := dxTahun.Text+'0630'; PeriodeData := dxTahun.Text+'-06-30';
+  PeriodeBalik := dxTahun.Text+'0701'; PerJurnalBalik := dxTahun.Text+'-07-01';
+  end;
+  if dxBulan.Text = '07' then begin Periode := dxTahun.Text+'0731'; PeriodeData := dxTahun.Text+'-07-31';
+  PeriodeBalik := dxTahun.Text+'0801'; PerJurnalBalik := dxTahun.Text+'-08-01';
+  end;
+  if dxBulan.Text = '08' then begin Periode := dxTahun.Text+'0831'; PeriodeData := dxTahun.Text+'-08-31';
+  PeriodeBalik := dxTahun.Text+'0901'; PerJurnalBalik := dxTahun.Text+'-09-01';
+  end;
+  if dxBulan.Text = '09' then begin Periode := dxTahun.Text+'0930'; PeriodeData := dxTahun.Text+'-09-30';
+  PeriodeBalik := dxTahun.Text+'1001'; PerJurnalBalik := dxTahun.Text+'-10-01';
+  end;
+  if dxBulan.Text = '10' then begin Periode := dxTahun.Text+'1031'; PeriodeData := dxTahun.Text+'-10-31';
+  PeriodeBalik := dxTahun.Text+'1101'; PerJurnalBalik := dxTahun.Text+'-11-01';
+  end;
+  if dxBulan.Text = '11' then begin Periode := dxTahun.Text+'1130'; PeriodeData := dxTahun.Text+'-11-30';
+  PeriodeBalik := dxTahun.Text+'1201'; PerJurnalBalik := dxTahun.Text+'-12-01';
+  end;
+  if dxBulan.Text = '12' then begin Periode := dxTahun.Text+'1231'; PeriodeData := dxTahun.Text+'-12-31';
+  PeriodeBalik := InttoStr(StrtoInt(dxTahun.Text)+1)+'0101'; PerJurnalBalik := InttoStr(StrtoInt(dxTahun.Text)+1)+'-01-01';
+  end;
+
+  with quselisih,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT DISTINCT ISNULL(SUM(CASE WHEN K.Jenis=''K'' THEN (CASE WHEN K.CurrID=''IDR'' THEN K.Amount ELSE K.Amount*K.Rate END) '
+       +'ELSE (CASE WHEN K.CurrID=''IDR'' THEN K.Amount ELSE K.Amount*K.Rate END)*-1 END),0) as Selisih FROM ('
+       +'SELECT A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate FROM CFTrKKBBDt A INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+       +'SELECT B.RekeningID,A.Transdate,CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+       +'WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' END,'
+       +'ISNULL(CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD '
+       +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK END,0),A.CurrID,A.Rate FROM CFTrKKBBHd A '
+       +'INNER JOIN CFMsBank B ON A.BankID=B.BankID WHERE A.FgPayment=''T'' UNION ALL '
+       //tabel penjualan
+       +'SELECT RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL ' 
+       +'SELECT RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningP,Transdate,''K'',ISNULL(CASE WHEN FgTax=''T'' THEN 0 ELSE (STKJ-(STKJ*Discount*0.01))*0.1 END,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       +'SELECT RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+       //tabel pembelian
+       +'SELECT RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningK,Transdate,''D'',ISNULL(SubTotal,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningD,Transdate,''K'',ISNULL(ROUND(SubTotal*Disc*0.01,2),0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       +'SELECT RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+       //retur pembelian
+       +'SELECT RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+       +'SELECT RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+       +'SELECT RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+       +'SELECT RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+       //retur penjualan
+       +'SELECT RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+       +'SELECT RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+       +'SELECT RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+       +'SELECT RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+       //adjustment
+       +'SELECT '''+sDGRPb+''',B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+       +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null UNION ALL '
+       +'SELECT A.RekeningID,B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''K'' ELSE ''D'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+       +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null '
+       +') as K INNER JOIN CFMsRekening L On K.RekeningID=L.RekeningID AND L.Tipe IN (''4'',''5'') '
+       +'WHERE CONVERT(VARCHAR(8),K.Transdate,112) <= '''+Periode+''' ');
+    Open;
+  end;
+
+  Jumlah := quSelisih.FieldByName('Selisih').AsCurrency;
+
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT * FROM CFTrKKBBHd WHERE VoucherID='''+Periode+''' AND FlagKKBB=''TB'' ');
+    Open;
+  end;
+  if quAct.RecordCount = 0 then
+  begin
+    with quHeader,SQL do
+    begin
+      Close;Clear;
+      Add('INSERT CFTrKKBBHd (VoucherID,TransDate,Note,FlagKKBB,UpdDate,UpdUser,CurrId,JumlahD,JumlahK,FgPayment,IDVoucher) '
+         +'VALUES ('''+Periode+''','''+PerJurnalBalik+''',''POSTING DATA''+'''+PeriodeData+''',''TB'',getdate(),'''+dmMain.UserId+''',''IDR'',0,'
+         +'0,''T'','''+Periode+''')');
+      ExecSQL;
+    end;
+    with quDetail,SQL do
+    begin
+      Close;Clear;
+      Add('INSERT CFTrKKBBDt (VoucherID,RekeningID,Jenis,Amount,Note) '
+         +'SELECT '''+Periode+''','''+Edit1.Text+''' as RekeningID,''K'' as Jenis,'''+CurrToStr(Jumlah)+''',''POSTING DATA ''+'''+PeriodeData+''' as keterangan UNION ALL '
+         +'SELECT '''+Periode+''',K.RekeningID,CASE WHEN K.Jumlah < 0 THEN ''K'' ELSE ''D'' END as Jenis,'
+         +'CASE WHEN K.Jumlah < 0 THEN K.Jumlah*-1 ELSE K.Jumlah END as Jumlah,''POSTING DATA ''+'''+dxTahun.Text+''' as keterangan FROM ('
+         +'SELECT A.RekeningID,A.RekeningName,'
+         +'(SELECT ISNULL(SUM(CASE WHEN P.Jenis=''K'' THEN (CASE WHEN P.CurrID=''IDR'' THEN P.Amount ELSE P.Amount*P.Rate END) '
+         +'ELSE (CASE WHEN P.CurrID=''IDR'' THEN P.Amount ELSE P.Amount*P.Rate END)*-1 END),0) FROM ('
+         +'SELECT A.VoucherID,A.RekeningID,B.Transdate,A.Jenis,ISNULL(A.Amount,0) as Amount,B.CurrID,B.Rate FROM CFTrKKBBDt A '
+         +'INNER JOIN CFTrKKBBHd B ON A.VoucherID=B.VoucherID AND B.FgPayment=''T'' UNION ALL '
+         +'SELECT A.VoucherID,B.RekeningID,A.Transdate,CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+         +'WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' '
+         +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN ''D'' '
+         +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN ''K'' END, '
+         +'ISNULL(CASE WHEN A.FlagKKBB IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD WHEN A.FlagKKBB IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK '
+         +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KM'',''BM'',''ARK'',''ARB'',''ARC'') THEN JumlahD '
+         +'WHEN (SELECT X.FlagKKBB FROM CFTrKKBBHd X WHERE X.VoucherID=A.IDVoucher) IN (''KK'',''BK'',''APK'',''APB'',''APC'') THEN JumlahK END,0),A.CurrID,A.Rate FROM CFTrKKBBHd A '
+         +'INNER JOIN CFMsBank B ON A.BankID=B.BankID WHERE A.FgPayment=''T'' UNION ALL '
+         //tabel penjualan
+         +'SELECT KonInvPelID,RekeningU,Transdate,''D'',ISNULL(TTLKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningD,Transdate,''D'',ISNULL((STKJ*Discount*0.01),0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningK,Transdate,''K'',ISNULL(StKj,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningO,Transdate,''K'',ISNULL(Ongkir,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningA,Transdate,''K'',ISNULL(Administrasi,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningR,Transdate,''K'',ISNULL(RePack,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningP,Transdate,''K'',ISNULL(CASE WHEN FgTax=''T'' THEN 0 ELSE (STKJ-(STKJ*Discount*0.01))*0.1 END,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningPsd,transdate,''K'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         +'SELECT KonInvPelID,RekeningHpp,transdate,''D'',ISNULL(Modal,0),CurrID,Rate FROM ARTrKonInvPelHd UNION ALL '
+         //tabel pembelian
+         +'SELECT KonsinyasiInvID,RekeningU,Transdate,''K'',ISNULL(TTLks,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningK,Transdate,''D'',ISNULL(SubTotal,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningO,Transdate,''D'',ISNULL(Ongkir,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningR,Transdate,''D'',ISNULL(Repack,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningA,Transdate,''D'',ISNULL(Administrasi,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningD,Transdate,''K'',ISNULL(ROUND(SubTotal*Disc*0.01,2),0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningDP,Transdate,''D'',ISNULL(DP,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         +'SELECT KonsinyasiInvID,RekeningP,Transdate,''D'',ISNULL(PPN,0),CurrID,Rate FROM ApTrkonsinyasiInvhD UNION ALL '
+         //retur pembelian
+         +'SELECT ReturnID,RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+         +'SELECT ReturnID,RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+         +'SELECT ReturnID,RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+         +'SELECT ReturnID,RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM APTrReturnHd UNION ALL '
+         //retur penjualan
+         +'SELECT ReturnID,RekeningD,Transdate,''D'',ISNULL(TTLRetur,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+         +'SELECT ReturnID,RekeningP,Transdate,''K'',ISNULL(TTLPPN,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+         +'SELECT ReturnID,RekeningK,Transdate,''K'',ISNULL(TTLRetur-TTLPPN+TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+         +'SELECT ReturnID,RekeningDisc,Transdate,''D'',ISNULL(TTLDiskon,0),''IDR'',1 FROM ARTrReturPenjualanHd UNION ALL '
+         //adjustment
+         +'SELECT A.TransID,''+sDGRPb+'',B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''D'' ELSE ''K'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+         +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null UNION ALL '
+         +'SELECT A.TransID,A.RekeningID,B.TransDate,CASE WHEN A.fgStatus=''T'' THEN ''K'' ELSE ''D'' END,ISNULL(A.Qty*A.Price,0),''IDR'',1 FROM INTrAdjustmentDt A '
+         +'Inner join INTrAdjustmentHd B on A.TransID=B.TransID and A.RekeningID is not null '
+         +') as P '
+         +'WHERE CONVERT(VARCHAR(8),Transdate,112) <= '''+Periode+''' AND P.RekeningID=A.RekeningID) as Jumlah '
+         +'FROM CFMsRekening A WHERE A.Tipe in (4,5)) as K WHERE K.Jumlah<>0 ORDER BY K.RekeningID');
+      ExecSQL;
+    end;
+  {  with quHeader,SQL do
+    begin
+      Close;Clear;
+      Add('INSERT CFTrKKBBHd (VoucherID,TransDate,Note,FlagKKBB,UpdDate,UpdUser,CurrId,JumlahD,JumlahK,FgPayment,IDVoucher) '
+         +'VALUES ('''+PeriodeBalik+''','''+PerJurnalBalik+''',''POSTING DATA ''+'''+PerJurnalBalik+''',''TB'',getdate(),'''+dmMain.UserId+''',''IDR'',0,'
+         +'0,''T'','''+PeriodeBalik+''')');
+      ExecSQL;
+    end;
+    with quDetail,SQL do
+    begin
+      Close;Clear;
+      Add('INSERT CFTrKKBBDt (VoucherID,RekeningID,Jenis,Amount,Note) '
+         +'SELECT '''+PeriodeBalik+''','''+Edit1.Text+''' as RekeningID,''K'' as Jenis,'''+CurrToStr(Jumlah)+''',''POSTING DATA ''+'''+PerJurnalBalik+''' as keterangan UNION ALL '
+         +'SELECT '''+PeriodeBalik+''','''+Edit2.Text+''' as RekeningID,''D'' as Jenis,'''+CurrToStr(Jumlah)+''',''POSTING DATA ''+'''+PerJurnalBalik+''' as keterangan ');
+      ExecSQL;
+    end;   }
+    ShowMessage('Proses Tutup Buku Sudah Selesai');
+  end else
+  begin
+    pesan('Sudah Pernah Tutup Buku Pada Periode ini!');
+    dxTahun.SetFocus;
+    Abort;
+  end;
+end;
+
+procedure TfmCfTrTB.FormShow(Sender: TObject);
+begin
+  inherited;
+  dxTahun.Text := FormatDateTime('YYYY',Date);
+  dxBulan.Text := FormatDateTime('MM',Date);
+  dxBulan.SetFocus;
+end;
+
+procedure TfmCfTrTB.Button2Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Rekening';
+       SQLString := 'SELECT DISTINCT RekeningName as Nama_Rekening,A.RekeningId as Kode_Rekening,'
+                   +'A.GroupRekId as Group_Rekening,B.GroupRekName as Nama_Group_Rekening '
+                   +'FROM CFMsRekening A INNER JOIN CFMsGroupRek B ON A.GroupRekId=B.GroupRekId '
+                   +'WHERE A.FgActive=''Y'' ORDER BY A.RekeningID';
+       if ShowModal = MrOK then
+       begin
+          Edit1.Text := Res[1];
+          Label3.Caption := Res[0];
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmCfTrTB.Button3Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Rekening';
+       SQLString := 'SELECT DISTINCT RekeningName as Nama_Rekening,A.RekeningId as Kode_Rekening,'
+                   +'A.GroupRekId as Group_Rekening,B.GroupRekName as Nama_Group_Rekening '
+                   +'FROM CFMsRekening A INNER JOIN CFMsGroupRek B ON A.GroupRekId=B.GroupRekId '
+                   +'WHERE A.FgActive=''Y'' ORDER BY A.RekeningID';
+       if ShowModal = MrOK then
+       begin
+          Edit2.Text := Res[1];
+          Label4.Caption := Res[0];
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmCfTrTB.sbCloseClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+end.

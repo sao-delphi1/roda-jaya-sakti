@@ -1,0 +1,257 @@
+unit RptINStokDlg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxEditor, dxEdLib, dxTL, dxDBCtrl, dxDBGrid, dxCore, dxButton,
+  ActnList;
+
+type
+  TfmINRptStokDlg = class(TfmRptDlg)
+    dsMain: TDataSource;
+    quMain: TADOQuery;
+    quActItemID: TStringField;
+    quActItemName: TStringField;
+    GroupBox1: TGroupBox;
+    rbAll: TRadioButton;
+    rbSelect: TRadioButton;
+    dbgWare: TdxDBGrid;
+    dxDBGridColumn1: TdxDBGridColumn;
+    dxDBGridColumn2: TdxDBGridColumn;
+    Panel1: TPanel;
+    rbselect2: TRadioButton;
+    rbAll2: TRadioButton;
+    dbgList: TdxDBGrid;
+    dbgListItemID: TdxDBGridMaskColumn;
+    dbgListItemName: TdxDBGridMaskColumn;
+    bbCancel: TdxButton;
+    cbxOuts: TCheckBox;
+    CBDetil: TCheckBox;
+    rbJenis: TRadioGroup;
+    dt2: TdxDateEdit;
+    ActionList: TActionList;
+    ActPrint: TAction;
+    CheckBox1: TCheckBox;
+    procedure FormShow(Sender: TObject);
+    procedure bbPreviewClick(Sender: TObject);
+    procedure rbSelectClick(Sender: TObject);
+    procedure rbselect2Click(Sender: TObject);
+    procedure bbCancelClick(Sender: TObject);
+    procedure rbJenisClick(Sender: TObject);
+    procedure dt1KeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmINRptStokDlg: TfmINRptStokDlg;
+
+implementation
+
+uses QRRptINStok, MyUnit, UnitGeneral, Search, ConMain, UnitDate;
+
+{$R *.dfm}
+
+procedure TfmINRptStokDlg.FormShow(Sender: TObject);
+begin
+  inherited;
+  quAct.Open;
+  quMain.Open;
+  dt2.Date:= date;
+  rbSelectClick(rbSelect);
+end;
+
+procedure TfmINRptStokDlg.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  with TfmINQRRptStok.Create(Self) do
+     try
+         qrlTitle.Caption  := laTitle.Caption;
+         qrlPeriode.Caption := 'Periode : '+FormatDateTime('dd/MM/yyyy',dt2.date);
+         TanggalSampai:= dt2.date;
+
+       if cbxOuts.Checked then
+         bChecked := True
+       else
+         bChecked := False;
+
+       if CBDetil.Checked then
+         bDetail := True
+       else
+         bDetail := False;
+
+       with qu001,SQL do
+       begin
+         Close;Clear;
+         Add('SELECT WarehouseID,WarehouseName as Gudang FROM INMsWarehouse WHERE WarehouseID IN (SELECT DISTINCT WarehouseID FROM AllItem)');
+         if rbSelect.Checked then
+         Add(' and WarehouseID IN '+SelGrid(quMain,dbgWare,'WarehouseID'));
+         Open;
+         if IsEmpty then
+         begin
+           MsgInfo('No Data !');
+           Abort;
+         end;
+       end;
+
+       with qu002,SQL do
+       begin
+         Close;Clear;
+         Add('SELECT K.LayoutID as Layout,K.ItemID,L.ItemName,L.UOMID,L.TypeUnit,K.WarehouseID,K.Barang,');
+         if CheckBox1.Checked then
+         begin
+         Add('ISNULL(ISNULL((select TOP 1 PRICE from ApTrPurchaseOrderDt A inner join ApTrPurchaseOrderHd b on A.POID=B.POID '
+            +'WHERE A.ItemID=K.ItemID AND B.TransDate<='''+FormatDateTime('yyyymmdd',dt2.date)+''' AND B.SiteID=M.WarehouseID ORDER BY B.Transdate DESC,A.Price DESC), '
+            +'(select TOP 1 PRICE from ApTrPurchaseOrderDt A inner join ApTrPurchaseOrderHd b on A.POID=B.POID '
+            +'WHERE A.ItemID=K.ItemID AND B.TransDate<='''+FormatDateTime('yyyymmdd',dt2.date)+'''  ORDER BY B.Transdate DESC,A.Price DESC)),L.UserPrice) as Harga ')
+         end else
+         begin
+         QRLabel6.Enabled := False;
+         QRLabel8.Enabled := False;
+         QRLabel10.Enabled := False;
+         QRLabel11.Enabled := False;
+         QRDBText4.Enabled := False;
+         Add('0 as Harga ');
+         end;
+         Add(' ,K.Stock '
+            +' FROM ( '
+            +' select ISNULL((SELECT SUM(Case WHEN A.FgTrans < 50  THEN A.QTy ELSE A.Qty * - 1 END)),0) as Stock, '
+            +' A.ItemID,A.WarehouseID,ISNULL(A.Barang,''-'') as Barang,ISNULL(A.LayoutID,'''') as LayoutID '
+            +' from AllItem A '
+            +' WHERE CONVERT(VARCHAR(8),A.TransDate,112) <= '''+FormatDateTime('yyyymmdd',dt2.date)+''' '
+            +' GROUP BY A.ItemID,A.WarehouseID,A.Barang,ISNULL(A.LayoutID,'''') '
+            +' ) as K '
+            +' inner join INMsItem L on K.ItemID=L.ItemID '
+            +' inner join INMsWarehouse M on K.WarehouseID=M.WarehouseID '
+            +' WHERE K.WarehouseID=:WarehouseID ');
+         if cbxOuts.Checked then
+         Add(' AND K.Stock<>0 ');
+         if rbSelect2.Checked then
+         Add(' and K.ItemID IN '+SelGrid(quAct,dbgList,'ItemID'));
+         Add(' ORDER BY K.barang,L.ItemName,K.LayoutID ');
+         Parameters.ParamByName('WarehouseID').DataType := ftString;
+         //showmessage(sql.Text);
+         Open;
+       end;
+
+        if Sender=bbPrint then
+           MyReport.Print
+        else
+           MyReport.PreviewModal;
+
+     finally
+        free;
+     end;
+end;
+
+procedure TfmINRptStokDlg.rbSelectClick(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll then
+  begin
+     dbgWare.OptionsBehavior := dbgWare.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect then
+  begin
+     dbgware.OptionsBehavior := dbgWare.OptionsBehavior + [edgoMultiSelect];
+     if dbgware.FocusedNode <> nil then
+        dbgware.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmINRptStokDlg.rbselect2Click(Sender: TObject);
+begin
+  inherited;
+  if Sender=rbAll2 then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior - [edgoMultiSelect];
+  end else
+  if Sender=rbSelect2 then
+  begin
+     dbgList.OptionsBehavior := dbgList.OptionsBehavior + [edgoMultiSelect];
+     if dbgList.FocusedNode <> nil then
+       dbgList.FocusedNode.Selected := TRUE;
+  end;
+end;
+
+procedure TfmINRptStokDlg.bbCancelClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       if rbJenis.ItemIndex = 0 then
+       begin
+         Title := 'Barang';
+         SQLString := ' SELECT ItemId as Part_Number,ItemName as Nama_Barang,TypeUnit FROM INMsItem WHERE FgActive=''Y'' ORDER BY ItemID';
+       end else
+       if rbJenis.ItemIndex = 1 then
+       begin
+         Title := 'Group Barang';
+         SQLString := ' SELECT GroupID as Kode_Group,GroupDesc as Group_Barang FROM INMsGroup ORDER BY GroupID';
+       end else
+       begin
+         Title := 'Tipe Barang';
+         SQLString := ' SELECT DISTINCT Tipe FROM INMsItem ORDER BY Tipe';
+       end;
+       if ShowModal = MrOK then
+       begin
+           Self.quAct.Locate('ItemID',Res[0],[]);
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmINRptStokDlg.rbJenisClick(Sender: TObject);
+begin
+  inherited;
+  if rbJenis.ItemIndex = 0 then
+  begin
+    dbgListItemID.Caption := 'Kode Barang';
+    dbgListItemName.Caption := 'Nama Barang';
+    dbgListItemName.Visible := True;
+    rbAll2.Checked := True;
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT ItemID,ItemName FROM INMsItem WHERE FgActive=''Y'' ORDER BY ItemID');
+      Open;
+    end;
+  end else
+  if rbJenis.ItemIndex = 1 then
+  begin
+    dbgListItemID.Caption := 'Kode Group';
+    dbgListItemName.Caption := 'Group Barang';
+    dbgListItemName.Visible := True;
+    rbAll2.Checked := True;
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT GroupID as ItemID,GroupDesc as ItemName FROM INMsGroup ORDER BY GroupID');
+      Open;
+    end;
+  end else
+  begin
+    dbgListItemID.Caption := 'Type Barang';
+    dbgListItemName.Visible := False;
+    rbAll2.Checked := True;
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('SELECT DISTINCT Tipe as ItemID,Tipe as Itemname FROM INMsItem ORDER BY Tipe ');
+      Open;
+    end;
+  end;
+end;
+
+procedure TfmINRptStokDlg.dt1KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key=#13 then PostMessage(Self.Handle,WM_NEXTDLGCTL,0,0)
+end;
+
+end.

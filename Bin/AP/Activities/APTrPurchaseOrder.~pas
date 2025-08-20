@@ -1,0 +1,1844 @@
+unit APTrPurchaseOrder;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv31, ActnList, DB, dxExEdtr, dxCntner, ADODB, dxPageControl,
+  dxEdLib, dxButton, StdCtrls, ExtCtrls, Buttons, dxCore, dxContainer, StrUtils,
+  dxDBELib, dxEditor, dxDBTLCl, dxGrClms, dxDBGrid, dxTL, dxDBCtrl, DBCtrls;
+
+type
+  TfmAPTrPurchaseOrder = class(TfmStdLv31)
+    DBText1: TDBText;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label13: TLabel;
+    Shape6: TShape;
+    Label3: TLabel;
+    DBText2: TDBText;
+    Label8: TLabel;
+    Shape3: TShape;
+    Label9: TLabel;
+    DBText6: TDBText;
+    Shape4: TShape;
+    Label12: TLabel;
+    DBText7: TDBText;
+    Label14: TLabel;
+    dbg: TdxDBGrid;
+    dbgPOID: TdxDBGridMaskColumn;
+    dbgItemID: TdxDBGridButtonColumn;
+    dbgLuItemName: TdxDBGridColumn;
+    dbgPRID: TdxDBGridButtonColumn;
+    dbgQty: TdxDBGridColumn;
+    dbgUOMID: TdxDBGridButtonColumn;
+    dbgDisc: TdxDBGridColumn;
+    dbgPrice: TdxDBGridColumn;
+    dbgUpdDate: TdxDBGridDateColumn;
+    dbgUpdUser: TdxDBGridMaskColumn;
+    dbgCTotal: TdxDBGridColumn;
+    TmbBrg: TdxButton;
+    KrgBrg: TdxButton;
+    bbSimpanDetil: TdxButton;
+    BtlBrg: TdxButton;
+    bbCetak: TdxButton;
+    quMainPOID: TStringField;
+    quMainPRID: TStringField;
+    quMainSuppID: TStringField;
+    quMainTransdate: TDateTimeField;
+    quMainNote: TStringField;
+    quMainTTLPO: TBCDField;
+    quMainUpdDate: TDateTimeField;
+    quMainUpdUser: TStringField;
+    quMainLokasi: TStringField;
+    quMainCityID: TStringField;
+    quMainFgTax: TStringField;
+    quMainTglKirim: TDateTimeField;
+    quDetilPOID: TStringField;
+    quDetilItemID: TStringField;
+    quDetilPRID: TStringField;
+    quDetilPrice: TBCDField;
+    quDetilDisc: TBCDField;
+    quDetilUpdDate: TDateTimeField;
+    quDetilUpdUser: TStringField;
+    quTotal: TADOQuery;
+    dsTotal: TDataSource;
+    quSupplier: TADOQuery;
+    quCalc: TADOQuery;
+    quMainLuSuppName: TStringField;
+    quDetilCTotal: TCurrencyField;
+    Shape5: TShape;
+    Label6: TLabel;
+    Shape7: TShape;
+    Label7: TLabel;
+    DBText5: TDBText;
+    quMainDisc: TBCDField;
+    dxDBButtonEdit3: TdxDBButtonEdit;
+    quTotalTotal: TBCDField;
+    quTotalSubTotal: TBCDField;
+    quTotalPajak: TBCDField;
+    quTotalGrandTotal: TBCDField;
+    ceBerat: TdxCheckEdit;
+    CePOLokal: TdxCheckEdit;
+    DBText8: TDBText;
+    DBText9: TDBText;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    CePOPrice: TdxCheckEdit;
+    quDetilDisc2: TBCDField;
+    quDetilDisc3: TBCDField;
+    dbgDisc2: TdxDBGridColumn;
+    dbgDisc3: TdxDBGridColumn;
+    Label23: TLabel;
+    quMainFgCetak: TStringField;
+    quMainCurrID: TStringField;
+    quMainLCurrName: TStringField;
+    quMainKurs: TBCDField;
+    Label22: TLabel;
+    quDetilDiscItem: TBCDField;
+    quTotalGrandTotalPO: TBCDField;
+    DBText12: TDBText;
+    DBText13: TDBText;
+    DBText14: TDBText;
+    DBText15: TDBText;
+    DBText16: TDBText;
+    quDetilUOMID: TStringField;
+    GroupBox1: TGroupBox;
+    Label10: TLabel;
+    DBText3: TDBText;
+    Label11: TLabel;
+    DBText4: TDBText;
+    quMainFgTerm: TStringField;
+    quMainTerm: TIntegerField;
+    quMainDP: TBCDField;
+    Label24: TLabel;
+    dxDBEdit5: TdxDBEdit;
+    Label25: TLabel;
+    dxDBEdit6: TdxDBEdit;
+    quMainFgEdit: TStringField;
+    quDetilLuItemName: TStringField;
+    Label27: TLabel;
+    dxDBButtonEdit4: TdxDBButtonEdit;
+    Label28: TLabel;
+    quMainAddress1: TStringField;
+    quMainNoPO: TStringField;
+    DBText10: TDBText;
+    quTotalDisc: TBCDField;
+    dxDBImageEdit1: TdxDBImageEdit;
+    quMainFgDP: TStringField;
+    dxDBEdit1: TdxDBEdit;
+    dxDBDateEdit1: TdxDBDateEdit;
+    dxDBDateEdit2: TdxDBDateEdit;
+    dxDBButtonEdit1: TdxDBButtonEdit;
+    dxDBButtonEdit2: TdxDBButtonEdit;
+    dxDBEdit3: TdxDBEdit;
+    dxDBEdit4: TdxDBEdit;
+    dxDBPajak: TdxDBImageEdit;
+    dxDBImageEdit2: TdxDBImageEdit;
+    quMainFgAdd: TStringField;
+    Shape8: TShape;
+    Shape9: TShape;
+    Label26: TLabel;
+    Label29: TLabel;
+    DBText11: TDBText;
+    DBText17: TDBText;
+    quMainOngkir: TBCDField;
+    quMainAdministrasi: TBCDField;
+    Label30: TLabel;
+    DBText18: TDBText;
+    Shape10: TShape;
+    quMainRepack: TBCDField;
+    dxDBEdit8: TdxDBEdit;
+    dxDBEdit9: TdxDBEdit;
+    dxDBEdit10: TdxDBEdit;
+    dxButton1: TdxButton;
+    quDetilNumAll: TIntegerField;
+    quDetilFgNum: TIntegerField;
+    CheckBox2: TCheckBox;
+    dbgColumn14: TdxDBGridColumn;
+    ActPrint: TAction;
+    dbTerm: TDBRadioGroup;
+    quDetilQty: TBCDField;
+    quDetilJumlah: TBCDField;
+    quMainFgNote: TStringField;
+    dxDBImageEdit3: TdxDBImageEdit;
+    dxDBMemo1: TdxDBMemo;
+    dxButton2: TdxButton;
+    quMainFgRev: TStringField;
+    dxDBImageEdit4: TdxDBImageEdit;
+    quMainTermin: TStringField;
+    dxDBMemo2: TdxDBMemo;
+    dxButton3: TdxButton;
+    quDetilTypeUnit: TStringField;
+    quDetilNoUnit: TStringField;
+    DBText19: TDBText;
+    Label31: TLabel;
+    dxDBButtonEdit6: TdxDBButtonEdit;
+    DBText20: TDBText;
+    Label32: TLabel;
+    dxDBButtonEdit7: TdxDBButtonEdit;
+    quMainwarehouseID: TStringField;
+    quMainSiteID: TStringField;
+    quMainLwarehouse: TStringField;
+    quMainLsites: TStringField;
+    dbgColumn15: TdxDBGridColumn;
+    dbgColumn16: TdxDBGridButtonColumn;
+    quMainDivisiID: TStringField;
+    DBText21: TDBText;
+    Label33: TLabel;
+    dxDBButtonEdit8: TdxDBButtonEdit;
+    quMainLDivisi: TStringField;
+    quMainFgOto: TStringField;
+    quDetilFgOto: TStringField;
+    Label34: TLabel;
+    quDetilLOto: TStringField;
+    dbgColumn17: TdxDBGridColumn;
+    quMainOtoBy: TStringField;
+    quDetilOtoBy: TStringField;
+    quMainLstatusoto: TStringField;
+    Label35: TLabel;
+    quDetilketerangan: TStringField;
+    dbgColumn18: TdxDBGridColumn;
+    Label36: TLabel;
+    dxDBEdit2: TdxDBEdit;
+    dxDBEdit7: TdxDBEdit;
+    dxButton4: TdxButton;
+    dxButton5: TdxButton;
+    quDetilpbbkb: TBCDField;
+    quDetilongkir: TBCDField;
+    quMainpbbkb: TBCDField;
+    dbgColumn19: TdxDBGridColumn;
+    quDetilfgongkir: TStringField;
+    dbgColumn20: TdxDBGridImageColumn;
+    DBText23: TDBText;
+    DBText24: TDBText;
+    quTotalPBBKB: TBCDField;
+    quTotalOngkir: TBCDField;
+    quCetak: TADOQuery;
+    DBText25: TDBText;
+    quMainJmlPrint: TIntegerField;
+    DBText26: TDBText;
+    dxButton6: TdxButton;
+    quMainLRev: TStringField;
+    quMainOtoDate: TDateTimeField;
+    GroupBox2: TGroupBox;
+    Label37: TLabel;
+    Label38: TLabel;
+    Label39: TLabel;
+    DBText27: TDBText;
+    DBText28: TDBText;
+    DBText29: TDBText;
+    dxDBImageEdit6: TdxDBImageEdit;
+    quMainNilaiTax: TBCDField;
+    quMainStPO: TBCDField;
+    quMainPPN: TBCDField;
+    dxDBEdit11: TdxDBEdit;
+    Label40: TLabel;
+    quDetilitemid2: TStringField;
+    dbgColumn21: TdxDBGridButtonColumn;
+    dxDBButtonEdit5: TdxDBButtonEdit;
+    DBText22: TDBText;
+    quMainLPT: TStringField;
+    procedure FormShow(Sender: TObject);
+    procedure dsMainStateChange(Sender: TObject);
+    procedure dxDBButtonEdit1ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBDateEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure quMainBeforePost(DataSet: TDataSet);
+    procedure dbgEnter(Sender: TObject);
+    procedure quMainNewRecord(DataSet: TDataSet);
+    procedure dbgItemIDButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quDetilBeforePost(DataSet: TDataSet);
+    procedure quDetilNewRecord(DataSet: TDataSet);
+    procedure dsDetilStateChange(Sender: TObject);
+    procedure bbFindClick(Sender: TObject);
+    procedure TmbBrgClick(Sender: TObject);
+    procedure BtlBrgClick(Sender: TObject);
+    procedure KrgBrgClick(Sender: TObject);
+    procedure bbSimpanDetilClick(Sender: TObject);
+    procedure quDetilCalcFields(DataSet: TDataSet);
+    procedure quMainAfterPost(DataSet: TDataSet);
+    procedure quDetilAfterDelete(DataSet: TDataSet);
+    procedure dxDBButtonEdit3ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quDetilBeforeInsert(DataSet: TDataSet);
+    procedure dbgUOMIDButtonClick(Sender: TObject; AbsoluteIndex: Integer);
+    procedure quMainBeforeDelete(DataSet: TDataSet);
+    procedure quDetilBeforeDelete(DataSet: TDataSet);
+    procedure quDetilUOMIDChange(Sender: TField);
+    procedure bbCetakClick(Sender: TObject);
+    procedure dxDBButtonEdit2ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quMainCalcFields(DataSet: TDataSet);
+    procedure dbgPRIDButtonClick(Sender: TObject; AbsoluteIndex: Integer);
+    procedure quDetilItemIDChange(Sender: TField);
+    procedure dbTermChange(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure quDetilBeforeEdit(DataSet: TDataSet);
+    procedure dxDBButtonEdit4ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxButton1Click(Sender: TObject);
+    procedure quDetilJumlahChange(Sender: TField);
+    procedure dxDBButtonEdit5ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxButton2Click(Sender: TObject);
+    procedure dxButton3Click(Sender: TObject);
+    procedure dxDBButtonEdit6ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBButtonEdit7ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure dxDBButtonEdit8ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+    procedure quMainSuppIDChange(Sender: TField);
+    procedure dxButton5Click(Sender: TObject);
+    procedure dxButton4Click(Sender: TObject);
+    procedure quMainBeforeEdit(DataSet: TDataSet);
+    procedure dxButton6Click(Sender: TObject);
+    procedure quDetilAfterPost(DataSet: TDataSet);
+    procedure dbgColumn21ButtonClick(Sender: TObject;
+      AbsoluteIndex: Integer);
+  private
+    { Private declarations }
+    Procedure UpDateTTLPO;
+    Procedure CekStatusHeader;
+    Procedure CekStatusDetil;
+    Procedure CekOTO;
+    Procedure CekUserEdit;
+    Procedure CekUserDelete;
+    Procedure CekUserTambah;
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAPTrPurchaseOrder: TfmAPTrPurchaseOrder;
+
+implementation
+
+uses ConMain, MyUnit, Search, UnitGeneral,
+  ARQRRptPurchaseOrder,
+  RptGLTrKMKK, StdLv1, StdLv3;
+
+{$R *.dfm}
+procedure TfmAPTrPurchaseOrder.CekOTo;
+Begin
+  if GroupUser<>'admin' then
+  begin
+    if quMainFgOto.ASString<>'T' then
+    begin
+      ShowMessage('Data sudah pernah di-otorisasi/di-tolak. tidak bisa diubah');
+      abort;
+    end;
+  end;
+End;
+
+procedure TfmAPTrPurchaseOrder.CekUserEdit;
+Begin
+  if FgEdit<>'Y' then
+  begin
+    if (quMainUpdUser.ASString<>dmmain.userid) then
+    begin
+      ShowMessage('Tidak Bisa Ubah Inputan User Lain');
+      abort;
+    end;
+  end;
+End;
+
+procedure TfmAPTrPurchaseOrder.CekUserDelete;
+Begin
+  if FgDelete<>'Y' then
+  begin
+    if (quMainUpdUser.ASString<>dmmain.userid) then
+    begin
+      ShowMessage('Tidak Bisa Hapus Inputan User Lain');
+      abort;
+    end;
+  end;
+End;
+
+procedure TfmAPTrPurchaseOrder.CekUserTambah;
+Begin
+  if FgTambah<>'Y' then
+  begin
+    if (quMainUpdUser.ASString<>dmmain.userid) then
+    begin
+      ShowMessage('Tidak Bisa Tambah Inputan User Lain');
+      abort;
+    end;
+  end;
+End;
+
+procedure TfmAPTrPurchaseOrder.CeKStatusHeader;
+Begin
+  with quAct, SQL do
+  begin
+    Close; Clear;
+    Add('SELECT TOP 1 A.POID,A.KonsinyasiInvId FROM APTrKonsinyasiInvDt A inner join Aptrkonsinyasiinvhd B on A.Konsinyasiinvid=b.Konsinyasiinvid '
+       +'WHERE A.POID='''+quMainPOID.AsString+''' AND B.FgOto IN (''Y'',''T'') ');
+    Open;
+    if not IsEmpty then
+    begin
+       MsgInfo('Sudah ada Pengajuan Pembayaran ['+quAct.FieldByName('KonsinyasiInvId').AsString+'], tidak bisa edit/Delete lagi');
+       Abort;
+    end;
+  end;
+End;
+
+procedure TfmAPTrPurchaseOrder.CeKStatusDetil;
+Begin
+  with quAct, SQL do
+  begin
+    Close; Clear;
+    Add('SELECT TOP 1 A.POID,A.KonsinyasiInvId FROM APTrKonsinyasiInvDt A inner join Aptrkonsinyasiinvhd B on A.Konsinyasiinvid=b.Konsinyasiinvid '
+       +'WHERE A.POID='''+quMainPOID.AsString+''' AND B.FgOto IN (''Y'',''T'') ');
+    Open;
+    if not IsEmpty then
+    begin
+       MsgInfo('Sudah ada Pengajuan Pembayaran ['+quAct.FieldByName('KonsinyasiInvId').AsString+'], tidak bisa edit/Delete lagi');
+       Abort;
+    end;
+  end;
+End;
+
+procedure TfmAPTrPurchaseOrder.UpDateTTLPO;
+Begin
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Update APTrPurchaseOrderHD SET '
+       +' TTLPO='+CurrToStr(quTotalGrandTotalPO.AsCurrency)+',DiscAmount='+CurrToStr(quTotalDisc.AsCurrency)+', '
+       +' STPO='+CurrToStr(quTotalTotal.AsCurrency)+',PPN='+CurrToStr(quTotalPajak.AsCurrency)+', '
+       +' Ongkir='+CurrToStr(quTotalOngkir.AsCurrency)+',PBBKB='+CurrToStr(quTotalPBBKB.AsCurrency)+' '
+       +' WHERE POID='''+quMainPOID.AsString+'''');
+    ExecSQL;
+  End;
+End;
+procedure TfmAPTrPurchaseOrder.FormShow(Sender: TObject);
+begin
+  FFieldOrder := 'CONVERT(VARCHAR(8),TransDate,112), POID';
+  FFieldTgl   := 'TransDate';
+  SettingDxGrid(dbg);
+  inherited;
+  quMain.Active  := TRUE;
+  quDetil.Active := TRUE;
+  quTotal.Active := TRUE;
+  dbTerm.Top := 407;
+  dbTerm.Left := 10;
+  dxButton1.Visible := False;
+end;
+
+procedure TfmAPTrPurchaseOrder.dsMainStateChange(Sender: TObject);
+begin
+  inherited;
+  SetBtnOperationVisible(bbSave,bbCancel,FActDS);
+  SetReadOnly(dxDBButtonEdit8,quMain.State <> dsInsert);
+  //SetReadOnly(dxDBButtonEdit1,quMain.State <> dsInsert);
+  SetReadOnly(dxDBButtonEdit3,quMain.State <> dsInsert);
+  SetReadOnly(dxDBButtonEdit6,quMain.State <> dsInsert);
+  SetReadOnly(dxDBButtonEdit7,quMain.State <> dsInsert);
+  SetReadOnly(dxDBButtonEdit5,quMain.State <> dsInsert);
+  if GroupUser<>'admin' then
+  begin
+    //SetReadOnly(dxDBEdit7,quMain.State <> dsInsert);
+    //SetReadOnly(dxDBDateEdit1,quMain.State <> dsInsert);
+    //SetReadOnly(dxDBEdit1,TRUE);
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit1ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+    Title := 'Supplier';
+    SQLString := 'SELECT SuppName as Supplier, SuppID as Kode_Supplier'
+                +' FROM APMsSupplier ORDER BY SuppName';
+    if ShowModal = MrOK then
+    begin
+       if quMain.State = dsBrowse then quMain.Edit;
+       quMainSuppID.AsString := Res[1];
+    end;
+  finally
+    free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBDateEdit1KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  inherited;
+  if Key=#13 then PostMessage(Self.Handle,WM_NEXTDLGCTL,0,0)
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainBeforePost(DataSet: TDataSet);
+var ST : string;
+begin
+  inherited;
+  if TRIM(quMainCurrID.AsString) = 'IDR' then quMainKurs.AsCurrency := 1;
+  If Trim(quMainTransDate.AsString)='' then
+  Begin
+    MsgInfo('Tanggal PO tidak boleh kosong');
+    quMainTransDate.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainwarehouseID.AsString)='' then
+  Begin
+    MsgInfo('Perusahaan belum dipilih');
+    quMainwarehouseID.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainSuppID.AsString)='' then
+  Begin
+    MsgInfo('Supplier tidak boleh kosong');
+    quMainSuppID.FocusControl;
+    Abort;
+  End;
+
+  If Trim(quMainLuSuppName.AsString)='' then
+  Begin
+    MsgInfo('Supplier tidak ada dalam Master');
+    quMainSuppID.FocusControl;
+    Abort;
+  End;
+
+  if TRIM(quMainPRID.AsString)='' then quMainPRID.AsString := '-';
+ { if quMainPRID.AsString <> '-' then
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      add('SELECT PRID FROM APTrPurchaseRequestHD WHERE PRID='''+quMainPRID.AsString+''' ');
+      Open;
+      if IsEmpty then
+      begin
+        //ShowMessage('Data PR tidak terdaftar di Transaksi Supplier Purchase Request');
+        //quMainPRID.FocusControl;
+        //Abort;
+      end;
+    end;
+  end;   }
+  if TRIM(quMainFgDP.AsString) = 'P' then
+  begin
+    if quMainDP.AsCurrency > 100 then
+    begin
+      pesan('Maximal DP cuma bisa 100');
+      quMainDP.FocusControl;
+      Abort;
+    end;
+  end;
+  if TRIM(quMainDP.AsString) = '' then quMainDP.AsCurrency := 0;
+  if (quMain.State=dsInsert) AND (quMainPOID.AsString='') then
+  Begin
+    ST :=  quMainwarehouseID.ASString+'/PO'+FormatDateTime('/YYYY/',quMainTransDate.AsDateTime);
+    quMainNoPO.AsString := ST + FormatFloat('0000', RunNumberGL(quAct, 'APTrPurchaseOrderHD', 'NoPO', ST, '0') + 1);
+    quMainPOID.AsString  := ST + FormatFloat('0000', RunNumberGL(quAct, 'APTrPurchaseOrderHD', 'POID', ST, '0') + 1);
+  End;
+
+  if Trim(quMainPOID.AsString) = '' then
+  begin
+    MsgInfo('Nota PO tidak boleh kosong');
+    quMainPOID.AsString;
+    Abort;
+  end;
+  quMainUpdUser.AsString := dmMain.UserId;
+  quMainUpddate.AsDateTime := GetServerDateTime;
+end;
+
+procedure TfmAPTrPurchaseOrder.dbgEnter(Sender: TObject);
+begin
+  inherited;
+  if quMain.State in dsEditModes then quMain.Post;
+  if quDetil.IsEmpty then quDetil.Append;
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quMainTransDate.AsDateTime:=Date;
+  quMainTglKirim.AsDateTime:=Date;
+  quMainTransdate.FocusControl;
+  quMainFgTax.AsString := 'T';
+  quMainKurs.AsCurrency := 1;
+  quMainCurrID.AsString := 'IDR';
+  quMainDisc.AsCurrency := 0;
+  quMainPRID.AsString := '-';
+  quMainFgTerm.AsString := '1';
+  quMainDP.AsCurrency := 0;
+  quMainCityID.ASString := 'Y';
+  quMainTerm.AsInteger := 0;
+  quMainFgEdit.asString := 'Y';
+  quMainFgCetak.AsString := 'T';
+  quMainFgDP.AsString := 'A';
+  quMainOngkir.AsCurrency := 0;
+  quMainpbbkb.AsCurrency := 0;
+  quMainAdministrasi.AsCurrency := 0;
+  quMainRepack.AsCurrency := 0;
+  quMainFgRev.AsString := '1';
+  quMainFgOto.AsString := 'T';
+  //quMainFgOto.AsString := 'Y';
+  with quAct, sql do
+  begin
+    Close;Clear;
+    Add('select CompanyAdd1 from SaMsCompany');
+    Open;
+  end;
+  quMainAddress1.asString := quAct.FieldByName('CompanyAdd1').AsString ;
+  quMainFgAdd.AsString := '2';
+  quMainFgNote.AsString := '2';
+  if StrToInt(FormatDateTime('yyyyMMdd',quMainTransdate.AsDateTime))>=20220401 then
+  quMainNilaiTax.AsCurrency := 11
+  else
+  quMainNilaiTax.asCurrency := 10;
+end;
+
+procedure TfmAPTrPurchaseOrder.dbgItemIDButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+var sQuery : string;
+begin
+  inherited;
+  sQuery := 'SELECT DISTINCT K.ItemName as Nama_Barang,K.ItemID as Part_Number,K.Nota as Nomor_PR,K.TypeUnit,K.NoUnit, '
+           +'ISNULL(SUM(K.Qty-K.Jumlah),0) as Qty,K.UOMID,K.NumAll as IDTXN FROM ( '
+           +'SELECT B.Transdate,C.ItemName,A.TypeUnit,A.NoUnit,A.PRID as Nota,A.Jumlah as Qty,A.UOMID,A.NumAll,ISNULL(A.FgOto,''W'') as FgOto, '
+           +'ISNULL((SELECT SUM(X.Jumlah) as Total FROM APTrPurchaseOrderDt X INNER JOIN APTrPurchaseOrderHd Y ON X.POID=Y.POID '
+           +'WHERE X.ItemID=A.ItemID AND X.PRID=A.PRID AND X.FgNum=A.NumAll AND X.FgOto=''Y''),0) as Jumlah,A.ItemID FROM APTrPurchaseRequestDt A '
+           +'INNER JOIN APTrPurchaseRequestHd B ON A.PRID=B.PRID AND B.FgForm=''PR'' '
+           +'AND B.SiteID='''+quMainSiteID.AsString+''' '
+           +'INNER JOIN INMsItem C ON A.ItemID=C.ItemID '
+           +'UNION ALL '
+           +'select '''',A.itemName,A.typeUnit,''-'',''-'',1,A.uomid,1,''Y'',0,A.itemID FROM INMsItem A where Ctk<>''Y'' AND FgActive=''Y'' '
+           +') as K WHERE ISNULL(K.Qty-K.Jumlah,0) > 0 AND K.FgOto IN (''Y'',''W'',''T'')  '
+           +'AND CONVERT(VARCHAR(8),K.Transdate,112) <= '''+FormatDateTime('yyyyMMdd',quMainTransdate.AsDateTime)+''' '
+           +'GROUP BY K.ItemName,K.TypeUnit,K.NoUnit,K.Nota,K.UOMID,K.ItemID,K.NumAll ORDER BY K.Nota,K.ItemName';
+           //ShowMessage(sQuery);
+  with TfmSearch.Create(Self) do
+  try
+    Title := 'Data Permintaan Barang';
+    SQLString := sQuery;
+    if ShowModal = MrOK then
+    begin
+       if quDetil.State = dsBrowse then quDetil.Edit;
+       quDetilItemID.AsString := Res[1];
+       quDetilJumlah.AsCurrency   := StrToCurr(Res[5]);
+       quDetilPRID.AsString := Res[2];
+       quDetilUOMID.AsString  := Res[6];
+       quDetilFgNum.AsInteger := StrtoInt(Res[7]);
+       quDetilTypeUnit.AsString := Res[3];
+       quDetilNoUnit.AsString := Res[4];
+    end;
+  finally
+    free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+  if TRIM(quDetilItemID.Value)='' then
+  begin
+     MsgInfo('Kode Item tidak boleh kosong !');
+     quDetilItemID.FocusControl;
+     Abort;
+  end;
+
+  if TRIM(quDetilLuItemName.Value)='' then
+  begin
+     MsgInfo('Item tidak terdaftar di Master Item');
+     quDetilItemID.FocusControl;
+     Abort;
+  end;
+
+  if TRIM(quDetilQty.AsString)='' then
+  Begin
+     MsgInfo('Jumlah barang tidak boleh kosong');
+     quDetilQty.FocusControl;
+     Abort;
+  End;
+
+  if quDetilQty.Value <=0 then
+  begin
+     MsgInfo('Jumlah Barang Tidak boleh lebih kecil sama dengan 0');
+     quDetilQty.FocusControl;
+     Abort;
+  end;
+
+  if TRIM(quDetilPrice.AsString)='' then
+  Begin
+     MsgInfo('Harga barang tidak boleh kosong');
+     quDetilPrice.FocusControl;
+     Abort;
+  End;
+
+  if TRIM(quDetilDisc.AsString) = '' then quDetilDisc.AsInteger := 0;
+
+  if TRIM(quDetilUOMID.AsString) = '' then
+  begin
+    ShowMessage('Kolom satuan tidak boleh kosong');
+    quDetilUOMID.FocusControl;
+    Abort;
+  end;
+
+  if Trim(quMainPRID.AsString) <> '-' then
+  begin
+    with quAct,SQL do
+    Begin
+      Close;Clear;
+      Add('SELECT PRID FROM APTrPurchaseRequestDT WHERE PRID='''+quMainPRID.AsString+''' '
+         +'AND ItemID='''+quDetilItemID.AsString+''' ');
+      Open;
+      If IsEmpty then
+      Begin
+        MsgInfo('Data tidak terdapat pada Purchase Request');
+        quDetilPRID.FocusControl;
+        Abort;
+      End;
+    End;
+  end;
+
+  if quDetil.State = dsInsert then
+  begin
+     with quAct, SQL do
+     begin
+        Close; Clear;
+        Add(' SELECT Count(*) FROM  APTrPurchaseOrderDT WHERE POID=:POID AND ItemId=:ItemId AND PRID=:PRID');
+        with Parameters do
+        begin
+           ParamByName('POID').Value := quMainPOID.AsString;
+           ParamByName('ItemId').Value  := quDetilItemID.AsString;
+           ParamByName('PRID').Value := quDetilPRID.AsString;
+        end;
+        Open;
+       { if Fields[0].AsInteger > 0 then
+        begin
+           MsgInfo('Kode Barang sudah ada dalam List');
+           quDetilItemID.FocusControl;
+           Abort;
+        end; }
+     end;
+  end;
+
+  quDetilUpdUser.AsString := dmMain.UserId;
+  quDetilUpdDate.AsDateTime := GetServerDateTime;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  quDetilQty.AsInteger:=1;
+  quDetilJumlah.AsInteger := 1;
+  quDetilPrice.AsCurrency := 0;
+  quDetilDisc.AsInteger := 0;
+  quDetilDisc2.AsInteger := 0;
+  quDetilDisc3.AsInteger := 0;
+  quDetilDiscItem.AsInteger := 0;
+  quDetilpbbkb.AsCurrency := 0;
+  quDetilItemID.FocusControl;
+  quDetilPRID.AsString := '-';
+  quDetilFgOto.AsString := 'Y';
+  quDetilfgongkir.AsString := 'T';
+end;
+
+procedure TfmAPTrPurchaseOrder.dsDetilStateChange(Sender: TObject);
+begin
+  inherited;
+  SetReadOnly(dbgItemID,quDetil.State<>dsInsert);
+  //SetReadOnly(dbgDisc,quDetil.State<>dsInsert);
+//  SetReadOnly(dbgQty,quDetil.State<>dsInsert);
+  SetReadOnly(dbgPRID,True);
+  SetReadOnly(dbgUOMID,quDetil.State<>dsInsert);
+  SetReadOnly(dbgLuItemName,TRUE);
+  SetReadOnly(dbgColumn15,TRUE);
+  SetReadOnly(dbgColumn16,TRUE);
+  SetReadOnly(dbgColumn17,TRUE);
+  if FGACCREF<>'Y' then
+  SetReadOnly(dbgColumn21,quDetil.State<>dsInsert);
+  SetReadOnly(dbgCTotal,TRUE);
+end;
+
+procedure TfmAPTrPurchaseOrder.bbFindClick(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+     Title := 'Supplier Purchase Order';
+     SQLString := 'SELECT POID as No_PO,Convert(Varchar(10),Transdate,103) as Tanggal,B.SuppName as Supplier, '
+                 +'ISNULL(A.TTLPO,0) as Total_PO, '
+                 +'ISNULL((select TOP 1 X.BPBID from aptrkonsinyasihd X where X.poid=A.POID),''-'') as BPB_ID, '
+                 +'ISNULL((select TOP 1 X.konsinyasiid from aptrkonsinyasihd X where X.poid=A.POID),''-'') as Nota_Terima, '
+                 +'A.Note as Keterangan,A.SuppID as Kode_Supplier, '
+                 +'CASE WHEN A.FgTax=''Y'' THEN ''Pajak'' ELSE ''Non Pajak'' END as Status '
+                 +'FROM APTrPurchaseOrderHD A '
+                 +'INNER JOIN APMsSupplier B ON A.SuppID=B.SuppID WHERE '+FSQLWhere
+                 +'ORDER BY A.POID';
+     if ShowModal = MrOK then
+     begin
+       quMain.Locate('POID',Res[0],[]);
+     end;
+  finally
+     free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.TmbBrgClick(Sender: TObject);
+begin
+  inherited;
+  if quMain.IsEmpty then Abort else quDetil.Append;
+end;
+
+procedure TfmAPTrPurchaseOrder.BtlBrgClick(Sender: TObject);
+begin
+  inherited;
+  quDetil.Cancel;
+end;
+
+procedure TfmAPTrPurchaseOrder.KrgBrgClick(Sender: TObject);
+begin
+  inherited;
+  if quDetil.IsEmpty then
+  begin
+    ShowMessage('Data sudah kosong');
+    Abort;
+  end;
+  if (dsdetil <> nil) and (dsDetil.DataSet <> nil) and
+     (MessageDlg('Hapus Barang ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+        dsDetil.DataSet.Delete;
+end;
+
+procedure TfmAPTrPurchaseOrder.bbSimpanDetilClick(Sender: TObject);
+begin
+  inherited;
+  if Self.quDetil.State = dsInsert then
+  begin
+   Self.quDetil.Edit;
+   Self.quDetil.Post;
+   Self.quDetil.Requery();
+  end;
+  if Self.quDetil.State = dsEdit then
+  begin
+   quDetil.Post;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilCalcFields(DataSet: TDataSet);
+var CTotal,Disc1,Disc2,Disc3 : currency;
+begin
+  inherited;
+  CTotal := (quDetilJumlah.AsCurrency-quDetilDiscItem.AsCurrency)*(quDetilPrice.AsCurrency);
+  Disc1 := CTotal*quDetilDisc.AsCurrency/100;
+  Disc2 := (CTotal-Disc1)*quDetilDisc2.AsCurrency/100;
+  Disc3 := (CTotal-Disc1-Disc2)*quDetilDisc3.AsCurrency/100;
+
+  quDetilCTotal.Value := CTotal-Disc1-Disc2-Disc3;
+
+  with quCalc,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT ItemName2 FROM INMsItem '
+       +'WHERE ItemID='''+quDetilItemID.AsString+''' ');
+    Open;
+  end;
+  qudetilLuItemName.AsString := quCalc.FieldByName('ItemName2').AsString;
+
+  if quDetilFgOto.AsString = 'T' then quDetilLOto.ASString := 'Void';
+  if quDetilFgOto.AsString = 'Y' then quDetilLOto.ASString := 'OK';
+  if quDetilFgOto.AsString = 'E' then quDetilLOto.ASString := 'Edited';
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainAfterPost(DataSet: TDataSet);
+var noPO : string;
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT Right(NoPO,3) as noPO,Left(POID,3) as noID ,Left(noPO,5) as ST FROM APtrPurchaseOrderHD Where POID='''+quMainPOID.AsString+''' ');
+    Open;
+  end;
+  noPO:= quAct.FieldByName('ST').asString+quAct.FieldByName('noID').asString;
+  if quAct.FieldByName('noID').asString<>quAct.FieldByName('noPO').asString then
+  begin
+  with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('Update APtrPurchaseOrderHD SET NoPO='''+noPO+''' Where POID='''+quMainPOID.AsString+''' ');
+      ExecSQL;
+    end;
+  end;
+  quTotal.Requery();
+  UpDateTTLPO;
+  quDetil.Append;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilAfterDelete(DataSet: TDataSet);
+var nopoid : string;
+begin
+  inherited;
+  quTotal.Requery();
+  UpDateTTLPO;
+
+  with quCetak,SQL do
+  Begin
+    Close;Clear;
+    add('Insert AllLogData (VoucherID,Jenis,Keterangan,upddate,upduser) '
+       +'select '''+quMainPOID.ASString+''',''Delete Detail'',''Hapus Detail PO'',getdate(),'''+dmMain.UserId+''' ');
+    ExecSQL;
+  End;
+  nopoid := quMainPOID.ASString;
+  quMain.Locate('POID',nopoid,[]);
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit3ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+    Title := 'Data Supplier Purchase Request';
+    SQLString := 'SELECT PRID as No_PR, CONVERT(VARCHAR(10),Transdate,103) as Tgl_PR '
+                +'FROM APTrPurchaseRequestHD WHERE SuppID='''+quMainSuppID.AsString+''' '
+                +'AND CONVERT(VARCHAR(8),Transdate,112) <= '''+FormatDateTime('yyyyMMdd',quMainTransdate.AsDateTime)+''' ';
+    if ShowModal = MrOK then
+    begin
+       if quMain.State = dsBrowse then quMain.Edit;
+       quMainPRID.AsString := Res[0];
+    end;
+  finally
+    free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilBeforeInsert(DataSet: TDataSet);
+begin
+  inherited;
+  if (quMain.IsEmpty) or  (quMain.State <> dsBrowse ) then Abort;
+  CekStatusHeader;
+  CekOTo;
+  CekUserTambah;
+end;
+
+procedure TfmAPTrPurchaseOrder.dbgUOMIDButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+   with TfmSearch.Create(Self) do
+    try
+       Title := 'Satuan';
+       SQLString := 'SELECT K.UOMID as Satuan FROM (SELECT ItemID,UOMID FROM INMsItem UNION ALL '
+                   +'SELECT ItemID,UOMID2 FROM INMsItem) as K '
+                   +'WHERE K.ItemID='''+quDetilItemID.AsString+''' '
+                   +'ORDER BY K.UOMID';
+       if ShowModal = MrOK then
+       begin
+          if quDetil.State = dsBrowse then quDetil.Edit;
+          quDetilUOMID.Value := Res[0];
+       end;
+    finally
+       free;
+    end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainBeforeDelete(DataSet: TDataSet);
+var nopoid : string;
+begin
+  inherited;
+  CekStatusHeader;
+  CekOTo;
+  CekUserDelete;
+
+  with quCetak,SQL do
+  Begin
+    Close;Clear;
+    add('Insert AllLogData (VoucherID,Jenis,Keterangan,upddate,upduser) '
+       +'select '''+quMainPOID.ASString+''',''Delete'',''Hapus PO'',getdate(),'''+dmMain.UserId+''' ');
+    ExecSQL;
+  End;
+  nopoid := quMainPOID.ASString;
+  quMain.Locate('POID',nopoid,[]);
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilBeforeDelete(DataSet: TDataSet);
+
+begin
+  inherited;
+  CekStatusDetil;
+  CEkOto;
+  CekUserDelete;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilUOMIDChange(Sender: TField);
+var Jum : Currency;
+    satuan : string;
+begin
+  inherited;
+  with quCalc,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT UOMID2,Konversi FROM INMsItem '
+       +'WHERE ItemID='''+quDetilItemID.AsString+''' ');
+    Open;
+  end;
+  if quDetilUOMID.AsString = quCalc.FieldByName('UOMID2').AsString then
+    Jum := quDetilJumlah.AsCurrency
+  else
+    Jum := quDetilJumlah.AsCurrency * quCalc.FieldByName('Konversi').AsCurrency;
+  quDetilQty.AsCurrency := Jum;
+
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT UOMID2 FROM INMsItem WHERE ItemID='''+quDetilItemID.AsString+''' ');
+    Open;
+  end;
+  satuan := quAct.FieldByName('UOMID2').AsString;
+  with QuAct, SQl do
+  begin
+    Close;Clear;
+    Add('Select PriceK,PriceB FROM ApMsSupplierPrice Where SuppID='''+quMainSuppID.AsString+''' AND ItemID='''+quDetilitemID.AsString+''' ');
+    Open;
+  End;
+  if quDetilUOMID.AsString = satuan then
+  quDetilPrice.AsCurrency := quAct.FieldByName('PriceK').AsCurrency
+  else
+  quDetilPrice.AsCurrency := quAct.FieldByName('PriceB').AsCurrency;
+end;
+
+procedure TfmAPTrPurchaseOrder.bbCetakClick(Sender: TObject);
+var otorisasi,company,phone,email,fax,Term,note,nope,nama,jabatan,nopoid : string;
+begin
+  inherited;
+  quTotal.Requery();
+  UpDateTTLPO;
+
+  if quMainFgOto.ASString <> 'Y' then
+  begin
+    if quMainFgOto.ASString = 'T' then
+    begin
+      ShowMessage('Data Belum di-Approved!');
+      Abort;
+    end else
+    begin
+      ShowMessage('Data Sudah di-Rejected!');
+      Abort;
+    end;
+  end;
+
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select CompanyName,isnull(Email,''-'') as email,isnull(Fax,''-'') as fax,isnull(Phone,''0000-000-000'') as phone From SaMsCompany ');
+    Open;
+  End;
+  company := quAct.FieldbyName('CompanyName').AsString;
+  phone := quAct.FieldbyName('Phone').AsString;
+  fax := quAct.FieldbyName('Fax').AsString;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select A.Email,A.NomorHP,A.Nama,B.SalesName,B.Jabatan From SysMsUser A inner join ARMsSales B on A.Nama=B.SalesID Where A.UserId='''+dmMain.UserId+''' ');
+    Open;
+  End;
+  nama := quAct.FieldbyName('salesname').AsString;
+  jabatan := quAct.FieldbyName('jabatan').AsString;
+  email := quAct.FieldbyName('email').AsString;
+  nope := quAct.FieldbyName('NomorHP').AsString;
+
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select isnull(Note,''-'') as note,Disc,DP,TTLPO,CASE WHEN FGTax=''Y'' THEN (TTLPO-DISC)*0.1 ELSE 0 END as Tax, '
+       +' CASE WHEN FgTerm=1 THEN ''CASH ON DELIVERY'' '
+       +'      WHEN FgTerm=2 THEN ''CASH BEFORE DELIVERY'' '
+       +'      WHEN FgTerm=3 Then ''DP'' ELSE ISNULL(CASE WHEN Termin='''' THEN ''JATUH TEMPO'' ELSE Termin END,''JATUH TEMPO'') END as termin,Term,FgTerm '
+       +' From APTRPurchaseOrderHD Where POID='''+quMainPOID.AsString+''' ');
+    Open;
+  End;
+  note := quAct.FieldbyName('Note').AsString;
+
+  if (quAct.FieldByName('FgTerm').AsString = '1') or (quAct.FieldByName('FgTerm').AsString = '2') then
+    term :=  quAct.FieldByName('Termin').AsString
+  else
+     if (quAct.FieldByName('FgTerm').AsString = '3') then
+     begin
+       if quMainFgDP.AsString = 'P' then
+         term :=  quAct.FieldByName('Termin').AsString + '  ' + quAct.FieldByName('DP').AsString + ' % '
+       else
+         term :=  quAct.FieldByName('Termin').AsString + '  Rp ' + FormatRptkurung(CurrToStr(quAct.FieldByName('DP').AsCurrency));
+     end else
+       if (quAct.FieldByName('FgTerm').asString = '4') then
+         term :=  quAct.FieldByName('Termin').AsString + ' ( ' + quAct.FieldByName('Term').AsString + ' hari ) ';
+
+  otorisasi := dmMain.UserId;
+  If (Self.quMain.State = dsEdit) or (Self.quMain.State = dsInsert) or
+     (Self.quDetil.State = dsEdit) or (Self.quDetil.State = dsInsert) then
+  begin
+    ShowMessage('Data Belum disimpan');
+    Abort;
+  end;
+
+  if (quMain.IsEmpty) or (quDetil.IsEmpty) then Abort;
+  Begin
+    with TfmARQRRptPurchaseOrder.Create(Self) do
+    try
+
+      qrlCompName.Caption := company;
+      //QRLabel76.Caption := quMainwarehouseID.ASString+'-'+quMainLsites.ASString+'-'+quMainLDivisi.AsString;
+
+      //summary valuee
+      qrlabel53.Caption := quMainCurrID.AsString;
+      qrlabel54.Caption := quMainCurrID.AsString;
+      qrlabel25.Caption := quMainCurrID.AsString;
+      qrlabel52.Caption := quMainCurrID.AsString;
+      qrlabel55.Caption := quMainCurrID.AsString;
+      qrlabel56.Caption := quMainCurrID.AsString;
+      qrlabel57.Caption := quMainCurrID.AsString;
+      qrlabel58.Caption := quMainCurrID.AsString;
+      qrlabel63.Caption := quMainCurrID.AsString;
+      Qrlabel60.Caption := CurrtoStr(quTotalPBBKB.AsCurrency);
+      Qrlabel82.Caption := CurrtoStr(quTotalTotal.AsCurrency);
+      Qrlabel76.Caption := CurrtoStr(quTotalOngkir.AsCurrency);
+      Qrlabel5.Caption := CurrtoStr(quTotalDisc.AsCurrency);
+      qrlabel8.caption := CurrtoStr(quTotalPajak.AsCurrency);
+      qrlabel11.caption := CurrtoStr(quMainOngkir.AsCurrency);
+      qrlabel38.caption := CurrtoStr(quMainAdministrasi.AsCurrency);
+      qrlabel62.caption := CurrtoStr(quMainRepack.AsCurrency);
+      qrlabel51.caption := CurrtoStr(quTotalGrandTotal.AsCurrency/quMainKurs.AsCurrency);
+
+      QRLabel32.Caption :='VAT (' +quMainNilaiTax.AsString+ '%)';
+
+      if quTotalPBBKB.AsCurrency=0 then
+      begin
+      qrlabel10.Enabled := false; qrlabel60.Enabled := false;
+
+        if quTotalOngkir.AsCurrency=0 then
+        begin
+          QRLabel19.Top := 25;
+          QRLabel32.Top := 45;
+          QRLabel39.Top := 65;
+          QRLabel5.Top := 25;
+          QRLabel8.Top := 45;
+          QRLabel51.Top := 65;
+          qrlabel3.Enabled := false;
+          qrlabel53.Enabled := false;
+          qrlabel50.Enabled := false;
+          qrlabel56.Enabled := false;
+          qrlabel42.Enabled := false;
+          qrlabel76.Enabled := false;
+        end else
+        begin
+          qrlabel42.Top := 25;
+          QRLabel19.Top := 45;
+          QRLabel32.Top := 65;
+          QRLabel39.Top := 85;
+          qrlabel76.Top := 25;
+          QRLabel5.Top := 45;
+          QRLabel8.Top := 65;
+          QRLabel51.Top := 85;
+          qrlabel53.Enabled := false;
+          qrlabel50.Enabled := false;
+        end;
+
+      end else
+      begin
+
+        if quTotalOngkir.AsCurrency=0 then
+        begin
+          QRLabel19.Top := 45;
+          QRLabel32.Top := 65;
+          QRLabel39.Top := 85;
+          QRLabel5.Top := 45;
+          QRLabel8.Top := 65;
+          QRLabel51.Top := 85;
+          qrlabel53.Enabled := false;
+          qrlabel50.Enabled := false;
+          qrlabel42.Enabled := false;
+          qrlabel76.Enabled := false;
+        end else
+        begin
+          //nothing happeneed
+        end;
+
+      end;
+
+      //header value
+      qlb1.Caption := company; qlb2.Caption := quMainAddress1.AsString; qlb3.Caption := phone;
+      qlb4.Caption := email; qlb6.Caption := term;
+      qrlabel65.Caption := nope;
+
+      //terbilang
+      if UpperCase(quMainCurrId.Value) ='IDR' then
+      begin
+        qlbTerbilang.Caption :=  'Terbilang '+ convert(FormatFloat(sEditFormat, quTotalGrandTotalPO.AsCurrency))+'Rupiah #';
+      end;
+      if UpperCase(quMainCurrId.Value) ='USD' then
+      begin
+        qlbTerbilang.Caption :=  'Spelled '+ converteng(FormatFloat(sEditFormat, quTotalGrandTotalPO.AsCurrency))+' Dollars #';
+        qrlabel33.Caption := 'Expedition';
+        qrlabel26.Caption := 'Administration';
+      end;
+
+      if quMainwarehouseID.ASString='RJS' then QRImage1.Enabled := TRUE;
+      if quMainwarehouseID.ASString='AGT' then QRImage2.Enabled := TRUE;
+      if quMainwarehouseID.ASString='EBTL' then QRImage3.Enabled := TRUE;
+      if quMainwarehouseID.ASString='IUP' then QRImage4.Enabled := TRUE;
+      if quMainwarehouseID.ASString='GP' then QRImage5.Enabled := TRUE;
+      if quMainwarehouseID.ASString='DIL' then QRImage6.Enabled := TRUE;
+      if quMainwarehouseID.ASString='OJP' then QRImage7.Enabled := TRUE;
+      if quMainwarehouseID.ASString='TIM' then QRImage8.Enabled := TRUE;
+      if quMainwarehouseID.ASString='OJS' then QRImage9.Enabled := TRUE;
+      if quMainwarehouseID.ASString='TPM' then QRImage10.Enabled := TRUE;
+
+      with qu001,SQL do
+      Begin
+        Close;Clear;
+        add('select A.POID as POID,A.POID as POIDD,CONVERT(varchar(10),A.TglKirim,103) as TglKirim,C.SiteName as SiteID, '
+           +'CONVERT(varchar(10),A.Transdate,103) as Tanggal,B.SuppName as CustName,B.ContactPerson as UP, '
+           +'B.Address as Address,B.Phone,B.Fax,A.Note as NoteMemo,'''+Nama+''' as userA,'''+jabatan+''' as jabatan '
+           +'from aptrpurchaseorderhd A '
+           +'inner join ApmsSupplier B on A.Suppid=B.Suppid '
+           +'inner join inmssites C on A.SiteID=C.SiteID '
+           +'where A.POID='''+quMainPOID.AsString+''' ');
+        Open;
+      End;
+
+      with qu002,SQL do
+      Begin
+        Close;Clear;
+        add('select DISTINCT A.POID,A.PRID from aptrpurchaseorderdt A '
+           +'where A.POID=:POIDD AND A.FgOto<>''T'' AND A.PRID<>''-'' order by A.PRID ');
+        Parameters.ParamByName('POIDD').DataType := ftString;
+        Open;
+      End;
+
+      with qu003,SQL do
+      Begin
+        Close;Clear;
+        add('select A.ItemId,A.itemid2,B.ItemName2 as ItemName,ISNULL((A.Jumlah-A.DiscItem),0) as jumlah,A.Price,A.UOMID,A.Disc,A.keterangan, '
+           +'ISNULL((A.Price*(A.Jumlah-A.DiscItem))-(A.Price*(A.Jumlah-A.DiscItem))*A.Disc/100,0) as Total,A.Discitem,A.typeUnit,A.NoUnit,A.PRID '
+           +'from aptrpurchaseorderdt A '
+           +'inner join inmsitem B on A.ItemId2=B.itemid '
+           +'where A.POID=:POID AND A.PRID=:PRID AND A.FgOto<>''T'' order by A.NoUnit,A.TypeUnit,A.ItemName,A.ItemID2 ');
+        Parameters.ParamByName('POID').DataType := ftString;
+        Parameters.ParamByName('PRID').DataType := ftString;
+        Open;
+      End;
+
+      MyReport.PreviewModal;
+
+    finally
+      free;
+    end;
+  End;
+
+  with quCetak,SQL do
+  Begin
+    Close;Clear;
+    add('Insert AllLogData (VoucherID,Jenis,Keterangan,upddate,upduser) '
+       +'select '''+quMainPOID.ASString+''',''Print'',''Cetak PO'',getdate(),'''+dmMain.UserId+''' ');
+    ExecSQL;
+  End;
+  nopoid := quMainPOID.ASString;
+  quMain.Locate('POID',nopoid,[]);
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit2ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Currency';
+       SQLString := 'SELECT CurrId as Currency, CurrName as Description '
+               +' FROM SAMsValuta'
+               +' ORDER BY CurrId';
+       if ShowModal = MrOk then
+       begin
+          if quMain.State = dsBrowse then quMain.Edit;
+             quMainCurrID.Value := Res[0];
+       end;
+  finally
+       free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainCalcFields(DataSet: TDataSet);
+begin
+  inherited;
+  if quMainFgTerm.AsString = '1' then
+  begin
+    Label24.Visible := False;
+    dxDBEdit5.Visible := False;
+    Label25.Visible := False;
+    dxDBEdit6.Visible := False;
+  end else
+  if quMainFgTerm.AsString = '2' then
+  begin
+    Label24.Visible := False;
+    dxDBEdit5.Visible := False;
+    Label25.Visible := False;
+    dxDBEdit6.Visible := False;
+  end else
+  if quMainFgTerm.AsString = '3' then
+  begin
+    Label24.Visible := True;
+    dxDBEdit5.Visible := True;
+    Label25.Visible := False;
+    dxDBEdit6.Visible := False;
+  end else
+  begin
+    Label24.Visible := False;
+    dxDBEdit5.Visible := False;
+    Label25.Visible := True;
+    dxDBEdit6.Visible := True;
+  end;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select CurrName From SaMsValuta WHERE CurrId='''+quMainCurrID.AsString+''' ');
+    Open;
+  End;
+  quMainLCurrName.asString := quAct.FieldByName('CurrName').AsString ;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select NamaPT From SAMSPT WHERE KodePT='''+quMainwarehouseID.AsString+''' ');
+    Open;
+  End;
+  quMainLPT.asString := quAct.FieldByName('NamaPT').AsString ;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select ISNULL(COUNT(VoucherID),0) as Jum From AllLogData Where VoucherID='''+quMainPOID.AsString+''' ');
+    Open;
+  End;
+  quMainJmlPrint.AsInteger := quAct.FieldByName('Jum').AsInteger ;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select WareHouseName From INMsWareHouse WHERE WarehouseID='''+quMainwarehouseID.AsString+''' ');
+    Open;
+  End;
+  quMainLwarehouse.asString := quAct.FieldByName('WareHouseName').AsString ;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select SiteName From INMSSites WHERE SiteID='''+quMainSiteID.AsString+''' ');
+    Open;
+  End;
+  quMainLsites.asString := quAct.FieldByName('SiteName').AsString ;
+  With quAct,sql do
+  Begin
+    Close;Clear;
+    add(' Select DivisiName From INMsDivisi WHERE DivisiID='''+quMainDivisiID.AsString+''' ');
+    Open;
+  End;
+  quMainLDivisi.asString := quAct.FieldByName('DivisiName').AsString ;
+
+  if quMainFgOto.ASString='Y' then
+  begin
+    DBText27.Font.Color := clLime;
+    quMainLstatusoto.AsString := 'Approved';
+  end else
+  if quMainFgOto.ASString = 'T' then
+  begin
+    DBText27.Font.Color := clYellow;
+    quMainLstatusoto.AsString := 'Pending';
+  end else
+  begin
+    DBText27.Font.Color := clRed;
+    quMainLstatusoto.AsString := 'Rejected';
+  end;
+
+  if quMainFgRev.ASString = '0' then
+  begin
+    quMainLRev.ASString := 'Sudah Submit';
+  end else
+  begin
+    quMainLRev.ASString := 'Belum Submit';
+  end;
+
+end;
+
+procedure TfmAPTrPurchaseOrder.dbgPRIDButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+    Title := 'Data Permintaan Barang';
+    SQLString := 'SELECT DISTINCT PRID,ISNULL(Jumlah,0) as Jumlah,UOMID as Unit,UpdUser as Request_By FROM APTrPurchaseRequestDT '
+                +'WHERE ItemID='''+quDetilItemID.AsString+''' AND PRID NOT IN (SELECT PRID FROM APTrPurchaseOrderDt) ORDER BY PRID';
+    if ShowModal = MrOK then
+    begin
+       if quDetil.State = dsBrowse then quDetil.Edit;
+         quDetilPRID.AsString := Res[0];
+         quDetilJumlah.AsCurrency   := StrToCurr(Res[1]);
+         quDetilUOMID.AsString := Res[2];
+    end;
+  finally
+    free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilItemIDChange(Sender: TField);
+var satuan :string;
+begin
+  inherited;
+  quDetilitemid2.AsString := quDetilItemID.AsString;
+
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT UOMID2 FROM INMsItem WHERE ItemID='''+quDetilItemID2.AsString+''' ');
+    Open;
+  end;
+  satuan := quAct.FieldByName('UOMID2').AsString;
+
+  with QuAct, SQl do
+  begin
+    Close;Clear;
+    {Add('Select ISNULL(PriceK,(select TOP 1 ISNULL(Price,0) as Harga from APTrPurchaseOrderDt A inner join APTrPurchaseOrderHd B on A.POID=B.POID '
+       +'WHERE A.ItemID='''+qudetilItemId.AsString+''' AND B.SuppID='''+quMainSuppID.ASString+''' order by B.Transdate DESC)) as PriceK, '
+       +'PriceB FROM ApMsSupplierPrice Where SuppID='''+quMainSuppID.AsString+''' AND ItemID='''+quDetilitemID.AsString+''' ');       }
+    Add('Select ISNULL(PriceK,0) as PriceK, '
+       +'PriceB FROM ApMsSupplierPrice Where SuppID='''+quMainSuppID.AsString+''' AND ItemID='''+quDetilitemID2.AsString+''' ');
+    Open;
+  End;
+  if quDetilUOMID.AsString = satuan then
+  quDetilPrice.AsCurrency := quAct.FieldByName('PriceK').AsCurrency
+  else
+  quDetilPrice.AsCurrency := quAct.FieldByName('PriceB').AsCurrency;
+end;
+
+procedure TfmAPTrPurchaseOrder.dbTermChange(Sender: TObject);
+begin
+  inherited;
+  if dbTerm.ItemIndex = 0 then
+  begin
+    Label24.Visible := False;
+    dxDBEdit5.Visible := False;
+    dxDBImageEdit1.Visible := False;
+    Label25.Visible := False;
+    dxDBEdit6.Visible := False;
+    dxButton1.Visible := False;
+    dxButton3.Visible := False;
+    dxDBMemo2.Visible := False;
+  end else
+  if dbTerm.ItemIndex = 1 then
+  begin
+    Label24.Visible := False;
+    dxDBEdit5.Visible := False;
+    dxDBImageEdit1.Visible := False;
+    Label25.Visible := False;
+    dxDBEdit6.Visible := False;
+    dxButton1.Visible := False;
+    dxButton3.Visible := False;
+    dxDBMemo2.Visible := False;
+  end else
+  if dbTerm.ItemIndex = 2 then
+  begin
+    Label24.Visible := True;
+    dxDBEdit5.Visible := True;
+    dxDBImageEdit1.Visible := True;
+    Label25.Visible := False;
+    dxDBEdit6.Visible := False;
+    dxButton3.Visible := False;
+    dxDBMemo2.Visible := False;
+  end else
+  begin
+    Label24.Visible := False;
+    dxDBEdit5.Visible := False;
+    dxDBImageEdit1.Visible := False;
+    Label25.Visible := True;
+    dxDBEdit6.Visible := True;
+    dxButton1.Visible := False;
+    dxButton3.Visible := True;
+    dxDBMemo2.Visible := True;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+   with quAct, SQL do
+  begin
+    Close; Clear;
+    Add('Update APTrPurchaseOrderHD Set FgEdit=''T'' WHERE POID='''+quMainPOID.AsString+''' ');
+    ExecSQL;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilBeforeEdit(DataSet: TDataSet);
+begin
+  inherited;
+  //CekStatusHeader;
+  CekStatusDetil;
+  CekOTo;
+  CekUserEdit;
+
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit4ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+  try
+    Title := 'Data Permintaan Barang';
+    SQLString := 'SELECT DISTINCT PRID FROM APTrPurchaseRequestHD '
+                +'WHERE PRID NOT IN (SELECT PRID FROM APTrPurchaseOrderDt) AND FgForm=''PR'' ORDER BY PRID ';
+    if ShowModal = MrOK then
+    begin
+       if quDetil.State = dsBrowse then quDetil.Edit;
+         quMainPRID.AsString := res[0];
+    end;
+  finally
+    free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxButton1Click(Sender: TObject);
+var sTotal : currency;
+begin
+  inherited;
+  if (quMain.State <> dsBrowse) or (quDetil.State <> dsBrowse) then
+  begin
+    pesan('Data belum disimpan');
+    Abort;
+  end;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT ISNULL(CASE WHEN FgDP=''P'' THEN DP*TTLPO*0.01 ELSE DP END,0) as Total FROM APTrPurchaseOrderHd '
+       +'WHERE POID='''+quMainPOID.AsString+''' ');
+    Open;
+  end;
+  sTotal := quAct.FieldByName('Total').AsCurrency;
+  if sTotal = 0 then
+  begin
+    pesan('DP tidak boleh kosong');
+    Abort;
+  end;
+  With TfmCFQRRptTrKKBB.Create(Self) do
+  try
+    qlbTitle.Caption:= sCompanyName; FgStatus := 'PO';
+    QRLabel1.Enabled := False; QRLabel2.Enabled := False; qlbBank.Enabled := False; qlbKas.Enabled := False;
+    QRShape2.Enabled := False; QRShape6.Enabled := False; qlb.Enabled := False; qlbJourTransID.Enabled := False;
+    qlbTitleV.Top := 18; QRLabel10.Top := 18; qlbTanggal.Top := 18;
+    QRLabel4.Enabled := False; QRLabel20.Enabled := False; QRLabel7.Enabled := False;
+    QRLabel5.Left := QRLabel4.Left; QRDBText2.Left := QRDBText1.Left; QRLabel21.Caption := 'Jumlah';
+    QRShape3.Enabled := False; QRShape4.Enabled := False; QRShape5.Enabled := False;
+    QRShape9.Enabled := False; QRShape12.Enabled := False; QRShape28.Enabled := False;
+    QRDBText1.Enabled := False; QRDBText4.Enabled := False; qlbTotalDebit.Caption := 'Total';
+    qlbterimaDari.Caption := quMainLuSuppName.AsString;
+    qlbTTerBayar.Caption := 'Penerima';
+    qlbTitleV.Caption := 'VOUCHER';
+    qlbTanggal.Caption := ': ' + FormatDateTime('dd/MMM/yyyy', quMainTransdate.AsDateTime);
+
+    if UpperCase(quMainCurrId.Value) ='IDR' then
+       qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, sTotal))+'rupiah';
+    if UpperCase(quMainCurrId.Value) ='USD' then
+       qlbTerbilang.Caption :=  convert(FormatFloat(sEditFormat, sTotal*quMainKurs.AsCurrency))+'rupiah';
+
+    qlbKeterangan.Caption := quMainNote.Value;
+
+    if UpperCase(quMainCurrId.Value) ='IDR' then
+    begin
+      With qu001,sql do
+      Begin
+        Close;Clear;
+        add('SELECT POID as RekeningID,POID as RekeningName,'
+           +'ISNULL(CASE WHEN FgDP=''P'' THEN DP*TTLPO*0.01 ELSE DP END,0) as Amount,'
+           +'''Pembayaran DP atas PO ''+POID as Note,''K'' as Jenis FROM APTrPurchaseOrderHd '
+           +'WHERE POID='''+quMainPOID.AsString+''' ');
+        Open;
+      End;
+    end else
+    begin
+      With qu001,sql do
+      Begin
+        Close;Clear;
+        add('SELECT POID as RekeningID,POID as RekeningName,'
+           +'ISNULL(CASE WHEN FgDP=''P'' THEN DP*TTLPO*0.01*Kurs ELSE DP*Kurs END,0) as Amount,'
+           +'''Pembayaran DP atas PO ''+POID as Note,''K'' as Jenis FROM APTrPurchaseOrderHd '
+           +'WHERE POID='''+quMainPOID.AsString+''' ');
+        Open;
+      End;
+    end;
+     if sCetak = '0' then
+       MyReport.PreviewModal
+     else
+       MyReport.Print;
+  Finally
+    Free;
+  End;
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilJumlahChange(Sender: TField);
+begin
+  inherited;
+  //qudetilqty.AsCurrency := quDetilJumlah.AsCurrency-quDetilDiscItem.AsCurrency;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('Select UOMID2,Konversi FROM InMsItem Where Itemid='''+quDetilItemID.AsString+''' ');
+    Open;
+  End;
+  if quDetilUOMID.AsString = quAct.FieldByName('UOMID2').AsString then
+  quDetilQty.AsCurrency := quDetilJumlah.AsCurrency-quDetilDiscItem.AsCurrency
+  else
+  qudetilQty.AsCurrency := (quDetilJumlah.AsCurrency-quDetilDiscItem.AsCurrency) * quAct.FieldByName('Konversi').AsCurrency;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit5ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+   with TfmSearch.Create(Self) do
+     try
+        Title := 'Pilih Perusahaan';
+        SQLString := 'SELECT KodePT as Kode_PT,NamaPT as Nama_PT,AlamatPT as Alamat_PT FROM SAMsPT WHERE FgActive=''Y'' ORDER BY KodePT ';
+        if ShowModal = MrOK then
+        begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainwarehouseID.AsString := Res[0];
+        end;
+     finally
+        free;
+     end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxButton2Click(Sender: TObject);
+begin
+  inherited;
+    with TfmSearch.Create(Self) do
+    try
+       Title := 'Alamat Kirim';
+       SQLString := 'SELECT DISTINCT Address1 FROM APTrPurchaseOrderHD WHERE Suppid='''+quMainSuppID.AsString+''' And FgAdd=1 ';
+       if ShowModal = MrOk then
+       begin
+          if quMain.State = dsBrowse then quMain.Edit;
+             quMainAddress1.Value := Res[0];
+       end;
+  finally
+       free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxButton3Click(Sender: TObject);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+    try
+       Title := 'Keterangan Term';
+       SQLString := 'SELECT DISTINCT Termin as Keterangan FROM APTrPurchaseOrderHD WHERE Suppid='''+quMainSuppID.AsString+''' ';
+       if ShowModal = MrOk then
+       begin
+          if quMain.State = dsBrowse then quMain.Edit;
+             quMainTermin.Value := Res[0];
+       end;
+  finally
+       free;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit6ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+   with TfmSearch.Create(Self) do
+     try
+        Title := 'Gudang';
+        SQLString := 'SELECT WareHouseID as Kode_Gudang, WareHouseName as Nama_Gudang'
+                    +' FROM INMsWareHouse ORDER BY WareHouseId';
+        if ShowModal = MrOK then
+        begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainWareHouseID.Value := Res[0];
+        end;
+     finally
+        free;
+     end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit7ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+   with TfmSearch.Create(Self) do
+     try
+        Title := 'Pilih Sites';
+        SQLString := 'SELECT SiteID as Kode_Sites, SiteName as Nama_Sites'
+                    +' FROM INMSSites ORDER BY SiteName';
+        if ShowModal = MrOK then
+        begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainSiteID.Value := Res[0];
+        end;
+     finally
+        free;
+     end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxDBButtonEdit8ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+begin
+  inherited;
+  with TfmSearch.Create(Self) do
+     try
+        Title := 'Pilih Divisi';
+        SQLString := 'SELECT DivisiID, DivisiName as Nama_Divisi FROM INMsDivisi ORDER BY DivisiID';
+        if ShowModal = MrOK then
+        begin
+           if quMain.State = dsBrowse then quMain.Edit;
+           quMainDivisiID.Value := Res[0];
+        end;
+     finally
+        free;
+     end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainSuppIDChange(Sender: TField);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('SELECT Term FROM APMsSupplier Where SuppID='''+quMainSuppID.ASString+''' ');
+    Open;
+  End;
+  quMainTerm.AsInteger := quAct.FieldByname('Term').AsInteger;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxButton5Click(Sender: TObject);
+begin
+  inherited;
+  if (MessageDlg('Harga*1.1 ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('update aptrpurchaseorderdt  set price=price*1.11 where poid='''+quMainPOID.AsString+''' and fgongkir=''T'' ');
+      ExecSQL;
+    end;
+    showmessage('Sudah Berhasil');
+    qudetil.requery();
+    qutotal.Requery();
+    UpDateTTLPO;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.dxButton4Click(Sender: TObject);
+begin
+  inherited;
+  if (MessageDlg('Harga/1.1 ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('update aptrpurchaseorderdt set price=price/1.11 where poid='''+quMainPOID.AsString+''' and fgongkir=''T'' ');
+      ExecSQL;
+    end;
+    showmessage('Sudah Berhasil');
+    qudetil.requery();
+    qutotal.Requery();
+    UpDateTTLPO;
+  end;
+end;
+
+procedure TfmAPTrPurchaseOrder.quMainBeforeEdit(DataSet: TDataSet);
+var nopoid : string;
+begin
+  inherited;
+  CekStatusHeader;
+  CekOTo;
+  CekUserEdit;
+
+  with quCetak,SQL do
+  Begin
+    Close;Clear;
+    add('Insert AllLogData (VoucherID,Jenis,Keterangan,upddate,upduser) '
+       +'select '''+quMainPOID.ASString+''',''Edit'',''Edit PO'',getdate(),'''+dmMain.UserId+''' ');
+    ExecSQL;
+  End;
+  nopoid := quMainPOID.ASString;
+  quMain.Locate('POID',nopoid,[]);
+end;
+
+procedure TfmAPTrPurchaseOrder.dxButton6Click(Sender: TObject);
+Var Nota : string;
+begin
+  inherited;
+  if quMainFgRev.AsString = '0' then
+  begin
+    ShowMessage('Data sudah pernah di submit');
+    Abort;
+  end else
+  begin
+    Nota := quMainPOID.AsString;
+    with quact,sql do
+    begin
+      close;clear;
+      add('update aptrpurchaseorderhd set FgRev=0 where poid='''+Nota+''' ');
+      ExecSQL;
+    end;
+    ShowMessage('Data sudah di-submit');
+    quMain.Requery();
+    quMain.Locate('POID',Nota,[]);
+  end;
+
+
+end;
+
+procedure TfmAPTrPurchaseOrder.quDetilAfterPost(DataSet: TDataSet);
+begin
+  inherited;
+  if quMainCityID.asString<>'T' then
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('Update INMsItem SET UserPrice='+quDetilPrice.AsString+' Where ItemID='''+quDetilItemID.AsString+''' ');
+      ExecSQL;
+    end;
+  end;
+
+  quTotal.Requery();
+  UpDateTTLPO;
+end;
+
+procedure TfmAPTrPurchaseOrder.dbgColumn21ButtonClick(Sender: TObject;
+  AbsoluteIndex: Integer);
+var sQuery : string;
+begin
+  inherited;
+  sQuery := 'select RefID as Kode_Barang,B.ItemName as Nama_Barang,B.typeunit as TYpe_Unit,B.UOMID as Satuan from INMsItemRef A inner join INMsItem B on A.RefID=B.ItemID '
+           +'WHERE A.ItemID='''+quDetilItemID.AsString+''' ';
+
+  with TfmSearch.Create(Self) do
+  try
+    Title := 'Data Reference Part';
+    SQLString := sQuery;
+    if ShowModal = MrOK then
+    begin
+       if quDetil.State = dsBrowse then quDetil.Edit;
+       quDetilItemID2.AsString := Res[0];
+       quDetilUOMID.AsString  := Res[3];
+       quDetilTypeUnit.AsString := res[2];
+    end;
+  finally
+    free;
+  end;
+end;
+
+end.

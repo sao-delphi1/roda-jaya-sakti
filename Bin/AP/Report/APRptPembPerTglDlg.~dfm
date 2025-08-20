@@ -1,0 +1,145 @@
+inherited fmAPRptPembPerTglDlg: TfmAPRptPembPerTglDlg
+  Left = 252
+  Top = 129
+  Caption = ''
+  ClientHeight = 206
+  ClientWidth = 344
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 344
+    inherited laTitle: TLabel
+      Width = 234
+      Caption = 'Laporan PO Per Tanggal'
+    end
+  end
+  inherited paCenter: TPanel
+    Width = 344
+    Height = 124
+    object GroupBox1: TGroupBox
+      Left = 22
+      Top = 7
+      Width = 293
+      Height = 55
+      Caption = 'Periode'
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 0
+      object Label2: TLabel
+        Left = 126
+        Top = 24
+        Width = 33
+        Height = 13
+        Caption = 'sampai'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object dt1: TdxDateEdit
+        Left = 25
+        Top = 18
+        Width = 86
+        TabOrder = 0
+        OnKeyPress = dt1KeyPress
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+      object dt2: TdxDateEdit
+        Left = 177
+        Top = 18
+        Width = 88
+        TabOrder = 1
+        OnKeyPress = dt1KeyPress
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+    end
+    object rcNota: TdxCheckEdit
+      Left = 20
+      Top = 136
+      Width = 101
+      TabOrder = 1
+      Caption = 'Detail Per Nota'
+      State = cbsChecked
+    end
+    object Edit1: TEdit
+      Left = 101
+      Top = 87
+      Width = 76
+      Height = 25
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 2
+    end
+    object Button1: TButton
+      Left = 22
+      Top = 88
+      Width = 75
+      Height = 25
+      Caption = 'CARI'
+      TabOrder = 3
+      OnClick = Button1Click
+    end
+    object CheckBox1: TCheckBox
+      Left = 23
+      Top = 66
+      Width = 97
+      Height = 17
+      Caption = 'CEK LOKASI'
+      TabOrder = 4
+    end
+    object Edit2: TEdit
+      Left = 179
+      Top = 87
+      Width = 158
+      Height = 25
+      Enabled = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 5
+    end
+  end
+  inherited paBottom: TPanel
+    Top = 165
+    Width = 344
+    inherited bbPreview: TBitBtn
+      Left = 98
+      OnClick = bbPreviewClick
+    end
+    inherited bbPrint: TBitBtn
+      Left = 192
+      OnClick = bbPreviewClick
+    end
+    inherited bbExit: TBitBtn
+      Left = 266
+    end
+  end
+  object ActionList: TActionList
+    Left = 228
+    Top = 8
+    object ActPrint: TAction
+      Category = 'Data'
+      Caption = 'Cetak (F9)'
+      ShortCut = 120
+      OnExecute = bbPreviewClick
+    end
+  end
+end

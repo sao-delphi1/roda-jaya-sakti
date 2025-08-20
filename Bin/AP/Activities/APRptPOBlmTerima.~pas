@@ -1,0 +1,42 @@
+unit APRptPOBlmTerima;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxCore, dxButton, dxTL, dxDBCtrl, dxDBGrid;
+
+type
+  TfmAPRptPOBlmTerima = class(TfmRptDlg)
+    quMain: TADOQuery;
+    dsMain: TDataSource;
+    quDetil: TADOQuery;
+    dsDetil: TDataSource;
+    dxDBGrid1: TdxDBGrid;
+    dxDBGrid1Column3: TdxDBGridColumn;
+    dxDBGrid1Column1: TdxDBGridColumn;
+    dxDBGrid1Column2: TdxDBGridColumn;
+    dxDBGrid2: TdxDBGrid;
+    dxDBGridColumn1: TdxDBGridColumn;
+    dxDBGridColumn2: TdxDBGridColumn;
+    dxDBGrid2Column6: TdxDBGridColumn;
+    dxDBGridColumn3: TdxDBGridColumn;
+    dxDBGridColumn4: TdxDBGridColumn;
+    dxDBGridColumn5: TdxDBGridColumn;
+    bbRefresh: TdxButton;
+    bbFind: TdxButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmAPRptPOBlmTerima: TfmAPRptPOBlmTerima;
+
+implementation
+
+{$R *.dfm}
+
+end.

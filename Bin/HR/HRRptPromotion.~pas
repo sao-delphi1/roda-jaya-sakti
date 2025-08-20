@@ -1,0 +1,165 @@
+unit HRRptPromotion;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, RptDlg, DB, dxExEdtr, dxCntner, ADODB, StdCtrls, Buttons,
+  ExtCtrls, dxEditor, dxEdLib;
+
+type
+  TfmHRRptPromotion = class(TfmRptDlg)
+    RadioGroup1: TRadioGroup;
+    CheckBox1: TCheckBox;
+    GroupBox1: TGroupBox;
+    Label2: TLabel;
+    dt1: TdxDateEdit;
+    dt2: TdxDateEdit;
+    RadioGroup2: TRadioGroup;
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure bbPreviewClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmHRRptPromotion: TfmHRRptPromotion;
+
+implementation
+
+uses MyUnit, UnitGeneral, HRQRRptPromotion, UnitDate, RptLv0;
+
+{$R *.dfm}
+
+procedure TfmHRRptPromotion.RadioGroup1Click(Sender: TObject);
+begin
+  inherited;
+  if RadioGroup1.ItemIndex=0 then
+  begin
+    CheckBox1.Visible := TRUE;
+    GroupBox1.Visible := FALSE;
+    RadioGroup2.Visible := TRUE;
+  end else
+  begin
+    CheckBox1.Visible := FALSE;
+    GroupBox1.Visible := TRUE;
+    RadioGroup2.Visible := FALSE;
+  end;
+end;
+
+procedure TfmHRRptPromotion.FormShow(Sender: TObject);
+begin
+  inherited;
+  dt1.Date := EncodeDate(GetYear(Date),GetMonth(Date),1);
+  dt2.Date := Date;
+  RadioGroup1Click(RadioGroup1);
+end;
+
+procedure TfmHRRptPromotion.bbPreviewClick(Sender: TObject);
+begin
+  inherited;
+  if RadioGroup1.ItemIndex=0 then
+  begin
+    with TfmHRQRRptPromotion.Create(Self) do
+    try
+      qrlTitle.Caption := 'Laporan Lokasi Karyawan';
+      qrlPeriode.Caption := '';
+
+      if CheckBox1.Checked then
+      bnd001.Enabled := True
+      else
+      bnd001.Enabled := False;
+
+      with qu001,SQL do
+      Begin
+        Close;Clear;
+        add(' select SalesID,SalesID as Kode,NIK,SalesName,Jabatan,ISNULL(D.DivisiName,'''') as Divisi,ISNULL(C.SiteName,'''') as Lokasi '
+           +' from ARMsSales A '
+           +' LEFT JOIN INMsDivisi D on A.department=D.DivisiID '
+           +' LEFT join INMsSites C on A.Location=C.SiteID ');
+        if RadioGroup2.ItemIndex=0 then
+        add(' order by A.SalesName ');
+        if RadioGroup2.ItemIndex=1 then
+        add(' order by A.NIK ');
+        if RadioGroup2.ItemIndex=2 then
+        add(' order by ISNULL(C.SiteName,'''') ');
+        Open;
+      End;
+
+      with qu002,SQL do
+      Begin
+        Close;Clear;
+        add(' select ReffID,A.SalesID,CONVERT(VARCHAR(10),A.TransDate,103) as Tanggal,SalesName,JabAwal as Jabatan,ISNULL(D.DivisiName,'''') as Divisi, '
+           +' ISNULL(C.SiteName,'''') as Lokasi from HRPromotion A '
+           +' inner join ARMsSales B on A.SalesID=B.SalesID '
+           +' LEFT JOIN INMsDivisi D on A.DepAwal=D.DivisiID '
+           +' LEFT join INMsSites C on A.LokAwal=C.SiteID '
+           +' Where B.SalesID=:SalesID ');
+        add(' order by A.TransDate DESC,ReffID DESC ');
+        Parameters.ParamByName('SalesID').DataType := ftString;
+        Open;
+      End;
+
+      MyReport.PreviewModal;
+
+      finally
+        free;
+      end;
+
+  end else
+  begin
+
+    with TfmHRQRRptPromotion.Create(Self) do
+    try
+      qrlTitle.Caption := 'Laporan Lokasi Karyawan';
+      qrlPeriode.Caption := '';
+
+      if CheckBox1.Checked then
+      bnd001.Enabled := True
+      else
+      bnd001.Enabled := False;
+
+      with qu001,SQL do
+      Begin
+        Close;Clear;
+        add(' select SalesID,SalesID as Kode,NIK,SalesName,Jabatan,ISNULL(D.DivisiName,'''') as Divisi,ISNULL(C.SiteName,'''') as Lokasi '
+           +' from ARMsSales A '
+           +' LEFT JOIN INMsDivisi D on A.department=D.DivisiID '
+           +' LEFT join INMsSites C on A.Location=C.SiteID ');
+        if RadioGroup2.ItemIndex=0 then
+        add(' order by A.SalesName ');
+        if RadioGroup2.ItemIndex=1 then
+        add(' order by A.NIK ');
+        if RadioGroup2.ItemIndex=2 then
+        add(' order by ISNULL(C.SiteName,'''') ');
+        Open;
+      End;
+
+      with qu002,SQL do
+      Begin
+        Close;Clear;
+        add(' select ReffID,A.SalesID,CONVERT(VARCHAR(10),A.TransDate,103) as Tanggal,SalesName,JabAwal as Jabatan,ISNULL(D.DivisiName,'''') as Divisi, '
+           +' ISNULL(C.SiteName,'''') as Lokasi from HRPromotion A '
+           +' inner join ARMsSales B on A.SalesID=B.SalesID '
+           +' LEFT JOIN INMsDivisi D on A.DepAwal=D.DivisiID '
+           +' LEFT join INMsSites C on A.LokAwal=C.SiteID '
+           +' Where B.SalesID=:SalesID ');
+        add(' order by A.TransDate DESC,ReffID DESC ');
+        Parameters.ParamByName('SalesID').DataType := ftString;
+        Open;
+      End;
+
+      MyReport.PreviewModal;
+
+      finally
+        free;
+      end;
+
+    end;
+    
+  end;
+
+end.

@@ -1,0 +1,702 @@
+inherited fmINRptJadwalDriver: TfmINRptJadwalDriver
+  Left = 528
+  Top = 227
+  Caption = 'Laporan Jadwal Driver'
+  ClientHeight = 519
+  ClientWidth = 892
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paTop: TPanel
+    Width = 892
+    Height = 69
+    inherited laTitle: TLabel
+      Visible = False
+    end
+    object grbKartu: TGroupBox
+      Left = 11
+      Top = 6
+      Width = 397
+      Height = 57
+      Caption = '[ Periode ]'
+      TabOrder = 0
+      object Label2: TLabel
+        Left = 24
+        Top = 24
+        Width = 25
+        Height = 13
+        Caption = 'Dari :'
+      end
+      object Label3: TLabel
+        Left = 152
+        Top = 25
+        Width = 41
+        Height = 13
+        Caption = 'Sampai :'
+      end
+      object bbRefresh: TBitBtn
+        Left = 305
+        Top = 15
+        Width = 84
+        Height = 30
+        Hint = 'Refresh'
+        Caption = '&Refresh'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        OnClick = bbRefreshClick
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          333333FFFFFFFFFFFFF3344444444444443337777777777777F334CCCCCCCCCC
+          C43337777777777777F33444881B188444333777F3737337773333308881FF70
+          33333337F3373337F3333330888BF770333333373F33F337333333330881F703
+          3333333373F73F7333333333308B703333333333373F77333333333333080333
+          3333333333777FF333333333301F103333333333377777FF3333333301B1F103
+          333333337737777FF3333330881BFB7033333337F3737F77F333333088881F70
+          333333F7F3337777FFF334448888888444333777FFFFFFF777F334CCCCCCCCCC
+          C43337777777777777F334444444444444333777777777777733}
+        NumGlyphs = 2
+      end
+      object dtpSmp: TDateTimePicker
+        Left = 200
+        Top = 21
+        Width = 85
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38070.9999884259
+        Format = 'dd/MM/yyyy'
+        Time = 38070.9999884259
+        Color = 16311512
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 1
+      end
+      object dtpDari: TDateTimePicker
+        Left = 56
+        Top = 21
+        Width = 85
+        Height = 21
+        CalAlignment = dtaLeft
+        Date = 38070
+        Format = 'dd/MM/yyyy'
+        Time = 38070
+        Color = 16311512
+        DateFormat = dfShort
+        DateMode = dmComboBox
+        Kind = dtkDate
+        ParseInput = False
+        TabOrder = 2
+      end
+    end
+  end
+  inherited paCenter: TPanel
+    Top = 69
+    Width = 892
+    Height = 409
+    object dgrReport: TdxDBGrid
+      Left = 1
+      Top = 1
+      Width = 890
+      Height = 407
+      Bands = <
+        item
+          Width = 1263
+        end>
+      DefaultLayout = False
+      HeaderPanelRowCount = 1
+      KeyField = 'NotaID'
+      ShowGroupPanel = True
+      ShowSummaryFooter = True
+      SummaryGroups = <
+        item
+          DefaultGroup = True
+          SummaryItems = <
+            item
+              SummaryField = 'total'
+              SummaryFormat = '#,0.00'
+              SummaryType = cstSum
+            end>
+          Name = 'dgrReportSummaryGroup2'
+        end>
+      SummarySeparator = ', '
+      Align = alClient
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      BandColor = clMoneyGreen
+      BandFont.Charset = DEFAULT_CHARSET
+      BandFont.Color = clWindowText
+      BandFont.Height = -11
+      BandFont.Name = 'MS Sans Serif'
+      BandFont.Style = [fsBold]
+      DataSource = dsAct
+      Filter.Active = True
+      Filter.Criteria = {00000000}
+      HeaderColor = clSilver
+      HeaderFont.Charset = DEFAULT_CHARSET
+      HeaderFont.Color = clWindowText
+      HeaderFont.Height = -11
+      HeaderFont.Name = 'MS Sans Serif'
+      HeaderFont.Style = []
+      HideFocusRect = True
+      HideSelection = True
+      HighlightTextColor = clRed
+      LookAndFeel = lfUltraFlat
+      OptionsBehavior = [edgoAutoCopySelectedToClipboard, edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoEnterThrough, edgoImmediateEditor, edgoMultiSelect, edgoMultiSort, edgoTabThrough, edgoVertThrough]
+      OptionsDB = [edgoCancelOnExit, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoUseBookmarks]
+      OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoUseBitmap]
+      PreviewFont.Charset = DEFAULT_CHARSET
+      PreviewFont.Color = clBlue
+      PreviewFont.Height = -11
+      PreviewFont.Name = 'MS Sans Serif'
+      PreviewFont.Style = []
+      ShowBands = True
+      ShowRowFooter = True
+      object dgrReportColumn16: TdxDBGridColumn
+        Color = clSilver
+        Sorted = csUp
+        Width = 80
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Tanggal'
+      end
+      object dgrReportColumn1: TdxDBGridColumn
+        Color = clSilver
+        Width = 120
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'NotaID'
+      end
+      object dgrReportColumn2: TdxDBGridColumn
+        Color = clSilver
+        Width = 100
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'NoUnit'
+      end
+      object dgrReportColumn3: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 80
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Driver'
+      end
+      object dgrReportColumn39: TdxDBGridColumn
+        Color = clSilver
+        Width = 90
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'TypeClassUnit'
+      end
+      object dgrReportColumn4: TdxDBGridTimeColumn
+        Caption = 'Start'
+        Color = clSilver
+        Visible = False
+        Width = 70
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'JamMulai'
+      end
+      object dgrReportColumn5: TdxDBGridColumn
+        Caption = 'End'
+        Color = clSilver
+        Visible = False
+        Width = 80
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'JamSelesai'
+      end
+      object dgrReportColumn6: TdxDBGridColumn
+        Caption = 'HM Awal'
+        Color = clSilver
+        Width = 70
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'HMAwal'
+      end
+      object dgrReportColumn7: TdxDBGridColumn
+        Caption = 'HM Akhir'
+        Color = clSilver
+        Width = 70
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'HMAkhir'
+      end
+      object dgrReportColumn38: TdxDBGridColumn
+        Visible = False
+        Width = 44
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BD'
+      end
+      object dgrReportColumn8: TdxDBGridColumn
+        Caption = 'Work Hour'
+        Color = clYellow
+        Width = 80
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'LWH'
+      end
+      object dgrReportColumn19: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BD1'
+      end
+      object dgrReportColumn20: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BD2'
+      end
+      object dgrReportColumn23: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BD3'
+      end
+      object dgrReportColumn24: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BD4'
+      end
+      object dgrReportColumn25: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'STB1'
+      end
+      object dgrReportColumn26: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'STB2'
+      end
+      object dgrReportColumn27: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'STB3'
+      end
+      object dgrReportColumn28: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'STB4'
+      end
+      object dgrReportColumn29: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'REST1'
+      end
+      object dgrReportColumn30: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'REST2'
+      end
+      object dgrReportColumn31: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'REST3'
+      end
+      object dgrReportColumn32: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 50
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'REST4'
+      end
+      object dgrReportColumn33: TdxDBGridColumn
+        Caption = 'BD'
+        Color = clYellow
+        Width = 60
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BDTime'
+      end
+      object dgrReportColumn34: TdxDBGridColumn
+        Caption = 'STB'
+        Color = clYellow
+        Width = 60
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'STBTime'
+      end
+      object dgrReportColumn35: TdxDBGridColumn
+        Caption = 'REST'
+        Color = clYellow
+        Visible = False
+        Width = 60
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'LRest'
+      end
+      object dgrReportColumn36: TdxDBGridColumn
+        Caption = 'WORK'
+        Color = clYellow
+        Visible = False
+        Width = 60
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'LOT'
+      end
+      object dgrReportColumn37: TdxDBGridColumn
+        Caption = 'PA (%)'
+        Color = clYellow
+        Width = 60
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'PA'
+      end
+      object dgrReportColumn17: TdxDBGridColumn
+        Color = clSilver
+        Width = 150
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'SiteName'
+      end
+      object dgrReportColumn18: TdxDBGridColumn
+        Color = clSilver
+        Visible = False
+        Width = 70
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Activity'
+      end
+    end
+  end
+  inherited paBottom: TPanel
+    Top = 478
+    Width = 892
+    inherited bbPreview: TBitBtn
+      Left = 517
+      Enabled = False
+      Visible = False
+    end
+    inherited bbPrint: TBitBtn
+      Left = -475
+      Enabled = False
+      Visible = False
+    end
+    inherited bbExit: TBitBtn
+      Left = 517
+      Enabled = False
+      Visible = False
+    end
+    object bbExcel: TBitBtn
+      Left = 661
+      Top = 6
+      Width = 115
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Export Excel'
+      TabOrder = 3
+      OnClick = bbExcelClick
+      Glyph.Data = {
+        26040000424D2604000000000000360000002800000012000000120000000100
+        180000000000F003000000000000000000000000000000000000808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        8080808080808080808080808080808000008080800080000080000080000080
+        0000800000800000800000800000800000800000800000800000800000800000
+        8000008000808080000080808000800000800000800000800000800000800000
+        8000008000008000008000008000008000008000008000008000008000808080
+        0000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0080000080000080
+        000080000080000080000080008080800000808080008000008000FFFFFF0080
+        00008000008000008000008000008000008000FFFFFF00800000800000800000
+        80000080008080800000808080008000008000FFFFFF00800000800000800000
+        8000008000008000FFFFFF008000008000008000FFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000008000008000008000008000FFFFFF
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFFFFFFFF008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFFFFFF
+        FFFFFFFF008000FFFFFF008000008000008000008000FFFFFFFFFFFFFFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFF008000FFFFFF00
+        8000008000008000008000008000008000FFFFFFFFFFFF008000008000808080
+        0000808080008000008000FFFFFF008000FFFFFF008000008000008000008000
+        008000008000008000008000FFFFFF0080000080008080800000808080008000
+        008000FFFFFF008000008000008000008000FFFFFF0080000080000080000080
+        00008000FFFFFF0080000080008080800000808080008000008000FFFFFF0080
+        00008000008000FFFFFFFFFFFFFFFFFF008000008000008000008000FFFFFF00
+        80000080008080800000808080008000008000FFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF008000008000808080
+        0000808080008000008000008000008000008000008000008000008000008000
+        0080000080000080000080000080000080000080008080800000808080008000
+        0080000080000080000080000080000080000080000080000080000080000080
+        0000800000800000800000800080808000008080808080808080808080808080
+        8080808080808080808080808080808080808080808080808080808080808080
+        80808080808080800000}
+    end
+    object bbCancel: TBitBtn
+      Left = 775
+      Top = 6
+      Width = 92
+      Height = 30
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = '&Batal'
+      TabOrder = 4
+      OnClick = bbCancelClick
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333FFFFF3333333333999993333333333F77777FFF333333999999999
+        3333333777333777FF33339993707399933333773337F3777FF3399933000339
+        9933377333777F3377F3399333707333993337733337333337FF993333333333
+        399377F33333F333377F993333303333399377F33337FF333373993333707333
+        333377F333777F333333993333101333333377F333777F3FFFFF993333000399
+        999377FF33777F77777F3993330003399993373FF3777F37777F399933000333
+        99933773FF777F3F777F339993707399999333773F373F77777F333999999999
+        3393333777333777337333333999993333333333377777333333}
+      NumGlyphs = 2
+    end
+  end
+  inherited quAct: TADOQuery
+    OnCalcFields = quActCalcFields
+    SQL.Strings = (
+      
+        'select A.NotaID,A.NoUnit,D.TypeClassUnit,A.Driver,A.JamMulai,A.J' +
+        'amSelesai,A.HMAwal,A.HMAkhir,A.UnitWh,'
+      'CASE WHEN A.FgStatus='#39'O'#39' THEN '#39'OPERATIONAL'#39
+      '     WHEN A.FgStatus='#39'B'#39' THEN '#39'BREAKDOWN'#39
+      '     ELSE '#39'STAND BY'#39' END as FgStatus,'
+      'A.BDTime,A.BD,A.STBTime,A.STB,A.RestTime,A.Rest,'
+      'CONVERT(VARCHAR(10),B.transdate,111) as Tanggal,C.SiteName,'
+      'CASE WHEN B.Activity='#39'BG'#39' THEN '#39'BARGING'#39
+      '     WHEN B.Activity='#39'PR'#39' THEN '#39'PRODUKSI'#39
+      '     WHEN B.Activity='#39'HA'#39' THEN '#39'HAULING'#39
+      
+        '     WHEN B.Activity='#39'RT'#39' THEN '#39'RENTAL'#39' ELSE '#39'OTHERS'#39' END as Act' +
+        'ivity,'
+      'BD1,BD2,BD3,BD4,'
+      'STB1,STB2,STB3,STB4,'
+      'REST1,REST2,REST3,REST4'
+      'from intrjadwaldriverdt A '
+      'inner join intrjadwaldriverhd B on A.NotaID=B.NotaID'
+      'inner join INMsSites C on B.SiteID=C.SiteID'
+      'inner join INMsNoUnit D ON A.NoUnit=D.NoUnit')
+    object quActNotaID: TStringField
+      FieldName = 'NotaID'
+      Size = 50
+    end
+    object quActNoUnit: TStringField
+      FieldName = 'NoUnit'
+      Size = 50
+    end
+    object quActDriver: TStringField
+      FieldName = 'Driver'
+      Size = 100
+    end
+    object quActJamMulai: TDateTimeField
+      FieldName = 'JamMulai'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActJamSelesai: TDateTimeField
+      FieldName = 'JamSelesai'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActHMAwal: TBCDField
+      FieldName = 'HMAwal'
+      DisplayFormat = '#,0.00'
+      Precision = 18
+    end
+    object quActHMAkhir: TBCDField
+      FieldName = 'HMAkhir'
+      DisplayFormat = '#,0.00'
+      Precision = 18
+    end
+    object quActUnitWh: TBCDField
+      FieldName = 'UnitWh'
+      Precision = 18
+    end
+    object quActFgStatus: TStringField
+      FieldName = 'FgStatus'
+      ReadOnly = True
+      Size = 11
+    end
+    object quActBDTime: TBCDField
+      FieldName = 'BDTime'
+      Precision = 18
+    end
+    object quActBD: TStringField
+      FieldName = 'BD'
+      Size = 50
+    end
+    object quActSTBTime: TBCDField
+      FieldName = 'STBTime'
+      Precision = 18
+    end
+    object quActSTB: TStringField
+      FieldName = 'STB'
+      Size = 50
+    end
+    object quActRestTime: TBCDField
+      FieldName = 'RestTime'
+      Precision = 18
+    end
+    object quActRest: TStringField
+      FieldName = 'Rest'
+      Size = 50
+    end
+    object quActTanggal: TStringField
+      FieldName = 'Tanggal'
+      ReadOnly = True
+      Size = 10
+    end
+    object quActSiteName: TStringField
+      FieldName = 'SiteName'
+      Size = 100
+    end
+    object quActActivity: TStringField
+      FieldName = 'Activity'
+      ReadOnly = True
+      Size = 8
+    end
+    object quActBD1: TDateTimeField
+      FieldName = 'BD1'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActBD2: TDateTimeField
+      FieldName = 'BD2'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActBD3: TDateTimeField
+      FieldName = 'BD3'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActBD4: TDateTimeField
+      FieldName = 'BD4'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActSTB1: TDateTimeField
+      FieldName = 'STB1'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActSTB2: TDateTimeField
+      FieldName = 'STB2'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActSTB3: TDateTimeField
+      FieldName = 'STB3'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActSTB4: TDateTimeField
+      FieldName = 'STB4'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActREST1: TDateTimeField
+      FieldName = 'REST1'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActREST2: TDateTimeField
+      FieldName = 'REST2'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActREST3: TDateTimeField
+      FieldName = 'REST3'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActREST4: TDateTimeField
+      FieldName = 'REST4'
+      DisplayFormat = 'HH:MM'
+    end
+    object quActLOT: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'LOT'
+      DisplayFormat = '#,0.00'
+      Currency = False
+      Calculated = True
+    end
+    object quActLWH: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'LWH'
+      DisplayFormat = '#,0.00'
+      Currency = False
+      Calculated = True
+    end
+    object quActLBD: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'LBD'
+      DisplayFormat = '#,0.00'
+      Currency = False
+      Calculated = True
+    end
+    object quActLSTB: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'LSTB'
+      DisplayFormat = '#,0.00'
+      Currency = False
+      Calculated = True
+    end
+    object quActLRest: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'LRest'
+      DisplayFormat = '#,0.00'
+      Currency = False
+      Calculated = True
+    end
+    object quActPA: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'PA'
+      DisplayFormat = '#,0.00'
+      Currency = False
+      Calculated = True
+    end
+    object quActTypeClassUnit: TStringField
+      FieldName = 'TypeClassUnit'
+      Size = 100
+    end
+  end
+  object saveDlg: TSaveDialog
+    DefaultExt = '*.xls'
+    Filter = 'Microsoft Excel File|*.xls'
+    Left = 856
+    Top = 64
+  end
+  object dxReport: TdxComponentPrinter
+    Version = 0
+    Left = 892
+    Top = 64
+  end
+end

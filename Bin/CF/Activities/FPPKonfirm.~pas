@@ -1,0 +1,81 @@
+unit FPPKonfirm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdLv0, dxExEdtr, dxCntner, DB, ADODB, StdCtrls, dxCore,
+  dxButton;
+
+type
+  TfmFPPKonfirm = class(TfmStdLv0)
+    dxButton4: TdxButton;
+    dxButton3: TdxButton;
+    dxButton2: TdxButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    procedure dxButton4Click(Sender: TObject);
+    procedure dxButton3Click(Sender: TObject);
+    procedure dxButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  fmFPPKonfirm: TfmFPPKonfirm;
+
+implementation
+
+uses ConMain;
+
+{$R *.dfm}
+
+procedure TfmFPPKonfirm.dxButton4Click(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE APTrKonsinyasiInvHd SET FgOto=''Y'',OtoBy='''+dmmain.Userid+''' WHERE KonsinyasiInvId='''+Label2.Caption+''' ');
+    ExecSQL;
+  end;
+  showmessage('Sudah Berhasil di-Otorisasi');
+  ModalResult := MrOK;
+end;
+
+procedure TfmFPPKonfirm.dxButton3Click(Sender: TObject);
+begin
+  inherited;
+  if Label3.Caption = 'WAITING' then
+  begin
+    ModalResult := MrOK;
+  end else
+  begin
+    with quAct,SQL do
+    begin
+      Close;Clear;
+      Add('UPDATE APTrKonsinyasiInvHd SET FgOto=''T'',OtoBy='''' WHERE KonsinyasiInvId='''+Label2.Caption+''' ');
+      ExecSQL;
+    end;
+    showmessage('Status FPP menjadi Waiting');
+    ModalResult := MrOK;
+  end;
+end;
+
+procedure TfmFPPKonfirm.dxButton2Click(Sender: TObject);
+begin
+  inherited;
+  with quAct,SQL do
+  begin
+    Close;Clear;
+    Add('UPDATE APTrKonsinyasiInvHd SET FgOto=''X'',OtoBy='''+dmmain.Userid+''' WHERE KonsinyasiInvId='''+Label2.Caption+''' ');
+    ExecSQL;
+  end;
+  showmessage('FPP tidak disetujui');
+  ModalResult := MrOK;
+end;
+
+end.

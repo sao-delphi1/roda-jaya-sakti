@@ -1,0 +1,545 @@
+inherited fmCFTrJurnal: TfmCFTrJurnal
+  Left = 202
+  Top = 96
+  Caption = 'HISTORY JURNAL'
+  ClientHeight = 580
+  ClientWidth = 1135
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel [1]
+    Left = 0
+    Top = 37
+    Width = 200
+    Height = 543
+    Align = alLeft
+    BevelOuter = bvNone
+    Color = 14467152
+    TabOrder = 1
+    object rbJenis: TRadioGroup
+      Left = 15
+      Top = 5
+      Width = 173
+      Height = 45
+      Caption = '[ Berdasarkan ]'
+      Columns = 2
+      Ctl3D = False
+      ItemIndex = 0
+      Items.Strings = (
+        'Tanggal'
+        'No Voucher')
+      ParentCtl3D = False
+      TabOrder = 0
+      OnClick = rbJenisClick
+    end
+    object GroupBox1: TGroupBox
+      Left = 15
+      Top = 52
+      Width = 173
+      Height = 90
+      Caption = '[ Periode Tanggal ]'
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 71
+        Top = 42
+        Width = 33
+        Height = 13
+        Caption = 'sampai'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+      end
+      object dt1: TdxDateEdit
+        Left = 42
+        Top = 17
+        Width = 90
+        TabOrder = 0
+        OnKeyPress = dt1KeyPress
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+      object dt2: TdxDateEdit
+        Left = 42
+        Top = 62
+        Width = 90
+        TabOrder = 1
+        OnKeyPress = dt2KeyPress
+        Date = -700000
+        SaveTime = False
+        UseEditMask = True
+        StoredValues = 4
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 15
+      Top = 52
+      Width = 173
+      Height = 56
+      Caption = '[ No Voucher ]'
+      Ctl3D = False
+      ParentCtl3D = False
+      TabOrder = 2
+      object edPartWord: TdxEdit
+        Left = 25
+        Top = 20
+        Width = 125
+        TabOrder = 0
+      end
+    end
+    object bbLoad: TdxButton
+      Left = 14
+      Top = 146
+      Width = 85
+      Height = 29
+      About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+      Version = '1.0.2e'
+      OnClick = bbLoadClick
+      Caption = 'LOAD'
+      TabOrder = 3
+    end
+    object dxButton1: TdxButton
+      Left = 103
+      Top = 146
+      Width = 85
+      Height = 29
+      About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+      Version = '1.0.2e'
+      OnClick = dxButton1Click
+      Caption = 'CETAK'
+      TabOrder = 4
+    end
+    object rgTransaksi: TRadioGroup
+      Left = 15
+      Top = 178
+      Width = 173
+      Height = 223
+      Caption = '[ Transaksi ]'
+      Ctl3D = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ItemIndex = 0
+      Items.Strings = (
+        'Semua'
+        'Kas Masuk'
+        'Kas Keluar'
+        'Bank Masuk '
+        'Bank Keluar '
+        'Jurnal Umum'
+        'Invoice Penjualan'
+        'Invoice Pembelian')
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 5
+      OnClick = rbJenisClick
+    end
+  end
+  object Panel2: TPanel [2]
+    Left = 200
+    Top = 37
+    Width = 935
+    Height = 543
+    Align = alClient
+    BevelOuter = bvNone
+    Color = 14467152
+    TabOrder = 2
+    object dbgHeader: TdxDBGrid
+      Left = 0
+      Top = 0
+      Width = 935
+      Height = 369
+      Bands = <
+        item
+        end>
+      DefaultLayout = True
+      HeaderPanelRowCount = 1
+      KeyField = 'VoucherID'
+      SummaryGroups = <>
+      SummarySeparator = ', '
+      Align = alTop
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = dbgHeaderClick
+      BandFont.Charset = DEFAULT_CHARSET
+      BandFont.Color = clWindowText
+      BandFont.Height = -11
+      BandFont.Name = 'MS Sans Serif'
+      BandFont.Style = []
+      DataSource = dsMain
+      Filter.Criteria = {00000000}
+      HeaderFont.Charset = ANSI_CHARSET
+      HeaderFont.Color = clWindowText
+      HeaderFont.Height = -13
+      HeaderFont.Name = 'Times New Roman'
+      HeaderFont.Style = []
+      HideFocusRect = True
+      HideSelection = True
+      LookAndFeel = lfUltraFlat
+      OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoUseBookmarks]
+      OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
+      PreviewFont.Charset = DEFAULT_CHARSET
+      PreviewFont.Color = clBlue
+      PreviewFont.Height = -11
+      PreviewFont.Name = 'MS Sans Serif'
+      PreviewFont.Style = []
+      OnChangeNode = dbgHeaderChangeNode
+      object dbgHeaderVoucherID: TdxDBGridColumn
+        Caption = 'No Voucher'
+        Sorted = csUp
+        Width = 123
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'VoucherID'
+      end
+      object dbgHeaderReferensi: TdxDBGridColumn
+        Visible = False
+        Width = 164
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Referensi'
+      end
+      object dbgHeaderTgl: TdxDBGridColumn
+        Width = 145
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Tgl'
+      end
+      object dbgHeaderActor: TdxDBGridColumn
+        Visible = False
+        Width = 122
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Actor'
+      end
+      object dbgHeaderBankName: TdxDBGridColumn
+        Visible = False
+        Width = 95
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'BankName'
+      end
+      object dbgHeaderNote: TdxDBGridColumn
+        Width = 168
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Note'
+      end
+      object dbgHeaderFlagKKBB: TdxDBGridMaskColumn
+        Visible = False
+        Width = 60
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'FlagKKBB'
+      end
+      object dbgHeaderCurrID: TdxDBGridColumn
+        Caption = 'Valuta'
+        Width = 65
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'CurrID'
+      end
+      object dbgHeaderJumlahD: TdxDBGridColumn
+        Caption = 'Debit'
+        Width = 118
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'JumlahD'
+      end
+      object dbgHeaderJumlahK: TdxDBGridColumn
+        Caption = 'Kredit'
+        Width = 129
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'JumlahK'
+      end
+      object dbgHeaderStatus: TdxDBGridColumn
+        Width = 167
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Status'
+      end
+    end
+    object dbgList: TdxDBGrid
+      Left = 0
+      Top = 368
+      Width = 935
+      Height = 175
+      Bands = <
+        item
+        end>
+      DefaultLayout = True
+      HeaderPanelRowCount = 1
+      KeyField = 'VoucherID'
+      SummaryGroups = <>
+      SummarySeparator = ', '
+      Align = alBottom
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Times New Roman'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      BandFont.Charset = DEFAULT_CHARSET
+      BandFont.Color = clWindowText
+      BandFont.Height = -11
+      BandFont.Name = 'MS Sans Serif'
+      BandFont.Style = []
+      DataSource = dsDetil
+      Filter.Criteria = {00000000}
+      HeaderFont.Charset = ANSI_CHARSET
+      HeaderFont.Color = clWindowText
+      HeaderFont.Height = -13
+      HeaderFont.Name = 'Times New Roman'
+      HeaderFont.Style = []
+      HideFocusRect = True
+      HideSelection = True
+      LookAndFeel = lfFlat
+      OptionsBehavior = [edgoAutoSort, edgoDragScroll, edgoEditing, edgoEnterShowEditor, edgoTabThrough, edgoVertThrough]
+      OptionsDB = [edgoCancelOnExit, edgoCanDelete, edgoCanInsert, edgoCanNavigation, edgoConfirmDelete, edgoLoadAllRecords, edgoUseBookmarks]
+      OptionsView = [edgoBandHeaderWidth, edgoIndicator, edgoRowSelect, edgoUseBitmap]
+      PreviewFont.Charset = DEFAULT_CHARSET
+      PreviewFont.Color = clBlue
+      PreviewFont.Height = -11
+      PreviewFont.Name = 'MS Sans Serif'
+      PreviewFont.Style = []
+      object dbgListVoucherID: TdxDBGridMaskColumn
+        Visible = False
+        Width = 183
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'VoucherID'
+      end
+      object dbgListRekeningID: TdxDBGridColumn
+        Caption = 'Kode Rekening'
+        Sorted = csUp
+        Width = 109
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'RekeningID'
+      end
+      object dbgListRekeningName: TdxDBGridColumn
+        Caption = 'Nama Rekening'
+        Width = 175
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'RekeningName'
+      end
+      object dbgListNote: TdxDBGridColumn
+        Width = 333
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Note'
+      end
+      object dbgListLNote: TdxDBGridColumn
+        Caption = 'Note'
+        Width = 53
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'LNote'
+      end
+      object dbgListDebit: TdxDBGridColumn
+        Width = 113
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Debit'
+      end
+      object dbgListAmount: TdxDBGridColumn
+        Width = 110
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Kredit'
+      end
+      object dbgListJenis: TdxDBGridColumn
+        Visible = False
+        Width = 41
+        BandIndex = 0
+        RowIndex = 0
+        FieldName = 'Jenis'
+      end
+    end
+  end
+  inherited paToolBar: TdxContainer
+    Width = 1135
+    inherited sbLast: TSpeedButton
+      Left = 1098
+      Visible = False
+    end
+    inherited sbNext: TSpeedButton
+      Left = 1071
+      Visible = False
+    end
+    inherited sbPrev: TSpeedButton
+      Left = 1044
+      Visible = False
+    end
+    inherited sbFirst: TSpeedButton
+      Left = 1017
+      Visible = False
+    end
+    inherited sbPeriod: TSpeedButton
+      Left = 991
+    end
+    inherited BvlPeriod: TBevel
+      Left = 745
+    end
+    inherited laPeriod: TLabel
+      Left = 749
+    end
+  end
+  inherited quMain: TADOQuery
+    CursorType = ctStatic
+    SQL.Strings = (
+      
+        'SELECT K.VoucherID,CONVERT(VARCHAR(10),K.Transdate,103) as Tgl,K' +
+        '.Actor,L.BankName,K.Note,K.FlagKKBB,K.CurrID,K.JumlahD,K.JumlahK' +
+        ','
+      'CASE WHEN K.FlagKKBB='#39'PCM'#39' THEN '#39'KAS MASUK'#39
+      '     WHEN K.FlagKKBB='#39'PCK'#39' THEN '#39'KAS KELUAR'#39
+      '     WHEN K.FlagKKBB='#39'BNM'#39' THEN '#39'BANK MASUK'#39
+      '     WHEN K.FlagKKBB='#39'BNK'#39' THEN '#39'BANK KELUAR'#39
+      '     WHEN K.FlagKKBB='#39'GC'#39' THEN '#39'PENCAIRAN CHEQUE / GIRO'#39
+      '     WHEN K.FlagKKBB='#39'GL'#39' THEN '#39'JURNAL MEMORIAL'#39
+      
+        '     WHEN K.FlagKKBB='#39'INV'#39' THEN '#39'INVOICE PENJUALAN'#39' END as Statu' +
+        's'
+      ' FROM ('
+      
+        'SELECT CASE WHEN FlagKKBB='#39'GC'#39' THEN IDVoucher ELSE VoucherID END' +
+        ' as VoucherID,'
+      
+        'Transdate,Actor,A.BankID,A.Note,FlagKKBB,CurrID,JumlahD,JumlahK ' +
+        'FROM CFTrKKBBHd A'
+      'WHERE FgPayment='#39'T'#39' UNION ALL'
+      
+        'SELECT KonInvPelID,Transdate,CustName,A.BankID,A.Note,'#39'INV'#39',Curr' +
+        'ID,A.TTLKj,A.TTLKj FROM ARTrKonInvPelHd A'
+      'INNER JOIN ARMsCustomer B ON A.CustID=B.CustID) as K'
+      'LEFT JOIN CFMsBank L ON K.BankID=L.BankID'
+      'WHERE K.FlagKKBB='#39'KM'#39)
+    object quMainVoucherID: TStringField
+      FieldName = 'VoucherID'
+      Size = 50
+    end
+    object quMainTgl: TStringField
+      FieldName = 'Tgl'
+      ReadOnly = True
+      Size = 10
+    end
+    object quMainActor: TStringField
+      FieldName = 'Actor'
+      Size = 200
+    end
+    object quMainBankName: TStringField
+      FieldName = 'BankName'
+      Size = 50
+    end
+    object quMainNote: TStringField
+      FieldName = 'Note'
+      Size = 100
+    end
+    object quMainFlagKKBB: TStringField
+      FieldName = 'FlagKKBB'
+    end
+    object quMainCurrID: TStringField
+      FieldName = 'CurrID'
+      FixedChar = True
+      Size = 30
+    end
+    object quMainJumlahD: TBCDField
+      FieldName = 'JumlahD'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quMainJumlahK: TBCDField
+      FieldName = 'JumlahK'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quMainStatus: TStringField
+      FieldName = 'Status'
+      ReadOnly = True
+      Size = 23
+    end
+  end
+  object quDetil: TADOQuery
+    Connection = dmMain.dbConn
+    CursorType = ctStatic
+    OnCalcFields = quDetilCalcFields
+    DataSource = dsMain
+    Parameters = <>
+    SQL.Strings = (
+      
+        'SELECT K.VoucherID,K.RekeningID,L.RekeningName,K.Note,K.Amount a' +
+        's Debit,K.Amount as Kredit FROM ('
+      
+        'SELECT VoucherID,RekeningID,Amount,Note,CASE WHEN Jenis='#39'D'#39' THEN' +
+        ' 2 ELSE 3 END as Urut,Jenis FROM CFTrKKBBDt UNION ALL'
+      
+        'SELECT VoucherID,'#39'1.11001.0001'#39' as RekeningID,ISNULL(JumlahD,0) ' +
+        'as Amount,Note,1 as Urut,'#39'D'#39' as Jenis FROM CFTrKKBBHd) as K '
+      'INNER JOIN CFMsRekening L ON K.RekeningID=L.RekeningID ')
+    Left = 324
+    Top = 4
+    object quDetilVoucherID: TStringField
+      FieldName = 'VoucherID'
+      Size = 30
+    end
+    object quDetilRekeningID: TStringField
+      FieldName = 'RekeningID'
+      Size = 30
+    end
+    object quDetilRekeningName: TStringField
+      FieldName = 'RekeningName'
+      Size = 50
+    end
+    object quDetilNote: TStringField
+      FieldName = 'Note'
+      Size = 800
+    end
+    object quDetilDebit: TBCDField
+      FieldName = 'Debit'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quDetilKredit: TBCDField
+      FieldName = 'Kredit'
+      DisplayFormat = '#,0.00'
+      EditFormat = '#,0.00'
+      Precision = 18
+    end
+    object quDetilLNote: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'LNote'
+      Size = 100
+      Calculated = True
+    end
+  end
+  object dsDetil: TDataSource
+    DataSet = quDetil
+    Left = 352
+    Top = 4
+  end
+  object quCalc: TADOQuery
+    Connection = dmMain.dbConn
+    Parameters = <>
+    Left = 392
+    Top = 4
+  end
+end

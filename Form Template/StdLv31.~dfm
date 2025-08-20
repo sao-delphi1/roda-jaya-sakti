@@ -1,0 +1,112 @@
+inherited fmStdLv31: TfmStdLv31
+  Left = 358
+  Caption = 'fmStdLv31'
+  ClientHeight = 536
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited paLeft: TdxContainer
+    Height = 487
+    inherited pa3: TdxContainer
+      Height = 308
+    end
+  end
+  inherited paBottom: TdxContainer
+    Top = 524
+  end
+  inherited pa2: TdxContainer
+    Height = 487
+  end
+  object dxContainer7: TdxContainer [4]
+    Left = 193
+    Top = 37
+    Width = 597
+    Height = 487
+    About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+    Align = alClient
+    Version = '1.0.0'
+    Caption = 'dxContainer7'
+    object pcParent: TdxPageControl
+      Left = 0
+      Top = 0
+      Width = 597
+      Height = 487
+      ActivePage = ts01
+      Align = alClient
+      HideButtons = True
+      HotTrack = False
+      MultiLine = False
+      OwnerDraw = False
+      RaggedRight = False
+      ScrollOpposite = False
+      TabHeight = 0
+      TabOrder = 0
+      TabPosition = dxtpTop
+      TabWidth = 0
+      object ts01: TdxTabSheet
+        Caption = 'ts01'
+        DesignSize = (
+          597
+          487)
+        object bbSave: TdxButton
+          Tag = 3333
+          Left = 426
+          Top = 465
+          Width = 78
+          Height = 19
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Anchors = [akRight, akBottom]
+          Color = 9609897
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          Version = '1.0.2e'
+          Action = ActSave
+          Colors.FocusedFrom = 16750383
+          Colors.FocusedTo = 16763799
+          Colors.HighlightFrom = clWhite
+          Colors.HighlightTo = clWhite
+          HotTrack = True
+          TabOrder = 0
+        end
+        object bbCancel: TdxButton
+          Tag = 4444
+          Left = 506
+          Top = 465
+          Width = 78
+          Height = 19
+          About = 'Design eXperience. '#169' 2002 M. Hoffmann'
+          Anchors = [akRight, akBottom]
+          Color = 9609897
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          Version = '1.0.2e'
+          Action = ActCancel
+          Colors.FocusedFrom = 16750383
+          Colors.FocusedTo = 16763799
+          Colors.HighlightFrom = clWhite
+          Colors.HighlightTo = clWhite
+          HotTrack = True
+          TabOrder = 1
+        end
+      end
+    end
+  end
+  inherited ActionList: TActionList
+    inherited ActSave: TAction
+      Caption = 'SIMPAN (F3)'
+    end
+  end
+end
